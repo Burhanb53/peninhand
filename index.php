@@ -40,7 +40,7 @@ include('includes/config.php');
                                 <div class="h3_banner-content">
                                     <div class="section-area-3 mb-45 ">
                                         <span class="section-subtitle">Paawan</span>
-                                        <h1>Burhanb53!! dontwrite this</h2>
+                                        <h1>Burhanb53!!</h2>
                                          <p style="font-weight: bolder; font-size: 20px; color: black;">
                                             </p>
                                     </div>
