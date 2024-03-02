@@ -39,8 +39,8 @@ include('includes/config.php');
                             <div class="col-xl-7 col-lg-6 col-md-12">
                                 <div class="h3_banner-content">
                                     <div class="section-area-3 mb-45 ">
-                                        <span class="section-subtitle">Paawan</span>
-                                        <h1>Burhanb53!!</h2>
+                                        <span class="section-subtitle">Pen In hand Education</span>
+                                        <h1>Learn What You Want To!!</h2>
                                          <p style="font-weight: bolder; font-size: 20px; color: black;">
                                             </p>
                                     </div>
