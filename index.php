@@ -40,7 +40,7 @@ include('includes/config.php');
                                 <div class="h3_banner-content">
                                     <div class="section-area-3 mb-45 ">
                                         <span class="section-subtitle">Pen In Hand Education</span>
-                                        <h1>Learn Only What You Want To!!!!</h2>
+                                        <h1>Learn Only What You Want To pawaan!!!!</h2>
                                          <p style="font-weight: bolder; font-size: 20px; color: black;">
                                             </p>
                                     </div>
