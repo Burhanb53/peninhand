@@ -60,7 +60,7 @@ include('includes/config.php');
                                     </div>
                                     <div class="h3_banner-meta">
                                         <div class="h3_banner-meta-info">
-                                            <span>Popular Course</span>
+                                            <span>Popular Course PAWAAN SOFTECH</span>
                                             <h5>Start Learning Today!!</h5>
                                         </div>
                                         <div class="h3_banner-meta-rating">
