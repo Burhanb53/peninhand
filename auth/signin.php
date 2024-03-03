@@ -40,13 +40,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         header("Location: ../index.php");
                         exit();
                     case 1:
-                        header("Location: ../student/dashboard.php");
+                        header("Location: ../student/Dashboard/index.php");
                         exit();
                     case 2:
-                        header("Location: ../teacher/dashboard.php");
+                        header("Location: ../teacher/Dashboard/index.php");
                         exit();
                     case 3:
-                        header("Location: ../admin/dashboard.php");
+                        header("Location: ../admin/Dashboard/index.php");
+                        exit();
+                    case 4:
+                        header("Location: ../parent/Dashboard/index.php");
                         exit();
                     default:
                         // Handle any other roles as needed
