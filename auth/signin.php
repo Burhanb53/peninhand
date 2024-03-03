@@ -37,18 +37,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Redirect based on the user's role
                 switch ($userData['role']) {
                     case 0:
+                        setcookie('user_id', $_SESSION['user_id'], time() + 259200, '/', '', false, true);
+                        setcookie('email', $_SESSION['email'], time() + 259200, '/', '', false, true);
+                        setcookie('role', $_SESSION['role'], time() + 259200, '/', '', false, true);
                         header("Location: ../index.php");
                         exit();
                     case 1:
+                        setcookie('user_id', $_SESSION['user_id'], time() + 259200, '/', '', false, true);
+                        setcookie('email', $_SESSION['email'], time() + 259200, '/', '', false, true);
+                        setcookie('role', $_SESSION['role'], time() + 259200, '/', '', false, true);
                         header("Location: ../student/Dashboard/index.php");
                         exit();
                     case 2:
+                        setcookie('user_id', $_SESSION['user_id'], time() + 259200, '/', '', false, true);
+                        setcookie('email', $_SESSION['email'], time() + 259200, '/', '', false, true);
+                        setcookie('role', $_SESSION['role'], time() + 259200, '/', '', false, true);
                         header("Location: ../teacher/Dashboard/index.php");
                         exit();
                     case 3:
+                        setcookie('user_id', $_SESSION['user_id'], time() + 259200, '/', '', false, true);
+                        setcookie('email', $_SESSION['email'], time() + 259200, '/', '', false, true);
+                        setcookie('role', $_SESSION['role'], time() + 259200, '/', '', false, true);
                         header("Location: ../admin/Dashboard/index.php");
                         exit();
                     case 4:
+                        setcookie('user_id', $_SESSION['user_id'], time() + 259200, '/', '', false, true);
+                        setcookie('email', $_SESSION['email'], time() + 259200, '/', '', false, true);
+                        setcookie('role', $_SESSION['role'], time() + 259200, '/', '', false, true);
                         header("Location: ../parent/Dashboard/index.php");
                         exit();
                     default:

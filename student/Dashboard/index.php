@@ -2,6 +2,11 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
+if (!(isset($_SESSION['role']) && $_SESSION['role'] == 1)) {
+    // User doesn't have the required role, redirect to index.php
+    header("Location: ../../index.php");
+    exit(); // Make sure to exit after the redirect to prevent further execution
+}
 ?>
 
 
@@ -12,7 +17,7 @@ include('includes/config.php');
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Directory</title>
+    <title>Student Dashboard</title>
     <link rel="icon" href="img/logo.png" type="image/png">
 
     <link rel="stylesheet" href="css/bootstrap1.min.css">
@@ -67,18 +72,18 @@ include('includes/config.php');
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="dashboard_header_title">
-                                        <h3> Directory Dashboard</h3>
+                                        <h3>Student Dashboard</h3>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="dashboard_breadcam text-end">
-                                        <p><a href>Dashboard</a> <i class="fas fa-caret-right"></i> Address Book</p>
+                                        <p><a href>Dashboard</a> <i class="fas fa-caret-right"></i>Performance Book</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-8 col-xl-8">
+                    <!-- <div class="col-lg-8 col-xl-8">
                         <div class="white_box mb_30">
                             <div class="box_header">
                                 <div class="main-title">
@@ -131,8 +136,8 @@ include('includes/config.php');
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-4">
+                    </div> -->
+                    <!-- <div class="col-lg-4">
                         <div class="list_counter_wrapper white_box mb_30 p-0 card_height_100">
                             <div class="single_list_counter">
                                 <h3 class="deep_blue_2"><span class="counter deep_blue_2 ">50</span> + </h3>
@@ -151,8 +156,8 @@ include('includes/config.php');
                                 <p>Reported Listing </p>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xl-6">
+                    </div> -->
+                    <!-- <div class="col-xl-6">
                         <div class="white_box QA_section card_height_100">
                             <div class="box_header m-0">
                                 <div class="main-title">
@@ -185,8 +190,8 @@ include('includes/config.php');
                                 </table>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-6">
+                    </div> -->
+                    <!-- <div class="col-lg-6">
                         <div class="white_box mb_30 card_height_100">
                             <div class="box_header ">
                                 <div class="main-title">
@@ -232,8 +237,8 @@ include('includes/config.php');
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-8">
+                    </div> -->
+                    <!-- <div class="col-lg-8">
                         <div class="white_box QA_section card_height_100">
                             <div class="box_header m-0">
                                 <div class="main-title">
@@ -242,7 +247,7 @@ include('includes/config.php');
                             </div>
                             <div id="home-chart-03" style="height: 280px; position: relative;"></div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-lg-4">
                         <div class="white_box QA_section card_height_100 blud_card">
                             <div class="box_header m-0">
@@ -258,7 +263,7 @@ include('includes/config.php');
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <!-- <div class="col-lg-4">
                         <div class="white_box QA_section card_height_100">
                             <div class="box_header m-0">
                                 <div class="main-title">
@@ -395,7 +400,7 @@ include('includes/config.php');
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-lg-6">
                         <div class="white_box card_height_100">
                             <div class="box_header">
@@ -465,7 +470,7 @@ include('includes/config.php');
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3">
+                    <!-- <div class="col-lg-3">
                         <div class="white_box QA_section card_height_100">
                             <div class="box_header m-0">
                                 <div class="main-title">
@@ -493,7 +498,7 @@ include('includes/config.php');
                                 <li class="d-block"> <span style="background-color:#FFA70B;"></span> Microsoft Edg</li>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -673,6 +678,19 @@ include('includes/config.php');
     <script src="js/custom.js"></script>
     <script src="vendors/apex_chart/bar_active_1.js"></script>
     <script src="vendors/apex_chart/apex_chart_list.js"></script>
+    <script>
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+      history.pushState(null, null, document.URL);
+    });
+
+    // Optional: Disable the backspace key to prevent accidental navigation
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Backspace') {
+        e.preventDefault();
+      }
+    });
+  </script>
 </body>
 
 </html>

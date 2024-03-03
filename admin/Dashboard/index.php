@@ -675,4 +675,5 @@ include('includes/config.php');
     <script src="vendors/apex_chart/apex_chart_list.js"></script>
 </body>
 
+
 </html>

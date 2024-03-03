@@ -24,7 +24,20 @@ session_start();
 </div>
 <div class="offcanvas-overlay"></div>
 <!-- sidebar-information-area-end -->
+<!-- <style>
+    .dropdown-content {
+        display: none;  
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
 
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+</style> -->
 <!-- header area start -->
 <header>
     <div class="h3_header-area header-sticky">
@@ -62,9 +75,35 @@ session_start();
                         <?php
                         // Check if the session is started
                         if (isset($_SESSION['user_id'])) {
-                            // If the session is started, show the "Logout" button
+                            $userRole = $_SESSION['role'];
+                            // If the session is started, show the "Profile" button
                             echo '<div class="h3_header-btn d-none d-sm-block">';
-                            echo '    <a href="../auth/logout.php" class="header-btn theme-btn theme-btn-medium theme-btn-3">Logout<i class="fa-light fa-arrow-up-right"></i></a>';
+                            echo '    <div class="header-btn theme-btn theme-btn-medium theme-btn-3 dropdown">Profile<i class="fa-light fa-arrow-up-right"></i>';
+                            echo '        <div class="dropdown-content">';
+                            
+                            // Show different options based on user role in the dropdown
+                            echo '        <div class="dropdown-content">';
+
+                            
+                            // Options based on user role
+                            if ($userRole == 0) {
+                                echo '            <a href="../auth/logout.php">Logout</a>';
+                            } elseif ($userRole == 1) {
+                                echo '            <a href="../student/Dashboard/index.php">Dashboard</a>';
+                                echo '            <a href="../auth/logout.php">Logout</a>';
+                            } elseif ($userRole == 2) {
+                                echo '            <a href="../teacher/Dashboard/index.php">Dashboard</a>';
+                                echo '            <a href="../auth/logout.php">Logout</a>';
+                            } elseif ($userRole == 3) {
+                                echo '            <a href="../admin/Dashboard/index.php">Dashboard</a>';
+                                echo '            <a href="../auth/logout.php">Logout</a>';
+                            } elseif ($userRole == 4) {
+                                echo '            <a href="../parent/Dashboard/index.php">Dashboard</a>';
+                                echo '            <a href="../auth/logout.php">Logout</a>';
+                            }
+                            
+                            echo '        </div>';
+                            echo '    </div>';
                             echo '</div>';
                         } else {
                             // If the session is not started, show the original HTML code
