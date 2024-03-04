@@ -59,7 +59,7 @@
         .chat-history {
             flex: 1;
             border-right: 1px solid #ddd;
-            height: 800px;
+            height: 500px;
             overflow: scroll;
             scroll-behavior: smooth;
             overflow-x: hidden;
@@ -77,7 +77,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: 800px;
+            height: 500px;
         }
 
         .chat-header {
