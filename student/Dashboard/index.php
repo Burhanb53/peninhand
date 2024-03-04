@@ -53,16 +53,95 @@ if (!(isset($_SESSION['role']) && $_SESSION['role'] == 1)) {
 
     <link rel="stylesheet" href="css/style1.css">
     <link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS">
+    <style>
+        .round-card {
+            width: 12rem;
+            height: 12rem;
+            border-radius: 50%;
+            text-align: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .count-wrapper {
+            position: relative;
+        }
+
+        .count {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .count-description {
+            font-size: 1rem;
+            color: #fff;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 320px) {
+            .round-card {
+                width: 8rem;
+                height: 8rem;
+                padding: 1.5rem;
+            }
+
+            .count {
+                font-size: 2rem;
+            }
+
+            .count-description {
+                font-size: 0.875rem;
+                margin-top: 0.5rem;
+            }
+        }
+
+        /* Animation */
+        @keyframes count-up {
+            from {
+                transform: translateY(1rem);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .count {
+            animation: count-up 1s ease-out;
+        }
+    </style>
+    <style>
+        .ask-doubt-btn-container {
+            text-align: right;
+        }
+
+        .ask-doubt-btn {
+            background-color: #3498db;
+            /* Choose your button color */
+            color: #fff;
+            /* Choose your text color */
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+
+
 </head>
 
 <body class="crm_body_bg">
 
 
-<?php include('includes/sidebar_index.php'); ?>
+    <?php include('includes/sidebar_index.php'); ?>
 
     <section class="main_content dashboard_part">
 
-    <?php include('includes/navbar_index.php'); ?>
+        <?php include('includes/navbar_index.php'); ?>
 
         <div class="main_content_iner ">
             <div class="container-fluid p-0 sm_padding_15px">
@@ -79,6 +158,37 @@ if (!(isset($_SESSION['role']) && $_SESSION['role'] == 1)) {
                                     <div class="dashboard_breadcam text-end">
                                         <p><a href>Dashboard</a> <i class="fas fa-caret-right"></i>Performance Book</p>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container text-center">
+                        <!-- Card 1: No. of Questions Asked -->
+                        <div class="col-lg-3 col-md-3 col-sm-6 mb-12 d-inline-block align-top">
+                            <div class="round-card box_shadow position-relative mb_30 blue_bg">
+                                <div class="count-wrapper">
+                                    <div class="count" data-count="75">0</div>
+                                    <p class="count-description">Questions Asked</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: No. of Answers Received -->
+                        <div class="col-lg-3 col-md-3 col-sm-6 mb-12 d-inline-block align-top">
+                            <div class="round-card box_shadow position-relative mb_30 orange_bg">
+                                <div class="count-wrapper">
+                                    <div class="count" data-count="120">0</div>
+                                    <p class="count-description">Answers Received</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: No. of Video Calls Attended -->
+                        <div class="col-lg-3 col-md-3 col-sm-6 mb-12 d-inline-block align-top">
+                            <div class="round-card box_shadow position-relative mb_30 green_bg">
+                                <div class="count-wrapper">
+                                    <div class="count" data-count="30">0</div>
+                                    <p class="count-description">Video Calls Attended</p>
                                 </div>
                             </div>
                         </div>
@@ -252,14 +362,86 @@ if (!(isset($_SESSION['role']) && $_SESSION['role'] == 1)) {
                         <div class="white_box QA_section card_height_100 blud_card">
                             <div class="box_header m-0">
                                 <div class="main-title">
-                                    <h3 class="m-0 text_white">2400 + New Users</h3>
+                                    <h3 class="m-0 text_white" style="font-size:1.5rem;">Subscription Details</h3>
                                 </div>
                             </div>
                             <div class="content_user">
-                                <p>At vero eos et accusamus et iusto odio
-                                    dignissimos ducimus</p>
-                                <a href="#" class="btn_2">Learn more</a>
+                                <p style="font-size:1.5rem;">Remaining Days: 15</p>
+                                <p style="font-size:1.5rem;">End Date: 20-04-2024</p>
+                                <a href="#" class="btn_2" style="font-size:1rem;">Renew Subscription</a>
                                 <img src="img/users_img.png" alt>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="white_box card_height_100">
+                            <div class="box_header">
+                                <div class="main-title" style="display: inline-flex;">
+                                    <h3 class="m-0">Recent Activity</h3>
+                                </div>
+                                <div class="ask-doubt-btn-container" style="display: inline-flex;">
+                                    <button class="ask-doubt-btn">Ask Doubt</button>
+                                </div>
+                            </div>
+                            <div class="Activity_timeline">
+                                <ul>
+                                    <li>
+                                        <div class="activity_bell"></div>
+                                        <div class="timeLine_inner d-flex align-items-center">
+                                            <div class="activity_wrap">
+                                                <h6>5 min ago</h6>
+                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+                                                    scelerisque
+                                                </p>
+                                            </div>
+                                            <div class="notification_read_btn mb_10">
+                                                <a href="#" class="notification_btn">Read</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="activity_bell"></div>
+                                        <div class="timeLine_inner d-flex align-items-center">
+                                            <div class="activity_wrap">
+                                                <h6>5 min ago</h6>
+                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+                                                    scelerisque
+                                                </p>
+                                            </div>
+                                            <div class="notification_read_btn mb_10">
+                                                <a href="#" class="notification_btn">Read</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="activity_bell"></div>
+                                        <div class="timeLine_inner d-flex align-items-center">
+                                            <div class="activity_wrap">
+                                                <h6>5 min ago</h6>
+                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+                                                    scelerisque
+                                                </p>
+                                            </div>
+                                            <div class="notification_read_btn mb_10">
+                                                <a href="#" class="notification_btn">Read</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="activity_bell"></div>
+                                        <div class="timeLine_inner d-flex align-items-center">
+                                            <div class="activity_wrap">
+                                                <h6>5 min ago</h6>
+                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+                                                    scelerisque
+                                                </p>
+                                            </div>
+                                            <div class="notification_read_btn mb_10">
+                                                <a href="#" class="notification_btn">Read</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -401,75 +583,6 @@ if (!(isset($_SESSION['role']) && $_SESSION['role'] == 1)) {
                             </div>
                         </div>
                     </div> -->
-                    <div class="col-lg-6">
-                        <div class="white_box card_height_100">
-                            <div class="box_header">
-                                <div class="main-title">
-                                    <h3 class="m-0">Recent Activity</h3>
-                                </div>
-                            </div>
-                            <div class="Activity_timeline">
-                                <ul>
-                                    <li>
-                                        <div class="activity_bell"></div>
-                                        <div class="timeLine_inner d-flex align-items-center">
-                                            <div class="activity_wrap">
-                                                <h6>5 min ago</h6>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-                                                    scelerisque
-                                                </p>
-                                            </div>
-                                            <div class="notification_read_btn mb_10">
-                                                <a href="#" class="notification_btn">Read</a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="activity_bell"></div>
-                                        <div class="timeLine_inner d-flex align-items-center">
-                                            <div class="activity_wrap">
-                                                <h6>5 min ago</h6>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-                                                    scelerisque
-                                                </p>
-                                            </div>
-                                            <div class="notification_read_btn mb_10">
-                                                <a href="#" class="notification_btn">Read</a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="activity_bell"></div>
-                                        <div class="timeLine_inner d-flex align-items-center">
-                                            <div class="activity_wrap">
-                                                <h6>5 min ago</h6>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-                                                    scelerisque
-                                                </p>
-                                            </div>
-                                            <div class="notification_read_btn mb_10">
-                                                <a href="#" class="notification_btn">Read</a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="activity_bell"></div>
-                                        <div class="timeLine_inner d-flex align-items-center">
-                                            <div class="activity_wrap">
-                                                <h6>5 min ago</h6>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-                                                    scelerisque
-                                                </p>
-                                            </div>
-                                            <div class="notification_read_btn mb_10">
-                                                <a href="#" class="notification_btn">Read</a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
                     <!-- <div class="col-lg-3">
                         <div class="white_box QA_section card_height_100">
                             <div class="box_header m-0">
@@ -479,8 +592,8 @@ if (!(isset($_SESSION['role']) && $_SESSION['role'] == 1)) {
                             </div>
                             <div id="bar-chart-6" class></div>
                         </div>
-                    </div>
-                    <div class="col-lg-3">
+                    </div> -->
+                    <!-- <div class="col-lg-3">
                         <div class="white_box">
                             <div class="box_header">
                                 <div class="main-title">
@@ -503,7 +616,7 @@ if (!(isset($_SESSION['role']) && $_SESSION['role'] == 1)) {
             </div>
         </div>
 
-        <?php include('includes/footer.php');?>
+        <?php include('includes/footer.php'); ?>
     </section>
 
 
@@ -679,18 +792,47 @@ if (!(isset($_SESSION['role']) && $_SESSION['role'] == 1)) {
     <script src="vendors/apex_chart/bar_active_1.js"></script>
     <script src="vendors/apex_chart/apex_chart_list.js"></script>
     <script>
-    history.pushState(null, null, document.URL);
-    window.addEventListener('popstate', function () {
-      history.pushState(null, null, document.URL);
-    });
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
 
-    // Optional: Disable the backspace key to prevent accidental navigation
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Backspace') {
-        e.preventDefault();
-      }
-    });
-  </script>
+        // Optional: Disable the backspace key to prevent accidental navigation
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Backspace') {
+                e.preventDefault();
+            }
+        });
+    </script>
+    <script>
+        // Counter Animation
+        document.addEventListener("DOMContentLoaded", function () {
+            const counters = document.querySelectorAll('.count');
+            const speed = 100; // The lower the slower
+
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-count');
+                    const count = +counter.innerText;
+
+                    // Lower inc to slow and higher to slow
+                    const inc = target / speed;
+
+                    // Check if target is reached
+                    if (count < target) {
+                        // Add inc to count and output in counter
+                        counter.innerText = Math.ceil(count + inc);
+                        // Call function every ms
+                        setTimeout(updateCount, 1);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+
+                updateCount();
+            });
+        });
+    </script>
 </body>
 
 </html>
