@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 02, 2024 at 05:22 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Mar 08, 2024 at 02:17 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -37,11 +37,17 @@ CREATE TABLE `doubt` (
   `doubt_created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `answer` varchar(255) DEFAULT NULL,
   `answer_image` varchar(255) DEFAULT NULL,
-  `answer_created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `student_view` int(11) NOT NULL DEFAULT 0,
-  `teacher_view` int(11) NOT NULL DEFAULT 0,
-  `admin_view` int(11) NOT NULL DEFAULT 0
+  `answer_created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `doubt`
+--
+
+INSERT INTO `doubt` (`id`, `doubt_id`, `user_id`, `teacher_id`, `doubt`, `doubt_image`, `doubt_created_at`, `answer`, `answer_image`, `answer_created_at`) VALUES
+(1, 1, 101, 201, 'How does gravity work?', 'gravity_image.jpg', '2024-03-08 13:16:39', 'Gravity is the force...', 'answer_image.jpg', '2024-03-08 13:16:39'),
+(2, 2, 102, 202, 'What is the capital of France?', NULL, '2024-03-08 13:16:39', 'The capital of France is Paris.', NULL, '2024-03-08 13:16:39'),
+(3, 3, 103, 203, 'How to solve quadratic equations?', 'equation_image.jpg', '2024-03-08 13:16:39', 'Quadratic equations can be solved using...', 'solution_image.jpg', '2024-03-08 13:16:39');
 
 -- --------------------------------------------------------
 
@@ -54,9 +60,17 @@ CREATE TABLE `doubt_submission` (
   `doubt_id` int(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `verified` int(11) NOT NULL DEFAULT 0,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `admin_view` int(11) NOT NULL DEFAULT 0
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `doubt_submission`
+--
+
+INSERT INTO `doubt_submission` (`id`, `doubt_id`, `description`, `verified`, `created_at`) VALUES
+(1, 1, 'Explanation of gravity', 1, '2024-03-08 18:46:39'),
+(2, 2, 'Question about French capital', 0, '2024-03-08 18:46:39'),
+(3, 3, 'Solving quadratic equations step by step', 1, '2024-03-08 18:46:39');
 
 -- --------------------------------------------------------
 
@@ -73,6 +87,15 @@ CREATE TABLE `subscription_plan` (
   `price` int(255) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `subscription_plan`
+--
+
+INSERT INTO `subscription_plan` (`id`, `subscription_id`, `plan_name`, `description`, `duration`, `price`, `created_at`) VALUES
+(1, 1, 'Basic', 'Access to basic features', '1 month', 10, '2024-03-08 18:46:39'),
+(2, 2, 'Premium', 'Access to premium features', '3 months', 25, '2024-03-08 18:46:39'),
+(3, 3, 'Pro', 'Access to all features', '6 months', 50, '2024-03-08 18:46:39');
 
 -- --------------------------------------------------------
 
@@ -103,6 +126,15 @@ CREATE TABLE `subscription_user` (
   `verified` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `subscription_user`
+--
+
+INSERT INTO `subscription_user` (`id`, `user_id`, `name`, `email`, `contact`, `photo`, `mother_name`, `mother_email`, `mother_contact`, `father_name`, `father_email`, `father_contact`, `address`, `city`, `state`, `pin`, `subscription_id`, `created_at`, `end_date`, `verified`) VALUES
+(1, 101, 'John Doe', 'john@example.com', '1234567890', 'john_photo.jpg', 'Jane Doe', 'jane@example.com', '9876543210', 'John Doe Sr.', 'johnsr@example.com', '8765432109', '123 Main St', 'Cityville', 'CA', '12345', 1, '2024-03-08 18:46:39', '2024-04-01', 1),
+(2, 102, 'Jane Smith', 'jane@example.com', '9876543210', 'jane_photo.jpg', 'Mary Smith', 'mary@example.com', '8765432109', 'James Smith', 'james@example.com', '7654321098', '456 Oak St', 'Townsville', 'NY', '54321', 2, '2024-03-08 18:46:39', '2024-06-01', 1),
+(3, 103, 'Bob Johnson', 'bob@example.com', '8765432109', 'bob_photo.jpg', 'Sue Johnson', 'sue@example.com', '7654321098', 'Tom Johnson', 'tom@example.com', '6543210987', '789 Pine St', 'Villageville', 'TX', '67890', 3, '2024-03-08 18:46:39', '2024-09-01', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -130,6 +162,15 @@ CREATE TABLE `teacher` (
   `verified` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `teacher`
+--
+
+INSERT INTO `teacher` (`id`, `teacher_id`, `profile_photo`, `name`, `email`, `contact`, `age`, `gender`, `tech_stake`, `Experience`, `resume`, `address`, `city`, `state`, `pin`, `created_at`, `active`, `verified`) VALUES
+(1, 201, 'teacher1_photo.jpg', 'Alice Teacher', 'alice@example.com', '9876543210', '30', 'Female', 'Mathematics', '5 years', 'alice_resume.pdf', '456 Oak St', 'Cityville', 'CA', '12345', '2024-03-08 18:46:39', 1, 1),
+(2, 202, 'teacher2_photo.jpg', 'Bob Educator', 'bob@example.com', '8765432109', '35', 'Male', 'Physics', '8 years', 'bob_resume.pdf', '789 Pine St', 'Townsville', 'NY', '54321', '2024-03-08 18:46:39', 1, 1),
+(3, 203, 'teacher3_photo.jpg', 'Charlie Instructor', 'charlie@example.com', '7654321098', '28', 'Male', 'Chemistry', '3 years', 'charlie_resume.pdf', '123 Main St', 'Villageville', 'TX', '67890', '2024-03-08 18:46:39', 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -142,7 +183,7 @@ CREATE TABLE `user` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `role` int(11) NOT NULL DEFAULT 0
+  `role` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -150,10 +191,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `user_id`, `email`, `password`, `created_at`, `role`) VALUES
-(9, 849016, '2022pietadburhanuddin013@poornima.org', '$2y$10$tvXlrP7EV/X2B3KNojabRekPvtkgn.Kl9j1ZTb.WRy.GMnxQPSA2i', '2024-03-01 19:40:42', 1),
-(10, 622832, 'burhanuddinb542@gmail.com', '$2y$10$kdp5bagAmkAHgdLpB2ZuxOUiECuONOxxrJ/DJyXKccooaHq50fVIu', '2024-03-01 19:41:17', 3),
-(11, 127525, 'paawan0304@proton.me', '$2y$10$nRfcfBNn9q1zO9XcoSn57OvP4V93m7g8lOYK4C0C5Zs8w0tqLYF4u', '2024-03-01 19:51:22', 2),
-(12, 655232, 'ruqaiiyah52@gmail.com', '$2y$10$z/IuOsnGg1sS1SsXjbEm7eK1BM1z7LHxzUbO9KIypxbdZYhB/3UcC', '2024-03-02 12:18:45', 0);
+(1, 101, 'john@example.com', 'hashed_password', '2024-03-08 18:46:39', 1),
+(2, 102, 'jane@example.com', 'hashed_password', '2024-03-08 18:46:39', 1),
+(3, 103, 'bob@example.com', 'hashed_password', '2024-03-08 18:46:39', 1);
 
 -- --------------------------------------------------------
 
@@ -168,6 +208,15 @@ CREATE TABLE `video_call` (
   `join_code` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `video_call`
+--
+
+INSERT INTO `video_call` (`id`, `doubt_id`, `videocall_link`, `join_code`, `created_at`) VALUES
+(1, 1, 'https://example.com/videocall1', '12345', '2024-03-08 18:46:39'),
+(2, 2, 'https://example.com/videocall2', '67890', '2024-03-08 18:46:39'),
+(3, 3, 'https://example.com/videocall3', '23456', '2024-03-08 18:46:39');
 
 --
 -- Indexes for dumped tables
@@ -223,43 +272,43 @@ ALTER TABLE `video_call`
 -- AUTO_INCREMENT for table `doubt`
 --
 ALTER TABLE `doubt`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `doubt_submission`
 --
 ALTER TABLE `doubt_submission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `subscription_plan`
 --
 ALTER TABLE `subscription_plan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `subscription_user`
 --
 ALTER TABLE `subscription_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `teacher`
 --
 ALTER TABLE `teacher`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `video_call`
 --
 ALTER TABLE `video_call`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
