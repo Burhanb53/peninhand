@@ -39,150 +39,111 @@
     <link rel="stylesheet" href="../css/metisMenu.css">
 
     <link rel="stylesheet" href="../css/style1.css">
-    <link rel="stylesheet" href="../css/colors/default.css" id="colorSkinCSS">
     <style>
-        .chat-container {
-            display: flex;
-            width: 100%;
-            max-width: 80%;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        body{
             overflow: hidden;
-            margin: auto;
-            height: 60%;
-            margin-top: 50px;
+        }
+        .chat-wrapper {
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
+            /* Center the chat container horizontally */
             margin-bottom: 50px;
         }
 
-        .chat-history {
-            flex: 1;
-            border-right: 1px solid #ddd;
-            height: 500px;
-            overflow: scroll;
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-
+        .search-bar {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+            z-index: 1;
         }
 
-        .history-item {
-            display: flex;
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .chat-window {
-            flex: 2;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 500px;
-        }
-
-        .chat-header {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .chat-info {
-            flex-grow: 1;
-        }
-
-        .chat-messages {
-            flex-grow: 1;
+        .chat-container {
+            max-height: 500px;
+            /* Adjust the maximum height as needed */
             overflow-y: auto;
-            padding: 15px;
+            padding-right: 20px;
+            /* Add padding to compensate for the scrollbar width */
         }
 
-        .message {
-            background-color: #F5F7F9;
-            color: #fff;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
+        /* Customize scrollbar */
+        .chat-container::-webkit-scrollbar {
+            width: 12px;
+            /* Set the width of the scrollbar */
         }
 
-        .compose {
+        .chat-container::-webkit-scrollbar-thumb {
+            background-color: #B9BABA;
+            /* Set the color of the scrollbar thumb */
+            border-radius: 6px;
+            /* Set the border radius of the scrollbar thumb */
+        }
+
+        .chat-container::-webkit-scrollbar-track {
+            background-color: #f5f5f5;
+            /* Set the color of the scrollbar track */
+        }
+
+        /* End of scrollbar customization */
+
+        .chat-card {
             display: flex;
             align-items: center;
             padding: 15px;
-            border-top: 1px solid #ddd;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
         }
 
-        textarea {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
-
-        button {
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #2980b9;
-        }
-
-        .profile-img {
-            width: 40px;
-            height: 40px;
-            background-color: #3498db;
+        .profile-image {
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             margin-right: 15px;
+            object-fit: cover;
         }
 
-        .name {
+        .message-content {
+            flex-grow: 1;
+        }
+
+        .message-text {
             margin: 0;
+            font-size: 16px;
+            color: #333;
         }
 
-        .date {
-            margin: 5px 0 0;
-            color: #888;
-            font-size: 14px;
-        }
-
-        .time {
-            color: #888;
+        .message-time {
             font-size: 12px;
+            color: #888;
         }
-        /* For Firefox */
-.chat-history::-webkit-scrollbar {
-    width: 8px;
-}
 
-.chat-history::-webkit-scrollbar-thumb {
-    background-color: #3498db;
-    border-radius: 4px;
-}
+        .unread {
+            background-color: #e6f7ff;
+        }
 
-.chat-history::-webkit-scrollbar-track {
-    background-color: #f5f5f5;
-}
+        .read {
+            background-color: #f2f2f2;
+        }
 
-/* For other browsers */
-.chat-history {
-    scrollbar-width: thin;
-}
-
-.chat-history::-webkit-scrollbar-thumb {
-    background-color: #3498db;
-    border-radius: 4px;
-}
-
-.chat-history::-webkit-scrollbar-track {
-    background-color: #f5f5f5;
-}
-
+        @media (max-width: 600px) {
+            .chat-wrapper {
+                padding: 0 10px;
+            }
+            .chat-wrapper {
+            
+            margin-left: 20px;
+            margin-right: 20px;
+            margin-top: 20px;
+        }
+        }
     </style>
 </head>
 
@@ -191,104 +152,74 @@
     <section class="main_content dashboard_part">
         <?php include('../includes/navbar.php'); ?>
 
-        <div class="chat-container">
-            <div class="chat-history">
-                <div class="history-item">
-                    <div class="profile-img"></div>
-                    <div class="history-info">
-                        <h4 class="name">John Doe</h4>
-                        <p class="date">Last seen: March 10, 2024</p>
+        <div class="chat-wrapper">
+            <input type="text" class="search-bar" placeholder="Search...">
+
+            <div class="chat-container">
+                <!-- Example chat history -->
+                <div class="chat-card unread">
+                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
+                    <div class="message-content">
+                        <p class="message-text">Short description of the message goes here...</p>
+                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
                     </div>
                 </div>
-                <div class="history-item">
-                    <div class="profile-img"></div>
-                    <div class="history-info">
-                        <h4 class="name">John Doe</h4>
-                        <p class="date">Last seen: March 10, 2024</p>
+                <div class="chat-card unread">
+                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
+                    <div class="message-content">
+                        <p class="message-text">Short description of the message goes here...</p>
+                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
                     </div>
                 </div>
-                <div class="history-item">
-                    <div class="profile-img"></div>
-                    <div class="history-info">
-                        <h4 class="name">John Doe</h4>
-                        <p class="date">Last seen: March 10, 2024</p>
+                <div class="chat-card unread">
+                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
+                    <div class="message-content">
+                        <p class="message-text">Short description of the message goes here...</p>
+                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
                     </div>
                 </div>
-                <div class="history-item">
-                    <div class="profile-img"></div>
-                    <div class="history-info">
-                        <h4 class="name">John Doe</h4>
-                        <p class="date">Last seen: March 10, 2024</p>
+                <div class="chat-card read">
+                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
+                    <div class="message-content">
+                        <p class="message-text">Short description of the message goes here...</p>
+                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
                     </div>
                 </div>
-                <div class="history-item">
-                    <div class="profile-img"></div>
-                    <div class="history-info">
-                        <h4 class="name">John Doe</h4>
-                        <p class="date">Last seen: March 10, 2024</p>
+                <div class="chat-card read">
+                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
+                    <div class="message-content">
+                        <p class="message-text">Short description of the message goes here...</p>
+                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
                     </div>
                 </div>
-                <div class="history-item">
-                    <div class="profile-img"></div>
-                    <div class="history-info">
-                        <h4 class="name">John Doe</h4>
-                        <p class="date">Last seen: March 10, 2024</p>
+                <div class="chat-card read">
+                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
+                    <div class="message-content">
+                        <p class="message-text">Short description of the message goes here...</p>
+                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
                     </div>
                 </div>
-                
-                <div class="history-item">
-                    <div class="profile-img"></div>
-                    <div class="history-info">
-                        <h4 class="name">John Doe</h4>
-                        <p class="date">Last seen: March 10, 2024</p>
+                <div class="chat-card read">
+                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
+                    <div class="message-content">
+                        <p class="message-text">Short description of the message goes here...</p>
+                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
                     </div>
                 </div>
-                <div class="history-item">
-                    <div class="profile-img"></div>
-                    <div class="history-info">
-                        <h4 class="name">John Doe</h4>
-                        <p class="date">Last seen: March 10, 2024</p>
-                    </div>
-                </div>
-                <div class="history-item">
-                    <div class="profile-img"></div>
-                    <div class="history-info">
-                        <h4 class="name">John Doe</h4>
-                        <p class="date">Last seen: March 10, 2024</p>
+                <div class="chat-card read">
+                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
+                    <div class="message-content">
+                        <p class="message-text">Short description of the message goes here...</p>
+                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
                     </div>
                 </div>
 
-                <!-- Add more history items as needed -->
+                <!-- Add more chat cards here -->
 
-            </div>
-
-            <div class="chat-window">
-                <div class="chat-header">
-                    <div class="profile-img"></div>
-                    <div class="chat-info">
-                        <h4 class="name">John Doe</h4>
-                        <p class="date">Online</p>
-                    </div>
-                </div>
-
-                <div class="chat-messages">
-                    <div class="message">
-                        <p>Hello there!</p>
-                        <span class="time">12:30 PM</span>
-                    </div>
-
-                    <!-- Add more chat messages as needed -->
-
-                </div>
-
-                <div class="compose">
-                    <textarea placeholder="Type your message..."></textarea>
-                    <button>Send</button>
-                </div>
             </div>
         </div>
 
-        <?php include('../includes/footer.php'); ?>
+
     </section>
 
 </body>

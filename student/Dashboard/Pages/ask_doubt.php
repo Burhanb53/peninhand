@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Student Dashboard</title>
     <link rel="icon" href="../img/logo.png" type="image/png">
@@ -40,6 +39,10 @@
 
     <link rel="stylesheet" href="../css/style1.css">
     <link rel="stylesheet" href="../css/colors/default.css" id="colorSkinCSS">
+    
+    
+
+
     <style>
         .form-container {
             width: 100%;
@@ -60,7 +63,7 @@
         }
 
         .card-header {
-            background-color: #3498db;
+            background-color: #2D1967;
             color: #fff;
             text-align: center;
             padding: 15px;
@@ -73,6 +76,7 @@
 
         .form-group {
             margin-bottom: 20px;
+            
         }
 
         label {
@@ -91,8 +95,8 @@
         }
 
         button {
-            background-color: #3498db;
-            color: #fff;
+            background-color: #2D1967;
+            color: white;
             padding: 10px 15px;
             border: none;
             border-radius: 5px;
@@ -131,7 +135,7 @@
         <div class="form-container">
             <div class="card">
                 <div class="card-header">
-                    <h3>Ask Doubt</h3>
+                    <h3 style="color:white;">Ask Doubt</h3>
                 </div>
                 <div class="card-body">
                     <form id="doubtForm">
@@ -186,6 +190,8 @@
         });
 
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 </body>
 
 </html>
