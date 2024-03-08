@@ -40,9 +40,10 @@
 
     <link rel="stylesheet" href="../css/style1.css">
     <style>
-        body{
+        body {
             overflow: hidden;
         }
+
         .chat-wrapper {
             display: flex;
             flex-direction: column;
@@ -137,12 +138,13 @@
             .chat-wrapper {
                 padding: 0 10px;
             }
+
             .chat-wrapper {
-            
-            margin-left: 20px;
-            margin-right: 20px;
-            margin-top: 20px;
-        }
+
+                margin-left: 20px;
+                margin-right: 20px;
+                margin-top: 20px;
+            }
         }
     </style>
 </head>
@@ -157,13 +159,15 @@
 
             <div class="chat-container">
                 <!-- Example chat history -->
-                <div class="chat-card unread">
-                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
-                    <div class="message-content">
-                        <p class="message-text">Short description of the message goes here...</p>
-                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
+                <a href="chat.php">
+                    <div class="chat-card unread">
+                        <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
+                        <div class="message-content">
+                            <p class="message-text">Short description of the message goes here...</p>
+                            <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
+                        </div>
                     </div>
-                </div>
+                </a>
                 <div class="chat-card unread">
                     <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
                     <div class="message-content">

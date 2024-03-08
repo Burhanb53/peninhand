@@ -24,15 +24,22 @@ function isMenuItemActive($menuItemPath)
 
         <li class="<?php echo isMenuItemActive('/ask_doubt.php'); ?>">
             <a href="Pages/ask_doubt.php" aria-expanded="false">
-                <img src="img/menu-icon/11.svg" alt>
+                <img src="img/menu-icon/16.svg" alt>
                 <span>Ask Doubt</span>
             </a>
         </li>
 
         <li class="<?php echo isMenuItemActive('/chat_history.php'); ?>">
             <a href="Pages/chat_history.php" aria-expanded="false">
-                <img src="img/menu-icon/11.svg" alt>
+                <img src="img/menu-icon/14.svg" alt>
                 <span>Chat</span>
+            </a>
+        </li>
+
+        <li class="<?php echo isMenuItemActive('/video_call.php'); ?>">
+            <a href="Pages/video_call.php" aria-expanded="false">
+                <img src="img/menu-icon/15.svg" alt>
+                <span>Video Call</span>
             </a>
         </li>
     </ul>
