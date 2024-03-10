@@ -380,7 +380,9 @@ if (!(isset($_SESSION['role']) && $_SESSION['role'] == 1)) {
                                     <h3 class="m-0">Recent Doubts</h3>
                                 </div>
                                 <div class="ask-doubt-btn-container" style="display: inline-flex;">
-                                    <button class="ask-doubt-btn">Ask Doubt</button>
+                                    <a href="Pages/ask_doubt.php" target="_blank" rel="noopener noreferrer">
+                                        <button class="ask-doubt-btn">Ask Doubt</button>
+                                    </a>
                                 </div>
                             </div>
                             <div class="Activity_timeline">

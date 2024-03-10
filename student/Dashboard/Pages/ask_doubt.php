@@ -39,11 +39,15 @@
 
     <link rel="stylesheet" href="../css/style1.css">
     <link rel="stylesheet" href="../css/colors/default.css" id="colorSkinCSS">
-    
+    <!-- Add these links in the head section of your HTML -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
     
 
 
     <style>
+        
         .form-container {
             width: 100%;
             max-width: 80%;
@@ -53,7 +57,7 @@
 
 
         .card {
-            background-color: #fff;
+            background-color: #F7ECF9;
             border: 1px solid #ddd;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -92,6 +96,7 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             margin-top: 5px;
+            
         }
 
         button {
@@ -124,6 +129,7 @@
             color: #3498db;
             text-decoration: none;
         }
+        
     </style>
 </head>
 
@@ -133,29 +139,35 @@
         <?php include('../includes/navbar.php'); ?>
 
         <div class="form-container">
-            <div class="card">
-                <div class="card-header">
-                    <h3 style="color:white;">Ask Doubt</h3>
-                </div>
-                <div class="card-body">
-                    <form id="doubtForm">
-                        <div class="form-group">
-                            <label for="description">Description:</label>
-                            <textarea id="description" name="description" rows="4" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="fileInput">Upload File:</label>
-                            <input type="file" id="fileInput" name="fileInput"
-                                accept=".pdf, .doc, .docx, .jpg, .jpeg, .png" required>
-                            <div id="filePreview"></div>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="submit-btn">Ask Doubt</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    <div class="card">
+        <div class="card-header">
+            <h3 style="color:white;">Ask Doubt</h3>
         </div>
+        <div class="card-body">
+            <form id="doubtForm">
+                <div class="form-group">
+                    <label for="questionCategory">Question Category:</label>
+                    <input type="text" id="questionCategory" name="questionCategory" class="question-category" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="fileInput">Upload File:</label>
+                    <input type="file" id="fileInput" name="fileInput" accept=".pdf, .doc, .docx, .jpg, .jpeg, .png" required>
+                    <div id="filePreview"></div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="submit-btn">Ask Doubt</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
         <?php include('../includes/footer.php'); ?>
     </section>
     <script>
@@ -191,7 +203,18 @@
 
     </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    // Initialize jQuery UI Autocomplete on the question category input field
+    $(function () {
+        var availableCategories = ["Physics", "Economics", "Maths", "Engg. Maths"]; // Add your available categories here
 
+        $(".question-category").autocomplete({
+            source: availableCategories
+        });
+    });
+</script>
 </body>
 
 </html>
