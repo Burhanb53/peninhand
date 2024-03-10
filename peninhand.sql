@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 08, 2024 at 02:17 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- Generation Time: Mar 10, 2024 at 07:29 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -37,17 +37,21 @@ CREATE TABLE `doubt` (
   `doubt_created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `answer` varchar(255) DEFAULT NULL,
   `answer_image` varchar(255) DEFAULT NULL,
-  `answer_created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `answer_created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `student_view` int(11) NOT NULL DEFAULT 0,
+  `teacher_view` int(11) NOT NULL DEFAULT 0,
+  `admin_view` int(11) NOT NULL DEFAULT 0,
+  `accepted` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `doubt`
 --
 
-INSERT INTO `doubt` (`id`, `doubt_id`, `user_id`, `teacher_id`, `doubt`, `doubt_image`, `doubt_created_at`, `answer`, `answer_image`, `answer_created_at`) VALUES
-(1, 1, 101, 201, 'How does gravity work?', 'gravity_image.jpg', '2024-03-08 13:16:39', 'Gravity is the force...', 'answer_image.jpg', '2024-03-08 13:16:39'),
-(2, 2, 102, 202, 'What is the capital of France?', NULL, '2024-03-08 13:16:39', 'The capital of France is Paris.', NULL, '2024-03-08 13:16:39'),
-(3, 3, 103, 203, 'How to solve quadratic equations?', 'equation_image.jpg', '2024-03-08 13:16:39', 'Quadratic equations can be solved using...', 'solution_image.jpg', '2024-03-08 13:16:39');
+INSERT INTO `doubt` (`id`, `doubt_id`, `user_id`, `teacher_id`, `doubt`, `doubt_image`, `doubt_created_at`, `answer`, `answer_image`, `answer_created_at`, `student_view`, `teacher_view`, `admin_view`, `accepted`) VALUES
+(1, 1, 101, 201, 'How does gravity work?', 'gravity_image.jpg', '2024-03-08 13:16:39', 'Gravity is the force...', 'answer_image.jpg', '2024-03-08 13:16:39', 0, 0, 0, 0),
+(2, 2, 102, 202, 'What is the capital of France?', NULL, '2024-03-08 13:16:39', 'The capital of France is Paris.', NULL, '2024-03-08 13:16:39', 0, 0, 0, 0),
+(3, 3, 103, 203, 'How to solve quadratic equations?', 'equation_image.jpg', '2024-03-08 13:16:39', 'Quadratic equations can be solved using...', 'solution_image.jpg', '2024-03-08 13:16:39', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -60,17 +64,18 @@ CREATE TABLE `doubt_submission` (
   `doubt_id` int(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `verified` int(11) NOT NULL DEFAULT 0,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `admin_view` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `doubt_submission`
 --
 
-INSERT INTO `doubt_submission` (`id`, `doubt_id`, `description`, `verified`, `created_at`) VALUES
-(1, 1, 'Explanation of gravity', 1, '2024-03-08 18:46:39'),
-(2, 2, 'Question about French capital', 0, '2024-03-08 18:46:39'),
-(3, 3, 'Solving quadratic equations step by step', 1, '2024-03-08 18:46:39');
+INSERT INTO `doubt_submission` (`id`, `doubt_id`, `description`, `verified`, `created_at`, `admin_view`) VALUES
+(1, 1, 'Explanation of gravity', 1, '2024-03-08 18:46:39', 0),
+(2, 2, 'Question about French capital', 0, '2024-03-08 18:46:39', 0),
+(3, 3, 'Solving quadratic equations step by step', 1, '2024-03-08 18:46:39', 0);
 
 -- --------------------------------------------------------
 
@@ -206,17 +211,18 @@ CREATE TABLE `video_call` (
   `doubt_id` int(255) NOT NULL,
   `videocall_link` varchar(255) NOT NULL,
   `join_code` varchar(255) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `attend` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `video_call`
 --
 
-INSERT INTO `video_call` (`id`, `doubt_id`, `videocall_link`, `join_code`, `created_at`) VALUES
-(1, 1, 'https://example.com/videocall1', '12345', '2024-03-08 18:46:39'),
-(2, 2, 'https://example.com/videocall2', '67890', '2024-03-08 18:46:39'),
-(3, 3, 'https://example.com/videocall3', '23456', '2024-03-08 18:46:39');
+INSERT INTO `video_call` (`id`, `doubt_id`, `videocall_link`, `join_code`, `created_at`, `attend`) VALUES
+(1, 1, 'https://example.com/videocall1', '12345', '2024-03-08 18:46:39', 0),
+(2, 2, 'https://example.com/videocall2', '67890', '2024-03-08 18:46:39', 0),
+(3, 3, 'https://example.com/videocall3', '23456', '2024-03-08 18:46:39', 0);
 
 --
 -- Indexes for dumped tables
