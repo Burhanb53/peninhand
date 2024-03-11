@@ -28,18 +28,27 @@
     <link rel="stylesheet" href="../css/colors/default.css" id="colorSkinCSS">
 
     <style>
-        body {
-            overflow: hidden;
+        /* Global Styles */
+
+
+
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        /* Chat Page Styles */
+
         .chat-page {
-            max-height: 80vh;
             max-width: 800px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
             margin-bottom: 50px;
         }
+
+        /* Chat Header Styles */
 
         .chat-header {
             position: sticky;
@@ -50,8 +59,8 @@
             display: flex;
             align-items: center;
             /* background-color: #F2F2F2;
-            border-radius: 10px;
-            margin-bottom: 2px; */
+    border-radius: 10px;
+    margin-bottom: 2px; */
         }
 
         .profile-image {
@@ -75,18 +84,21 @@
             font-size: 12px;
         }
 
+        /* Chat Content Styles */
+
         .chat-content {
             flex-grow: 1;
             overflow-y: auto;
             padding: 10px;
             max-width: 800px;
+            max-height: 500px;
             background-color: #f2f2f2;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-height: 60vh;
         }
 
-        /* Customize scrollbar */
+        /* Scrollbar Customization */
+
         .chat-content::-webkit-scrollbar {
             width: 6px;
         }
@@ -100,7 +112,7 @@
             background-color: #f5f5f5;
         }
 
-        /* End of scrollbar customization */
+        /* Message Styles */
 
         .message {
             margin-bottom: 10px;
@@ -125,6 +137,8 @@
             color: #888;
         }
 
+        /* Message Input Styles */
+
         .message-input {
             display: flex;
             padding: 10px;
@@ -142,6 +156,8 @@
             overflow-y: auto;
         }
 
+        /* Textarea Scrollbar Customization */
+
         textarea::-webkit-scrollbar {
             width: 6px;
         }
@@ -155,6 +171,8 @@
             background-color: #f5f5f5;
         }
 
+        /* Button Styles */
+
         button {
             padding: 8px;
             margin-left: 10px;
@@ -165,12 +183,20 @@
             border-radius: 5px;
         }
 
+        button:hover {
+            background: #2980b9;
+        }
+
+        /* Back Icon Styles */
+
         .back-icon {
             font-size: 24px;
             color: #000;
             margin-right: 10px;
             cursor: pointer;
         }
+
+        /* Modal Styles */
 
         .modal {
             display: none;
@@ -186,24 +212,19 @@
 
         .modal-content {
             margin: auto;
-            margin-top: 100px;
             margin-top: 150px;
         }
 
         .modal img {
             width: 400px;
-            /* Set the width to 100% to fit perfectly in the container */
             height: auto;
-            /* Maintain aspect ratio */
             cursor: pointer;
             transition: transform 0.3s ease;
             margin: auto;
-
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
 
         .modal img:hover {
             transform: scale(1.1);
@@ -218,6 +239,8 @@
             cursor: pointer;
         }
 
+        /* Download Link Styles */
+
         .download-link {
             display: block;
             margin-top: 10px;
@@ -228,21 +251,7 @@
             background-color: #DEDFE2;
         }
 
-        .message img {
-            width: 150px;
-            height: 100px;
-            cursor: pointer;
-        }
-
-        .sent {
-            background-color: #d4e6f1;
-            align-self: flex-end;
-        }
-
-        .message-time {
-            font-size: 12px;
-            color: #888;
-        }
+        /* Responsive Styles */
 
         @media (max-width: 600px) {
             .chat-page {
@@ -250,7 +259,6 @@
                 margin-left: 20px;
                 margin-right: 20px;
                 margin-top: 20px;
-
             }
 
             .chat-content {
@@ -268,11 +276,114 @@
                 margin-top: 10%;
             }
         }
+
+        main.cd__main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+            min-width: 1200px;
+        }
+
+        .additional-details {
+            margin-top: 20px;
+            background-color: #F2F2F2;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            /* Adjust the width as needed */
+            max-width: 800px;
+            /* Set a minimum width */
+        }
+
+        form#solutionForm {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        textarea,
+        input[type="text"],
+        input[type="file"] {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        textarea {
+            resize: vertical;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        button.edit-details-button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        button.edit-details-button:hover {
+            background: #2980b9;
+        }
+
+        @media (max-width: 600px) {
+
+            .additional-details {
+
+                /* Adjust the width as needed */
+                max-width: 400px;
+                /* Set a minimum width */
+            }
+        }
+
+        .icons {
+            display: flex;
+            align-items: center;
+        }
+        
+
+        .close-icon,
+        .right-icon {
+            font-size: 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            color: #fff;
+            border-radius: 50%;
+            padding: 5px 8px;
+        }
+
+        .close-icon {
+            background-color: red;
+            padding: 5px 10px;
+
+        }
+
+        .right-icon {
+            background-color: green;
+        }
     </style>
+
+
 
 </head>
 
-<body class="crm_body_bg">
+<body class="crm_body_bg" style="overflow:scroll; height:100vh;">
     <?php include('../includes/sidebar.php'); ?>
     <section class="main_content dashboard_part">
         <?php include('../includes/navbar.php'); ?>
@@ -285,7 +396,10 @@
                     <h2>John Doe</h2>
                     <p>Short description about John Doe</p>
                     <p class="date-time">March 8, 2024 12:45 PM</p>
-
+                </div>
+                <div class="icons">
+                    <a href="#"><span class="close-icon"><i class="fas fa-times"></i></span></a>
+                    <a href="#"><span class="right-icon"><i class="fas fa-check"></i></span></a>
                 </div>
             </div>
 
@@ -296,7 +410,7 @@
                     <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
                 </div>
 
-                <div class="message received">
+                <div class="message sent">
                     <!-- Example 1: Image -->
                     <img style="width: 200px; height: auto;" src="../img/card.jpg" alt="Image Message"
                         onclick="zoomMedia(this, 'image')">
@@ -304,14 +418,14 @@
                     <a href="../img/card.jpg" class="download-link" download>Download Image</a>
                 </div>
 
-                <div class="message received">
+                <div class="message sent">
                     <!-- Example 2: PDF -->
                     <a style="cursor: pointer;" onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
                     <p class="message-time">Sent on March 8, 2024 10:35 AM</p>
                     <a href="../img/mefa_1.pdf" class="download-link" download>Download PDF</a>
                 </div>
 
-                <div class="message received">
+                <div class="message sent">
                     <!-- Example 3: Video -->
                     <video style="width: 200px; height: auto;" controls onclick="zoomMedia(this, 'video')">
                         <source src="../img/trial.mp4" type="video/mp4">
@@ -331,9 +445,30 @@
             </div>
 
             <!-- Message input section -->
-            <div class="message-input">
-                <textarea placeholder="Type your message..."></textarea>
-                <button onclick="sendMessage()">Send</button>
+            <div class="additional-details" id="additionalDetails">
+                <form id="solutionForm">
+                    <div class="form-group">
+                        <label for="solution">Solution:</label>
+                        <textarea id="solution" name="solution" placeholder="Type your solution..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fileUpload">Upload File:</label>
+                        <input type="file" id="fileUpload" name="fileUpload">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="videoLink">Video Call Link:</label>
+                        <input type="text" id="videoLink" name="videoLink" placeholder="Paste video call link...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="joinCode">Join Code:</label>
+                        <input type="text" id="joinCode" name="joinCode" placeholder="Enter join code...">
+                    </div>
+
+                    <button type="submit" class="edit-details-button">Submit</button>
+                </form>
             </div>
         </div>
         <div id="zoomModal" class="modal" onclick="closeZoom()">

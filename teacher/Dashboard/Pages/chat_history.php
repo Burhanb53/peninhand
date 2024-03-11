@@ -39,6 +39,8 @@
     <link rel="stylesheet" href="../css/metisMenu.css">
 
     <link rel="stylesheet" href="../css/style1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
         body {
             overflow: hidden;
@@ -146,6 +148,8 @@
                 margin-top: 20px;
             }
         }
+
+        
     </style>
 </head>
 
@@ -159,21 +163,22 @@
 
             <div class="chat-container">
                 <!-- Example chat history -->
-                <a href="chat.php">
-                    <div class="chat-card unread">
-                        <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
-                        <div class="message-content">
-                            <p class="message-text">Short description of the message goes here...</p>
-                            <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
-                        </div>
+                <div class="chat-card unread" onclick="window.location.href='chat.php';">
+                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
+                    <div class="message-content">
+                        <p class="message-text">Short description of the message goes here...</p>
+                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
                     </div>
-                </a>
+                    
+                </div>
+
                 <div class="chat-card unread">
                     <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
                     <div class="message-content">
                         <p class="message-text">Short description of the message goes here...</p>
                         <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
                     </div>
+                    
                 </div>
                 <div class="chat-card unread">
                     <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
@@ -225,7 +230,12 @@
 
 
     </section>
-
+    <script>
+        function handleRightIconClick() {
+            // Add your logic for right icon click here
+            console.log('Right icon clicked');
+        }
+    </script>
 </body>
 
 </html>
