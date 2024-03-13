@@ -120,13 +120,13 @@
     }
 
     td {
-        background-color: #F7ECF9;
+        background-color: #F9F9F9;
 
     }
 
     th {
-        background-color: #2D1967;
-        color: #fff;
+        background-color: #FFFFFF;
+        color: black;
 
     }
 
@@ -136,7 +136,6 @@
         border-radius: 5px;
         cursor: pointer;
         margin-right: 5px;
-        background-color: #2D1967;
         float: inline-end;
     }
 
@@ -152,11 +151,7 @@
 
     }
 
-    .call-links button {
-        background-color: #2D1967;
-        color: white;
-    }
-
+    
     .call-links button:hover {
         background-color: #357ae8;
     }

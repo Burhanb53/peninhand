@@ -74,7 +74,7 @@ include('config.php');
                                     <p class="h2_price-middle-info-2">Per User, billed annually</p>
                                 </div>
                                 <div class="h2_price-button">
-                                    <a href="#">Enroll Now</a>
+                                    <a href="../student/Dashboard/Pages/subscription_form.php">Enroll Now</a>
                                 </div>
                                 <div class="h3_price-content">
                                     <div class="h2_price-content-top"><a href="#">Choose 2 - year plan</a><span>Save 6%</span></div>
