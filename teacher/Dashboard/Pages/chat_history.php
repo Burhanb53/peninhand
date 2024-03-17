@@ -1,3 +1,15 @@
+<?php
+session_start();
+include ('../../../includes/config.php');
+
+// Fetch doubts for the current user
+$user_id = $_SESSION['user_id'];
+$stmt = $dbh->prepare("SELECT * FROM doubt WHERE teacher_id = :user_id");
+$stmt->bindParam(':user_id', $user_id);
+$stmt->execute();
+$doubts = $stmt->fetchAll();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -100,11 +112,18 @@
             align-items: center;
             padding: 15px;
             margin-bottom: 15px;
+            margin-left: 5px;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             background-color: #fff;
+            transition: transform 0.3s ease;
         }
 
+        .chat-card:hover {
+            transform: scale(1.05);
+            /* Adjust the scale factor as needed */
+        }
+        
         .profile-image {
             width: 60px;
             height: 60px;
@@ -159,73 +178,78 @@
         <?php include('../includes/navbar.php'); ?>
 
         <div class="chat-wrapper">
-            <input type="text" class="search-bar" placeholder="Search...">
+            <input type="text" class="search-bar" id="searchInput" placeholder="Search...">
+            <div id="searchResults" class="chat-container">
+                <?php
 
-            <div class="chat-container">
-                <!-- Example chat history -->
-                <div class="chat-card unread" onclick="window.location.href='chat.php';">
-                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
-                    <div class="message-content">
-                        <p class="message-text">Short description of the message goes here...</p>
-                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
-                    </div>
-                    
-                </div>
 
-                <div class="chat-card unread">
-                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
-                    <div class="message-content">
-                        <p class="message-text">Short description of the message goes here...</p>
-                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
-                    </div>
-                    
-                </div>
-                <div class="chat-card unread">
-                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
-                    <div class="message-content">
-                        <p class="message-text">Short description of the message goes here...</p>
-                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
-                    </div>
-                </div>
-                <div class="chat-card read">
-                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
-                    <div class="message-content">
-                        <p class="message-text">Short description of the message goes here...</p>
-                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
-                    </div>
-                </div>
-                <div class="chat-card read">
-                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
-                    <div class="message-content">
-                        <p class="message-text">Short description of the message goes here...</p>
-                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
-                    </div>
-                </div>
-                <div class="chat-card read">
-                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
-                    <div class="message-content">
-                        <p class="message-text">Short description of the message goes here...</p>
-                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
-                    </div>
-                </div>
-                <div class="chat-card read">
-                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
-                    <div class="message-content">
-                        <p class="message-text">Short description of the message goes here...</p>
-                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
-                    </div>
-                </div>
-                <div class="chat-card read">
-                    <img src="../img/card.jpg" alt="Profile 1" class="profile-image">
-                    <div class="message-content">
-                        <p class="message-text">Short description of the message goes here...</p>
-                        <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
-                    </div>
-                </div>
+                // Fetch doubts based on user_id, sorted by created_at timestamp
+                $stmt_doubts = $dbh->prepare("SELECT * FROM doubt WHERE teacher_id = :user_id ORDER BY doubt_created_at DESC");
+                $stmt_doubts->bindParam(':user_id', $_SESSION['user_id']);
+                $stmt_doubts->execute();
+                $all_doubts = $stmt_doubts->fetchAll();
 
-                <!-- Add more chat cards here -->
+                foreach ($all_doubts as $doubt):
+                    $student_view_class = ($doubt['teacher_view'] == 0) ? 'unread' : 'read';
+                    $profile_image_src = '';
 
+                    // Fetch profile image based on user_id from subscription_user table
+                    $stmt_profile = $dbh->prepare("SELECT photo FROM teacher WHERE teacher_id = :teacher_id");
+                    $stmt_profile->bindParam(':teacher_id', $doubt['teacher_id']);
+                    $stmt_profile->execute();
+                    $profile_data = $stmt_profile->fetch();
+                    if ($profile_data) {
+                        $profile_image_src = "../uploads/profile/" . $profile_data['photo'];
+                    } else {
+                        // Default profile image source if no profile image found
+                        $profile_image_src = "../img/card.jpg";
+                    }
+
+                    // Truncate doubt message if it exceeds 40 characters
+                    $doubt_message = (strlen($doubt['doubt']) > 40) ? substr($doubt['doubt'], 0, 40) . "..." : $doubt['doubt'];
+
+                    // Format the created_at timestamp
+                    $sent_time = date("F j, Y g:i A", strtotime($doubt['doubt_created_at']));
+                    ?>
+
+                    <a href="chat.php?doubt_id=<?php echo $doubt['doubt_id']; ?>"
+                        class="chat-card <?php echo $student_view_class; ?>">
+                        <img src="<?php echo $profile_image_src; ?>" alt="Profile" class="profile-image">
+                        <div class="message-content">
+                            <p class="message-text">
+                                <?php echo $doubt_message; ?>
+                            </p>
+                            <p class="message-time">Sent on
+                                <?php echo $sent_time; ?>
+                            </p>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
             </div>
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    var searchInput = document.getElementById("searchInput");
+
+                    searchInput.addEventListener("input", function () {
+                        var query = this.value.toLowerCase().trim();
+                        var chatCards = document.querySelectorAll("#searchResults .chat-card");
+
+                        chatCards.forEach(function (card) {
+                            var messageText = card.querySelector(".message-text").textContent.toLowerCase();
+
+                            if (messageText.includes(query)) {
+                                card.style.display = "block";
+                            } else {
+                                card.style.display = "none";
+                            }
+                        });
+                    });
+                });
+            </script>
+
+
         </div>
 
 

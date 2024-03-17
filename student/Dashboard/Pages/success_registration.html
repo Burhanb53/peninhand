@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shape Animation</title>
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .animation-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .shape {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: #ff6384; /* Shape color */
+    border-radius: 50%;
+    animation: shapeFall 3s ease infinite; /* Adjust animation duration */
+  }
+
+  @keyframes shapeFall {
+    0% {
+      transform: translateY(-100vh) rotate(0deg);
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  .square {
+    width: 30px;
+    height: 30px;
+    background-color: #ff9f00; /* Square color */
+    animation: shapeFall 3s ease infinite; /* Adjust animation duration */
+  }
+
+  .triangle {
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 30px solid #36a2eb; /* Triangle color */
+    animation: shapeFall 3s ease infinite; /* Adjust animation duration */
+  }
+
+  .star {
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 30px solid #ffcd56; /* Star color */
+    position: relative;
+    animation: shapeFall 3s ease infinite; /* Adjust animation duration */
+  }
+  .star:before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 15px solid #ffcd56; /* Star color */
+    position: absolute;
+    top: 5px;
+    left: -20px;
+  }
+
+  .card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  .message {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff; /* Blue */
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="animation-container">
+    <!-- Generate shapes dynamically using JavaScript -->
+  </div>
+  <div class="card">
+    <div class="message">Successfully Registered!</div>
+    <div class="waiting-message">Please wait for confirmation.</div>
+  </div>
+</div>
+
+<script>
+  const animationContainer = document.querySelector('.animation-container');
+
+  // Function to create a shape element
+  function createShape(className) {
+    const shape = document.createElement('div');
+    shape.classList.add(className);
+    shape.style.left = `${Math.random() * 100}vw`;
+    animationContainer.appendChild(shape);
+
+    // Remove shape element after animation ends
+    shape.addEventListener('animationend', () => {
+      shape.remove();
+    });
+  }
+
+  // Generate shapes at random intervals
+  setInterval(() => {
+    const shapes = ['shape', 'square', 'triangle', 'star'];
+    const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
+    createShape(randomShape);
+  }, 50);
+</script>
+<script>
+  setTimeout(function(){
+    window.location.href = "../../../Pages/sign-in.php"; // Redirect after 5 seconds
+  }, 10000);
+</script>
+</body>
+</html>

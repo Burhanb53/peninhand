@@ -302,7 +302,7 @@ include('includes/config.php');
                                 </div>
                                 
                                 <div class="h3_admission-button">
-                                    <a href="#" class="theme-btn theme-btn-medium theme-btn-3">Apply Now<i class="fa-light fa-arrow-up-right"></i></a>
+                                    <a href="teacher/Dashboard/Pages/subscription_form.php" class="theme-btn theme-btn-medium theme-btn-3">Apply Now<i class="fa-light fa-arrow-up-right"></i></a>
                                 </div>
                             </div>
                         </div>

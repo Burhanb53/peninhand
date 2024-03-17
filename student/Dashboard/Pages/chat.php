@@ -1,3 +1,52 @@
+<?php
+session_start();
+include ('../../../includes/config.php');
+// Fetch the doubt details based on doubt_id from the URL parameter
+if (isset ($_GET['doubt_id'])) {
+    $doubt_id = $_GET['doubt_id'];
+    // Update student_view to 1 for the specified doubt_id
+    $sql = "UPDATE doubt SET student_view = 1 WHERE doubt_id = :doubt_id";
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':doubt_id', $doubt_id);
+    $stmt->execute(); // Execute the update query
+
+    // Query to fetch doubt details using doubt_id
+    $stmt_doubt = $dbh->prepare("SELECT * FROM doubt WHERE doubt_id = :doubt_id");
+    $stmt_doubt->bindParam(':doubt_id', $doubt_id);
+    $stmt_doubt->execute();
+    $doubt = $stmt_doubt->fetch();
+
+    // Check if doubt is found
+    if ($doubt) {
+        // Fetch profile image based on user_id from subscription_user table
+        $stmt_profile = $dbh->prepare("SELECT photo FROM subscription_user WHERE user_id = :user_id");
+        $stmt_profile->bindParam(':user_id', $doubt['user_id']);
+        $stmt_profile->execute();
+        $profile_data = $stmt_profile->fetch();
+        if ($profile_data) {
+            $profile_image_src = "../uploads/profile/" . $profile_data['photo'];
+        } else {
+            // Default profile image source if no profile image found
+            $profile_image_src = "../img/card.jpg";
+        }
+        $doubt_description = $doubt['doubt'];
+        // Truncate doubt message if it exceeds 40 characters
+        $doubt_message = (strlen($doubt['doubt']) > 40) ? substr($doubt['doubt'], 0, 40) . "..." : $doubt['doubt'];
+        $teacher_id = $doubt['teacher_id'];
+        // Format the created_at timestamp
+        $sent_time = date("F j, Y g:i A", strtotime($doubt['doubt_created_at']));
+        $received_time = date("F j, Y g:i A", strtotime($doubt['answer_created_at']));
+    } else {
+        // Doubt not found
+        echo "Doubt not found.";
+        exit();
+    }
+} else {
+    // Doubt ID parameter not provided
+    echo "Doubt ID not provided.";
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -111,15 +160,15 @@
         }
 
         .received {
-            background-color: #e6f7ff;
+            background-color: #2F2F2F;
             align-self: flex-start;
+            font-size: 1rem;
+            color: white;
         }
 
-        .sent {
-            background-color: #d4e6f1;
-            align-self: flex-end;
+        .received p {
+            color: white;
         }
-
         .message-time {
             font-size: 12px;
             color: #888;
@@ -215,18 +264,27 @@
 
         .message img {
             width: 150px;
-            height: 100px;
+            height: 150px;
             cursor: pointer;
         }
 
         .sent {
-            background-color: #d4e6f1;
+            background-color: #00A67D;
             align-self: flex-end;
+            font-size: 1rem;
         }
 
-        .message-time {
-            font-size: 12px;
-            color: #888;
+        .sent .message-time {
+            color: white
+        }
+
+        .sent p,
+        a {
+            color: white;
+        }
+
+        video {
+            height: 300px;
         }
 
         @media (max-width: 600px) {
@@ -253,84 +311,115 @@
                 margin-top: 10%;
             }
         }
+
+        p {
+            font-size: 1rem;
+
+        }
     </style>
 
 </head>
 
 <body class="crm_body_bg">
-    <?php include('../includes/sidebar.php'); ?>
+    <?php include ('../includes/sidebar.php'); ?>
     <section class="main_content dashboard_part">
-        <?php include('../includes/navbar.php'); ?>
+        <?php include ('../includes/navbar.php'); ?>
 
         <div class="chat-page">
             <div class="chat-header">
                 <span class="back-icon" onclick="goBack()">&#9665;</span>
-                <img src="../img/card.jpg" alt="Profile Image" class="profile-image">
+                <img src="<?php echo $profile_image_src; ?>" alt="Profile" class="profile-image">
                 <div class="profile-info">
-                    <h2>John Doe</h2>
-                    <p>Short description about John Doe</p>
-                    <p class="date-time">March 8, 2024 12:45 PM</p>
-
+                    <h2>
+                        <?php echo $doubt['teacher_id'] ? 'Teacher ID: ' . $doubt['teacher_id'] : 'Teacher not assigned'; ?>
+                    </h2>
+                    <p>
+                        <?php echo $doubt_message; ?>
+                    </p>
+                    <p class="date-time">
+                        <?php echo $sent_time; ?>
+                    </p>
                 </div>
             </div>
 
             <div class="chat-content">
                 <!-- Chat messages go here -->
+                <?php if ($doubt['doubt']): ?>
+                    <div class="message sent">
+                        <p>
+                            <?php echo $doubt_description ?>
+                        </p>
+                        <p class="message-time">
+                            <?php echo $sent_time; ?>
+                        </p>
+                    </div>
+                <?php endif; ?>
+                <div class="message sent">
+                    <?php if ($doubt['doubt_file']): ?>
+                        <?php
+                        $doubt_media_type = strtolower(pathinfo($doubt['doubt_file'], PATHINFO_EXTENSION));
+                        if ($doubt_media_type === 'pdf'): ?>
+                            <!-- Example 2: PDF -->
+                            <a href="../uploads/doubt/<?php echo $doubt['doubt_file']; ?>" style="cursor: pointer;"
+                                onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
+                        <?php elseif ($doubt_media_type === 'mp4'): ?>
+                            <!-- Example 3: Video -->
+                            <video controls onclick="zoomMedia(this, 'video')">
+                                <source src="../uploads/doubt/<?php echo $doubt['doubt_file']; ?>" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        <?php else: ?>
+                            <!-- Example 1: Image -->
+                            <img src="../uploads/doubt/<?php echo $doubt['doubt_file']; ?>" alt="Image Message"
+                                onclick="zoomMedia(this, 'image')">
+                        <?php endif; ?>
+                        <p class="message-time">Sent on
+                            <?php echo $sent_time; ?>
+                        </p>
+                        <a href="../uploads/doubt/<?php echo $doubt['doubt_file']; ?>" class="download-link"
+                            download>Download
+                            <?php echo ucfirst($doubt_media_type); ?>
+                        </a>
+                    <?php endif; ?>
+                </div>
+                <?php if ($doubt['answer']): ?>
+                    <div class="message received">
+                        <p>
+                            <?php echo $doubt_description ?>
+                        </p>
+                        <p class="message-time">
+                            <?php echo $sent_time; ?>
+                        </p>
+                    </div>
+                <?php endif; ?>
                 <div class="message received">
-                    <p>Hello! How are you doing?</p>
-                    <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
+                    <?php if ($doubt['answer_file']): ?>
+                        <?php
+                        $doubt_media_type = strtolower(pathinfo($doubt['answer_file'], PATHINFO_EXTENSION));
+                        if ($doubt_media_type === 'pdf'): ?>
+                            <!-- Example 2: PDF -->
+                            <a href="../uploads/doubt/<?php echo $doubt['answer_file']; ?>" style="cursor: pointer;"
+                                onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
+                        <?php elseif ($doubt_media_type === 'mp4'): ?>
+                            <!-- Example 3: Video -->
+                            <video controls onclick="zoomMedia(this, 'video')">
+                                <source src="../uploads/doubt/<?php echo $doubt['answer_file']; ?>" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        <?php else: ?>
+                            <!-- Example 1: Image -->
+                            <img src="../uploads/doubt/<?php echo $doubt['answer_file']; ?>" alt="Image Message"
+                                onclick="zoomMedia(this, 'image')">
+                        <?php endif; ?>
+                        <p class="message-time">Sent on
+                            <?php echo $sent_time; ?>
+                        </p>
+                        <a href="../uploads/doubt/<?php echo $doubt['answer_file']; ?>" class="download-link"
+                            download>Download
+                            <?php echo ucfirst($doubt_media_type); ?>
+                        </a>
+                    <?php endif; ?>
                 </div>
-                <div class="message received">
-                    <p>Hello! How are you doing?</p>
-                    <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
-                </div>
-                <div class="message received">
-                    <p>Hello! How are you doing?</p>
-                    <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
-                </div>
-
-                <div class="message sent">
-                    <p>I'm doing well, thanks! How about you?</p>
-                    <p class="message-time">Sent on March 8, 2024 10:35 AM</p>
-                </div>
-                <div class="message sent">
-                    <p>I'm doing well, thanks! How about you?</p>
-                    <p class="message-time">Sent on March 8, 2024 10:35 AM</p>
-                </div>
-                <div class="message sent">
-                    <p>I'm doing well, thanks! How about you?</p>
-                    <p class="message-time">Sent on March 8, 2024 10:35 AM</p>
-                </div>
-                <div class="message sent">
-                    <p>I'm doing well, thanks! How about you?</p>
-                    <p class="message-time">Sent on March 8, 2024 10:35 AM</p>
-                </div>
-                <div class="message sent">
-                    <!-- Example 1: Image -->
-                    <img style="width: 200px; height: auto;" src="../img/card.jpg" alt="Image Message"
-                        onclick="zoomMedia(this, 'image')">
-                    <p class="message-time">Sent on March 8, 2024 10:35 AM</p>
-                    <a href="../img/card.jpg" class="download-link" download>Download Image</a>
-                </div>
-
-                <div class="message sent">
-                    <!-- Example 2: PDF -->
-                    <a style="cursor: pointer;" onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
-                    <p class="message-time">Sent on March 8, 2024 10:35 AM</p>
-                    <a href="../img/mefa_1.pdf" class="download-link" download>Download PDF</a>
-                </div>
-
-                <div class="message sent">
-                    <!-- Example 3: Video -->
-                    <video style="width: 200px; height: auto;" controls onclick="zoomMedia(this, 'video')">
-                        <source src="../img/trial.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <p class="message-time">Sent on March 8, 2024 10:35 AM</p>
-                    <a href="../img/trial.mp4" class="download-link" download>Download Video</a>
-                </div>
-
-
                 <!-- Zoom Modal -->
                 <div id="zoomModal" class="modal" onclick="closeZoom()">
                     <span class="close" onclick="closeZoom()">&times;</span>
@@ -339,57 +428,45 @@
                 </div>
             </div>
 
-            <!-- Message input section -->
-            <!-- <div class="message-input">
-                <textarea placeholder="Type your message..."></textarea>
-                <button onclick="sendMessage()">Send</button>
-            </div> -->
+
         </div>
-        <div id="zoomModal" class="modal" onclick="closeZoom()">
-            <span class="close">&times;</span>
-            <div class="modal-content">
-                <img id="zoomedImage">
-                <a id="downloadLink" class="download-link" download>Download Image</a>
-            </div>
-        </div>
+
     </section>
 
     <script>
         function zoomMedia(element, mediaType) {
-    var modal = document.getElementById('zoomModal');
-    var zoomedContent = document.getElementById('zoomedContent');
-    var downloadLink = document.getElementById('downloadLink');
+            var modal = document.getElementById('zoomModal');
+            var zoomedContent = document.getElementById('zoomedContent');
+            var downloadLink = document.getElementById('downloadLink');
 
-    modal.style.display = 'block';
-    zoomedContent.innerHTML = ''; // Clear previous content
+            modal.style.display = 'block';
+            zoomedContent.innerHTML = ''; // Clear previous content
 
-    if (mediaType === 'image') {
-        const img = document.createElement('img');
-        img.src = element.src;
-        zoomedContent.appendChild(img);
+            if (mediaType === 'image') {
+                const img = document.createElement('img');
+                img.src = element.src;
+                zoomedContent.appendChild(img);
 
-        // Set the href property of the download link for images
-        downloadLink.href = element.src;
-        downloadLink.download = 'image_download.jpg';
-        downloadLink.style.display = 'block'; // Show download link for images
-    } else if (mediaType === 'pdf') {
-        // Display PDF in a new tab
-        window.open('../img/mefa_1.pdf', '_blank');
+                // Set the href property of the download link for images
+                downloadLink.href = element.src;
+                downloadLink.style.display = 'block'; // Show download link for images
+            } else if (mediaType === 'pdf') {
+                // Display PDF in a new tab
 
-        // Hide the download link for PDFs
-        downloadLink.style.display = 'none';
-    } else if (mediaType === 'video') {
-        const video = document.createElement('video');
-        video.src = element.querySelector('source').src;
-        video.controls = true;
-        video.width = '100%';
-        video.height = 'auto';
-        zoomedContent.appendChild(video);
+                // Hide the download link for PDFs
+                downloadLink.style.display = 'none';
+            } else if (mediaType === 'video') {
+                const video = document.createElement('video');
+                video.src = element.querySelector('source').src;
+                video.controls = true;
+                video.width = '100%';
+                video.height = 'auto';
+                zoomedContent.appendChild(video);
 
-        // Hide the download link for videos
-        downloadLink.style.display = 'none';
-    }
-}
+                // Hide the download link for videos
+                downloadLink.style.display = 'none';
+            }
+        }
 
 
         function closeZoom() {

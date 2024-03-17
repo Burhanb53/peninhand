@@ -115,8 +115,7 @@
                                     <div class="profile_info_details">
                                         <a href="Pages/profile.php">My Profile </a>
                                         <a href="#">Settings</a>
-                                        <a href="#">Log Out </a>
-                                    </div>
+                                        <a href="../../auth/logout.php">Log Out </a>                                    </div>
                                 </div>
                             </div>
                         </div>
