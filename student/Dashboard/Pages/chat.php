@@ -27,7 +27,7 @@ if (isset ($_GET['doubt_id'])) {
             $profile_image_src = "../../../teacher/Dashboard/uploads/profile/" . $profile_data['photo'];
         } else {
             // Default profile image source if no profile image found
-            $profile_image_src = "../img/card.jpg";
+            $profile_image_src = "../img/profile.jpg";
         }
         $doubt_description = $doubt['doubt'];
         $doubt_solution = $doubt['answer'];
