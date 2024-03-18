@@ -148,7 +148,7 @@ $doubts = $stmt->fetchAll();
         }
 
         .unread {
-            background-color: #e6f7ff;
+            background-color: #82bfe0;
         }
 
         .read {
@@ -194,12 +194,12 @@ $doubts = $stmt->fetchAll();
                     $profile_image_src = '';
 
                     // Fetch profile image based on user_id from subscription_user table
-                    $stmt_profile = $dbh->prepare("SELECT photo FROM teacher WHERE teacher_id = :teacher_id");
-                    $stmt_profile->bindParam(':teacher_id', $doubt['teacher_id']);
+                    $stmt_profile = $dbh->prepare("SELECT photo FROM subscription_user WHERE user_id = :user_id");
+                    $stmt_profile->bindParam(':user_id', $doubt['user_id']);
                     $stmt_profile->execute();
                     $profile_data = $stmt_profile->fetch();
                     if ($profile_data) {
-                        $profile_image_src = "../uploads/profile/" . $profile_data['photo'];
+                        $profile_image_src = "../../../student/Dashboard/uploads/profile/" . $profile_data['photo'];
                     } else {
                         // Default profile image source if no profile image found
                         $profile_image_src = "../img/card.jpg";

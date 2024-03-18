@@ -1,3 +1,70 @@
+<?php
+session_start();
+include ('../../../includes/config.php');
+// Fetch the doubt details based on doubt_id from the URL parameter
+if (isset ($_GET['doubt_id'])) {
+    $doubt_id = $_GET['doubt_id'];
+
+    // Update student_view to 1 for the specified doubt_id
+    $sql = "UPDATE doubt SET teacher_view = 1 WHERE doubt_id = :doubt_id";
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':doubt_id', $doubt_id);
+    $stmt->execute(); // Execute the update query
+
+    $stmt_link = $dbh->prepare("SELECT * FROM video_call WHERE doubt_id = :doubt_id");
+    $stmt_link->bindParam(':doubt_id', $doubt_id);
+    $stmt_link->execute();
+    $video_call_data = $stmt_link->fetch();
+
+    if ($video_call_data !== false) {
+        // Row exists for the given doubt_id
+        // Proceed with using $video_call_data
+        $video_call = $video_call_data; // Assign $video_call_data to $video_call
+    } else {
+        // No corresponding row found in the table
+        $video_call = false; // Set $video_call to false
+        // Handle accordingly, such as setting default values or displaying a message
+    }
+
+
+    // Query to fetch doubt details using doubt_id
+    $stmt_doubt = $dbh->prepare("SELECT * FROM doubt WHERE doubt_id = :doubt_id");
+    $stmt_doubt->bindParam(':doubt_id', $doubt_id);
+    $stmt_doubt->execute();
+    $doubt = $stmt_doubt->fetch();
+
+    // Check if doubt is found
+    if ($doubt) {
+        // Fetch profile image based on user_id from subscription_user table
+        $stmt_profile = $dbh->prepare("SELECT photo, name FROM subscription_user WHERE user_id = :user_id");
+        $stmt_profile->bindParam(':user_id', $doubt['user_id']);
+        $stmt_profile->execute();
+        $profile_data = $stmt_profile->fetch();
+        if ($profile_data) {
+            $profile_image_src = "../../../student/Dashboard/uploads/profile/" . $profile_data['photo'];
+        } else {
+            // Default profile image source if no profile image found
+            $profile_image_src = "../img/card.jpg";
+        }
+        $doubt_description = $doubt['doubt'];
+        $doubt_solution = $doubt['answer'];
+        // Truncate doubt message if it exceeds 40 characters
+        $doubt_message = (strlen($doubt['doubt']) > 40) ? substr($doubt['doubt'], 0, 40) . "..." : $doubt['doubt'];
+        $teacher_id = $doubt['teacher_id'];
+        // Format the created_at timestamp
+        $sent_time = date("F j, Y g:i A", strtotime($doubt['doubt_created_at']));
+        $received_time = date("F j, Y g:i A", strtotime($doubt['answer_created_at']));
+    } else {
+        // Doubt not found
+        echo "Doubt not found.";
+        exit();
+    }
+} else {
+    // Doubt ID parameter not provided
+    echo "Doubt ID not provided.";
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -123,18 +190,26 @@
         }
 
         .received {
-            background-color: #e6f7ff;
+            background-color: #2F2F2F;
             align-self: flex-start;
+            font-size: 1rem;
+            color: white;
         }
 
-        .sent {
-            background-color: #d4e6f1;
-            align-self: flex-end;
+        .received p {
+            color: white;
         }
 
         .message-time {
             font-size: 12px;
             color: #888;
+        }
+
+        .message-input {
+            display: flex;
+            padding: 10px;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
         }
 
         /* Message Input Styles */
@@ -239,8 +314,6 @@
             cursor: pointer;
         }
 
-        /* Download Link Styles */
-
         .download-link {
             display: block;
             margin-top: 10px;
@@ -249,6 +322,31 @@
             text-decoration: none;
             cursor: pointer;
             background-color: #DEDFE2;
+        }
+
+        .message img {
+            width: 250px;
+            height: 250px;
+            cursor: pointer;
+        }
+
+        .sent {
+            background-color: #00A67D;
+            align-self: flex-end;
+            font-size: 1rem;
+        }
+
+        .sent .message-time {
+            color: white
+        }
+
+        .sent p,
+        a {
+            color: white;
+        }
+
+        video {
+            height: 400px;
         }
 
         /* Responsive Styles */
@@ -356,7 +454,7 @@
             display: flex;
             align-items: center;
         }
-        
+
 
         .close-icon,
         .right-icon {
@@ -377,6 +475,11 @@
         .right-icon {
             background-color: green;
         }
+
+        p {
+            font-size: 1rem;
+
+        }
     </style>
 
 
@@ -384,58 +487,119 @@
 </head>
 
 <body class="crm_body_bg" style="overflow:scroll; height:100vh;">
-    <?php include('../includes/sidebar.php'); ?>
+    <?php include ('../includes/sidebar.php'); ?>
     <section class="main_content dashboard_part">
-        <?php include('../includes/navbar.php'); ?>
+        <?php include ('../includes/navbar.php'); ?>
 
-        <div class="chat-page">
+        <di class="chat-page">
             <div class="chat-header">
                 <span class="back-icon" onclick="goBack()">&#9665;</span>
-                <img src="../img/card.jpg" alt="Profile Image" class="profile-image">
+                <img src="<?php echo $profile_image_src; ?>" alt="Profile" class="profile-image">
                 <div class="profile-info">
-                    <h2>John Doe</h2>
-                    <p>Short description about John Doe</p>
-                    <p class="date-time">March 8, 2024 12:45 PM</p>
+                    <h2>
+                        <?php echo $doubt['user_id'] ? $profile_data['name'] : 'Student not assigned'; ?>
+                    </h2>
+                    <p>
+                        <?php echo $doubt_message; ?>
+                    </p>
+                    <p class="date-time">
+                        <?php echo $sent_time; ?>
+                    </p>
                 </div>
-                <div class="icons">
-                    <a href="#"><span class="close-icon"><i class="fas fa-times"></i></span></a>
-                    <a href="#"><span class="right-icon"><i class="fas fa-check"></i></span></a>
-                </div>
+                <?php if ($doubt['accepted'] == 0): ?>
+                    <div class="icons">
+                        <a href="../backend/doubt_reject.php?doubt_id=<?php echo $doubt['doubt_id']; ?>"
+                            onclick="return confirmReject()">
+                            <span class="close-icon"><i class="fas fa-times"></i></span>
+                        </a>
+                        <a href="../backend/doubt_accept.php?doubt_id=<?php echo $doubt['doubt_id']; ?>"
+                            onclick="return confirmAccept()">
+                            <span class="right-icon"><i class="fas fa-check"></i></span>
+                        </a>
+                    </div>
+                <?php endif; ?>
+
             </div>
 
             <div class="chat-content">
                 <!-- Chat messages go here -->
+                <?php if ($doubt['doubt']): ?>
+                    <div class="message received">
+                        <p>
+                            <?php echo $doubt_description ?>
+                        </p>
+                        <p class="message-time">
+                            <?php echo $sent_time; ?>
+                        </p>
+                    </div>
+                <?php endif; ?>
                 <div class="message received">
-                    <p>Hello! How are you doing?</p>
-                    <p class="message-time">Sent on March 8, 2024 10:30 AM</p>
+                    <?php if ($doubt['doubt_file']): ?>
+                        <?php
+                        $doubt_media_type = strtolower(pathinfo($doubt['doubt_file'], PATHINFO_EXTENSION));
+                        if ($doubt_media_type === 'pdf'): ?>
+                            <!-- Example 2: PDF -->
+                            <a href="../../../student/Dashboard/uploads/doubt/<?php echo $doubt['doubt_file']; ?>"
+                                style="cursor: pointer;" onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
+                        <?php elseif ($doubt_media_type === 'mp4'): ?>
+                            <!-- Example 3: Video -->
+                            <video controls onclick="zoomMedia(this, 'video')">
+                                <source src="../../../student/Dashboard/uploads/doubt/<?php echo $doubt['doubt_file']; ?>"
+                                    type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        <?php else: ?>
+                            <!-- Example 1: Image -->
+                            <img src="../../../student/Dashboard/uploads/doubt/<?php echo $doubt['doubt_file']; ?>"
+                                alt="Image Message" onclick="zoomMedia(this, 'image')">
+                        <?php endif; ?>
+                        <p class="message-time">Sent on
+                            <?php echo $sent_time; ?>
+                        </p>
+                        <a href="../../../student/Dashboard/uploads/doubt/<?php echo $doubt['doubt_file']; ?>"
+                            class="download-link" download>Download
+                            <?php echo ucfirst($doubt_media_type); ?>
+                        </a>
+                    <?php endif; ?>
                 </div>
-
+                <?php if ($doubt['answer']): ?>
+                    <div class="message sent">
+                        <p>
+                            <?php echo $doubt_solution ?>
+                        </p>
+                        <p class="message-time">
+                            <?php echo $received_time; ?>
+                        </p>
+                    </div>
+                <?php endif; ?>
                 <div class="message sent">
-                    <!-- Example 1: Image -->
-                    <img style="width: 200px; height: auto;" src="../img/card.jpg" alt="Image Message"
-                        onclick="zoomMedia(this, 'image')">
-                    <p class="message-time">Sent on March 8, 2024 10:35 AM</p>
-                    <a href="../img/card.jpg" class="download-link" download>Download Image</a>
+                    <?php if ($doubt['answer_file']): ?>
+                        <?php
+                        $doubt_media_type = strtolower(pathinfo($doubt['answer_file'], PATHINFO_EXTENSION));
+                        if ($doubt_media_type === 'pdf'): ?>
+                            <!-- Example 2: PDF -->
+                            <a href="../uploads/doubt/<?php echo $doubt['answer_file']; ?>" style="cursor: pointer;"
+                                onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
+                        <?php elseif ($doubt_media_type === 'mp4'): ?>
+                            <!-- Example 3: Video -->
+                            <video controls >
+                                <source src="../uploads/doubt/<?php echo $doubt['answer_file']; ?>" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        <?php else: ?>
+                            <!-- Example 1: Image -->
+                            <img src="../uploads/doubt/<?php echo $doubt['answer_file']; ?>" alt="Image Message"
+                                onclick="zoomMedia(this, 'image')">
+                        <?php endif; ?>
+                        <p class="message-time">Sent on
+                            <?php echo $received_time; ?>
+                        </p>
+                        <a href="../uploads/doubt/<?php echo $doubt['answer_file']; ?>" class="download-link"
+                            download>Download
+                            <?php echo ucfirst($doubt_media_type); ?>
+                        </a>
+                    <?php endif; ?>
                 </div>
-
-                <div class="message sent">
-                    <!-- Example 2: PDF -->
-                    <a style="cursor: pointer;" onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
-                    <p class="message-time">Sent on March 8, 2024 10:35 AM</p>
-                    <a href="../img/mefa_1.pdf" class="download-link" download>Download PDF</a>
-                </div>
-
-                <div class="message sent">
-                    <!-- Example 3: Video -->
-                    <video style="width: 200px; height: auto;" controls onclick="zoomMedia(this, 'video')">
-                        <source src="../img/trial.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <p class="message-time">Sent on March 8, 2024 10:35 AM</p>
-                    <a href="../img/trial.mp4" class="download-link" download>Download Video</a>
-                </div>
-
-
                 <!-- Zoom Modal -->
                 <div id="zoomModal" class="modal" onclick="closeZoom()">
                     <span class="close" onclick="closeZoom()">&times;</span>
@@ -444,40 +608,52 @@
                 </div>
             </div>
 
-            <!-- Message input section -->
-            <div class="additional-details" id="additionalDetails">
-                <form id="solutionForm">
-                    <div class="form-group">
-                        <label for="solution">Solution:</label>
-                        <textarea id="solution" name="solution" placeholder="Type your solution..." required></textarea>
-                    </div>
+            <?php if ($doubt['accepted'] == 1): ?>
+                <!-- Message input section -->
+                <div class="additional-details" id="additionalDetails">
+                    <form id="solutionForm" enctype="multipart/form-data" action="../backend/solution.php" method="post">
+                    <input type="hidden" name="doubt_id" value="<?php echo $doubt_id; ?>">
+                        <div class="form-group">
+                            <label for="solution">Solution:</label>
+                            <textarea id="solution" name="solution"
+                                placeholder="Type your solution..."><?php if ($doubt['answer']): ?><?php echo $doubt_solution ?><?php endif; ?></textarea>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="fileUpload">Upload File:</label>
-                        <input type="file" id="fileUpload" name="fileUpload">
-                    </div>
+                        <div class="form-group">
+                            <label for="fileUpload">Upload File:</label>
+                            <input type="file" id="fileUpload" name="fileUpload">
+                            <?php if ($doubt['answer_file']): ?>
+                                <input type="hidden" name="existingFile" value="<?php echo $doubt['answer_file']; ?>">
+                                <?php echo $doubt['answer_file']; ?> <!-- Display the file name -->
+                            <?php endif; ?>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="videoLink">Video Call Link:</label>
-                        <input type="text" id="videoLink" name="videoLink" placeholder="Paste video call link...">
-                    </div>
+                        <div class="form-group">
+                            <label for="videoLink">Video Call Link:</label>
+                            <input type="text" id="videoLink" name="videoLink" placeholder="Paste video call link..." <?php if ($video_call !== false && $video_call['videocall_link']): ?>value="<?php echo $video_call['videocall_link']; ?>" <?php endif; ?>>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="joinCode">Join Code:</label>
-                        <input type="text" id="joinCode" name="joinCode" placeholder="Enter join code...">
-                    </div>
+                        <div class="form-group">
+                            <label for="joinCode">Join Code:</label>
+                            <input type="text" id="joinCode" name="joinCode" placeholder="Enter join code..." <?php if ($video_call !== false && $video_call['join_code']): ?>value="<?php echo $video_call['join_code']; ?>" <?php endif; ?>>
+                        </div>
 
-                    <button type="submit" class="edit-details-button">Submit</button>
-                </form>
+                        <button type="submit" class="edit-details-button">Submit</button>
+                    </form>
+
+
+
+                </div>
+            <?php endif; ?>
+
             </div>
-        </div>
-        <div id="zoomModal" class="modal" onclick="closeZoom()">
-            <span class="close">&times;</span>
-            <div class="modal-content">
-                <img id="zoomedImage">
-                <a id="downloadLink" class="download-link" download>Download Image</a>
+            <div id="zoomModal" class="modal" onclick="closeZoom()">
+                <span class="close">&times;</span>
+                <div class="modal-content">
+                    <img id="zoomedImage">
+                    <a id="downloadLink" class="download-link" download>Download Image</a>
+                </div>
             </div>
-        </div>
     </section>
 
     <script>
@@ -496,11 +672,9 @@
 
                 // Set the href property of the download link for images
                 downloadLink.href = element.src;
-                downloadLink.download = 'image_download.jpg';
                 downloadLink.style.display = 'block'; // Show download link for images
             } else if (mediaType === 'pdf') {
                 // Display PDF in a new tab
-                window.open('../img/mefa_1.pdf', '_blank');
 
                 // Hide the download link for PDFs
                 downloadLink.style.display = 'none';
@@ -539,7 +713,15 @@
 
 
     </script>
+    <script>
+        function confirmReject() {
+            return confirm('Are you sure you want to reject this doubt?');
+        }
 
+        function confirmAccept() {
+            return confirm('Are you sure you want to accept this doubt?');
+        }
+    </script>
 </body>
 
 </html>

@@ -19,17 +19,19 @@ if (isset ($_GET['doubt_id'])) {
     // Check if doubt is found
     if ($doubt) {
         // Fetch profile image based on user_id from subscription_user table
-        $stmt_profile = $dbh->prepare("SELECT photo FROM subscription_user WHERE user_id = :user_id");
-        $stmt_profile->bindParam(':user_id', $doubt['user_id']);
+        $stmt_profile = $dbh->prepare("SELECT photo, name FROM teacher WHERE teacher_id = :teacher_id");
+        $stmt_profile->bindParam(':teacher_id', $doubt['teacher_id']);
         $stmt_profile->execute();
         $profile_data = $stmt_profile->fetch();
         if ($profile_data) {
-            $profile_image_src = "../uploads/profile/" . $profile_data['photo'];
+            $profile_image_src = "../../../teacher/Dashboard/uploads/profile/" . $profile_data['photo'];
         } else {
             // Default profile image source if no profile image found
             $profile_image_src = "../img/card.jpg";
         }
         $doubt_description = $doubt['doubt'];
+        $doubt_solution = $doubt['answer'];
+
         // Truncate doubt message if it exceeds 40 characters
         $doubt_message = (strlen($doubt['doubt']) > 40) ? substr($doubt['doubt'], 0, 40) . "..." : $doubt['doubt'];
         $teacher_id = $doubt['teacher_id'];
@@ -263,8 +265,8 @@ if (isset ($_GET['doubt_id'])) {
         }
 
         .message img {
-            width: 150px;
-            height: 150px;
+            width: 250px;
+            height: 250px;
             cursor: pointer;
         }
 
@@ -284,7 +286,7 @@ if (isset ($_GET['doubt_id'])) {
         }
 
         video {
-            height: 300px;
+            height: 400px;
         }
 
         @media (max-width: 600px) {
@@ -331,7 +333,7 @@ if (isset ($_GET['doubt_id'])) {
                 <img src="<?php echo $profile_image_src; ?>" alt="Profile" class="profile-image">
                 <div class="profile-info">
                     <h2>
-                        <?php echo $doubt['teacher_id'] ? 'Teacher ID: ' . $doubt['teacher_id'] : 'Teacher not assigned'; ?>
+                        <?php echo $doubt['teacher_id'] ?  $profile_data['name'] : 'Teacher not assigned'; ?>
                     </h2>
                     <p>
                         <?php echo $doubt_message; ?>
@@ -385,10 +387,10 @@ if (isset ($_GET['doubt_id'])) {
                 <?php if ($doubt['answer']): ?>
                     <div class="message received">
                         <p>
-                            <?php echo $doubt_description ?>
+                            <?php echo $doubt_solution ?>
                         </p>
                         <p class="message-time">
-                            <?php echo $sent_time; ?>
+                            <?php echo $received_time; ?>
                         </p>
                     </div>
                 <?php endif; ?>
@@ -398,23 +400,23 @@ if (isset ($_GET['doubt_id'])) {
                         $doubt_media_type = strtolower(pathinfo($doubt['answer_file'], PATHINFO_EXTENSION));
                         if ($doubt_media_type === 'pdf'): ?>
                             <!-- Example 2: PDF -->
-                            <a href="../uploads/doubt/<?php echo $doubt['answer_file']; ?>" style="cursor: pointer;"
+                            <a href="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" style="cursor: pointer;"
                                 onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
                         <?php elseif ($doubt_media_type === 'mp4'): ?>
                             <!-- Example 3: Video -->
-                            <video controls onclick="zoomMedia(this, 'video')">
-                                <source src="../uploads/doubt/<?php echo $doubt['answer_file']; ?>" type="video/mp4">
+                            <video controls>
+                                <source src="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
                         <?php else: ?>
                             <!-- Example 1: Image -->
-                            <img src="../uploads/doubt/<?php echo $doubt['answer_file']; ?>" alt="Image Message"
+                            <img src="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" alt="Image Message"
                                 onclick="zoomMedia(this, 'image')">
                         <?php endif; ?>
                         <p class="message-time">Sent on
-                            <?php echo $sent_time; ?>
+                            <?php echo $received_time; ?>
                         </p>
-                        <a href="../uploads/doubt/<?php echo $doubt['answer_file']; ?>" class="download-link"
+                        <a href="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" class="download-link"
                             download>Download
                             <?php echo ucfirst($doubt_media_type); ?>
                         </a>
