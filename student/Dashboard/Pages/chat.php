@@ -5,7 +5,7 @@ include ('../../../includes/config.php');
 if (isset ($_GET['doubt_id'])) {
     $doubt_id = $_GET['doubt_id'];
     // Update student_view to 1 for the specified doubt_id
-    $sql = "UPDATE doubt SET student_view = 1 WHERE doubt_id = :doubt_id";
+    $sql = "UPDATE doubt SET teacher_view = 1 WHERE doubt_id = :doubt_id and feedback = 0";
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':doubt_id', $doubt_id);
     $stmt->execute(); // Execute the update query
@@ -15,6 +15,12 @@ if (isset ($_GET['doubt_id'])) {
     $stmt_doubt->bindParam(':doubt_id', $doubt_id);
     $stmt_doubt->execute();
     $doubt = $stmt_doubt->fetch();
+
+
+    $stmt_feedback = $dbh->prepare("SELECT * FROM feedback WHERE doubt_id = :doubt_id");
+    $stmt_feedback->bindParam(':doubt_id', $doubt_id);
+    $stmt_feedback->execute();
+    $feedback = $stmt_feedback->fetch();
 
     // Check if doubt is found
     if ($doubt) {
@@ -79,18 +85,27 @@ if (isset ($_GET['doubt_id'])) {
     <link rel="stylesheet" href="../css/colors/default.css" id="colorSkinCSS">
 
     <style>
-        body {
-            overflow: hidden;
+        /* Global Styles */
+
+
+
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        /* Chat Page Styles */
+
         .chat-page {
-            max-height: 80vh;
             max-width: 800px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
             margin-bottom: 50px;
         }
+
+        /* Chat Header Styles */
 
         .chat-header {
             position: sticky;
@@ -101,8 +116,8 @@ if (isset ($_GET['doubt_id'])) {
             display: flex;
             align-items: center;
             /* background-color: #F2F2F2;
-            border-radius: 10px;
-            margin-bottom: 2px; */
+    border-radius: 10px;
+    margin-bottom: 2px; */
         }
 
         .profile-image {
@@ -126,18 +141,21 @@ if (isset ($_GET['doubt_id'])) {
             font-size: 12px;
         }
 
+        /* Chat Content Styles */
+
         .chat-content {
             flex-grow: 1;
             overflow-y: auto;
             padding: 10px;
             max-width: 800px;
+            max-height: 500px;
             background-color: #f2f2f2;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-height: 60vh;
         }
 
-        /* Customize scrollbar */
+        /* Scrollbar Customization */
+
         .chat-content::-webkit-scrollbar {
             width: 6px;
         }
@@ -151,7 +169,7 @@ if (isset ($_GET['doubt_id'])) {
             background-color: #f5f5f5;
         }
 
-        /* End of scrollbar customization */
+        /* Message Styles */
 
         .message {
             margin-bottom: 10px;
@@ -171,6 +189,7 @@ if (isset ($_GET['doubt_id'])) {
         .received p {
             color: white;
         }
+
         .message-time {
             font-size: 12px;
             color: #888;
@@ -183,13 +202,41 @@ if (isset ($_GET['doubt_id'])) {
             border-top: 1px solid #ddd;
         }
 
+        /* Message Input Styles */
+
+        .message-input {
+            display: flex;
+            padding: 10px;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+        }
+
         textarea {
             flex-grow: 1;
-            resize: none;
+            resize: vertical;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
         }
+
+        /* Textarea Scrollbar Customization */
+
+        textarea::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #B9BABA;
+            border-radius: 6px;
+        }
+
+        textarea::-webkit-scrollbar-track {
+            background-color: #f5f5f5;
+        }
+
+        /* Button Styles */
 
         button {
             padding: 8px;
@@ -201,12 +248,20 @@ if (isset ($_GET['doubt_id'])) {
             border-radius: 5px;
         }
 
+        button:hover {
+            background: #2980b9;
+        }
+
+        /* Back Icon Styles */
+
         .back-icon {
             font-size: 24px;
             color: #000;
             margin-right: 10px;
             cursor: pointer;
         }
+
+        /* Modal Styles */
 
         .modal {
             display: none;
@@ -222,24 +277,19 @@ if (isset ($_GET['doubt_id'])) {
 
         .modal-content {
             margin: auto;
-            margin-top: 100px;
             margin-top: 150px;
         }
 
         .modal img {
             width: 400px;
-            /* Set the width to 100% to fit perfectly in the container */
             height: auto;
-            /* Maintain aspect ratio */
             cursor: pointer;
             transition: transform 0.3s ease;
             margin: auto;
-
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
 
         .modal img:hover {
             transform: scale(1.1);
@@ -289,13 +339,14 @@ if (isset ($_GET['doubt_id'])) {
             height: 400px;
         }
 
+        /* Responsive Styles */
+
         @media (max-width: 600px) {
             .chat-page {
                 padding: 0 10px;
                 margin-left: 20px;
                 margin-right: 20px;
                 margin-top: 20px;
-
             }
 
             .chat-content {
@@ -312,6 +363,107 @@ if (isset ($_GET['doubt_id'])) {
                 margin: auto;
                 margin-top: 10%;
             }
+        }
+
+        main.cd__main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+            min-width: 1200px;
+        }
+
+        .additional-details {
+            margin-top: 20px;
+            background-color: #F2F2F2;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            /* Adjust the width as needed */
+            max-width: 800px;
+            /* Set a minimum width */
+        }
+
+        form#solutionForm {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        textarea,
+        input[type="text"],
+        input[type="file"] {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        textarea {
+            resize: vertical;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        button.edit-details-button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        button.edit-details-button:hover {
+            background: #2980b9;
+        }
+
+        @media (max-width: 600px) {
+
+            .additional-details {
+
+                /* Adjust the width as needed */
+                max-width: 400px;
+                /* Set a minimum width */
+            }
+        }
+
+        .icons {
+            display: flex;
+            align-items: center;
+        }
+
+
+        .close-icon,
+        .right-icon {
+            font-size: 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            color: #fff;
+            border-radius: 50%;
+            padding: 5px 8px;
+        }
+
+        .close-icon {
+            background-color: red;
+            padding: 5px 10px;
+
+        }
+
+        .right-icon {
+            background-color: green;
         }
 
         p {
@@ -333,7 +485,7 @@ if (isset ($_GET['doubt_id'])) {
                 <img src="<?php echo $profile_image_src; ?>" alt="Profile" class="profile-image">
                 <div class="profile-info">
                     <h2>
-                        <?php echo $doubt['teacher_id'] ?  $profile_data['name'] : 'Teacher not assigned'; ?>
+                        <?php echo $doubt['teacher_id'] ? $profile_data['name'] : 'Teacher not assigned'; ?>
                     </h2>
                     <p>
                         <?php echo $doubt_message; ?>
@@ -342,6 +494,15 @@ if (isset ($_GET['doubt_id'])) {
                         <?php echo $sent_time; ?>
                     </p>
                 </div>
+                <?php if ($doubt['accepted'] == 1): ?>
+                    <?php if ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 0): ?>
+                        <!-- Show text in color that waiting for feedback -->
+                        <p style="color: blue;">"Please provide feedback below. Thank you!"</p>
+                    <?php elseif ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 1): ?>
+                        <!-- Show "Chat Ended" in red -->
+                        <p style="color: red;">Chat Ended</p>
+                    <?php endif; ?>
+                <?php endif; ?>
             </div>
 
             <div class="chat-content">
@@ -400,24 +561,25 @@ if (isset ($_GET['doubt_id'])) {
                         $doubt_media_type = strtolower(pathinfo($doubt['answer_file'], PATHINFO_EXTENSION));
                         if ($doubt_media_type === 'pdf'): ?>
                             <!-- Example 2: PDF -->
-                            <a href="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" style="cursor: pointer;"
-                                onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
+                            <a href="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>"
+                                style="cursor: pointer;" onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
                         <?php elseif ($doubt_media_type === 'mp4'): ?>
                             <!-- Example 3: Video -->
                             <video controls>
-                                <source src="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" type="video/mp4">
+                                <source src="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>"
+                                    type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
                         <?php else: ?>
                             <!-- Example 1: Image -->
-                            <img src="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" alt="Image Message"
-                                onclick="zoomMedia(this, 'image')">
+                            <img src="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>"
+                                alt="Image Message" onclick="zoomMedia(this, 'image')">
                         <?php endif; ?>
                         <p class="message-time">Sent on
                             <?php echo $received_time; ?>
                         </p>
-                        <a href="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" class="download-link"
-                            download>Download
+                        <a href="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>"
+                            class="download-link" download>Download
                             <?php echo ucfirst($doubt_media_type); ?>
                         </a>
                     <?php endif; ?>
@@ -428,7 +590,79 @@ if (isset ($_GET['doubt_id'])) {
                     <div id="zoomedContent" class="modal-content"></div>
                     <a id="downloadLink" class="download-link" download>Download Media</a>
                 </div>
+
+
             </div>
+            <?php if ($doubt['accepted'] == 1 && (!($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 1))): ?>
+                <!-- Message input section -->
+                <div class="additional-details" id="additionalDetails">
+                    <form id="solutionForm" enctype="multipart/form-data" action="../backend/edit_doubt.php" method="post">
+                        <input type="hidden" name="doubt_id" value="<?php echo $doubt_id; ?>">
+                        <div class="form-group">
+                            <label for="solution">Solution:</label>
+                            <textarea id="solution" name="doubt"
+                                placeholder="Type your solution..."><?php if ($doubt['doubt']): ?><?php echo $doubt_description ?><?php endif; ?></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fileUpload">Upload File:</label>
+                            <input type="file" id="fileUpload" name="fileUpload">
+                            <?php if ($doubt['answer_file']): ?>
+                                <input type="hidden" name="existingFile" value="<?php echo $doubt['doubt_file']; ?>">
+                                <?php echo $doubt['answer_file']; ?> <!-- Display the file name -->
+                            <?php endif; ?>
+                        </div>
+
+
+                        <button type="submit" class="edit-details-button">Submit</button>
+                    </form>
+                </div>
+            <?php endif; ?>
+            <?php if ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 1): ?>
+                <div class="additional-details" id="additionalDetails">
+                    <div style="margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+                        <h2 style="margin-bottom: 5px;">Feedback</h2>
+                        <h4 style="color: blue;">(<?php echo $feedback['satisfaction_level'] ?> Star)</h4>
+                        <p style="color: #333;">
+                            <?php echo $feedback['feedback_text'] ?>
+                        </p>
+                    </div>
+                    <div style="text-align:center; ">
+                        <p style="color: #000;">
+                            This Chat Has been Ended.
+                        </p>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 0): ?>
+                <div class="additional-details" id="additionalDetails">
+                    <p style="color: blue;">You can end the chat by providing feedback below or continuing with your
+                        question.</p><br>
+                    <form id="feedbackForm" action="../backend/submit_feedback.php" method="post">
+                        <input type="hidden" name="doubt_id" value="<?php echo $doubt_id; ?>">
+                        <input type="hidden" name="teacher_id" value="<?php echo $doubt['teacher_id'] ?>">
+                        <div class="form-group">
+                            <label for="feedback">Feedback:</label>
+                            <textarea id="feedback" name="feedback" placeholder="Type your feedback..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>How satisfied are you with the solution provided?</label><br>
+                            <input type="radio" id="satisfied1" name="satisfied" value="1">
+                            <label for="satisfied1">1 Star</label><br>
+                            <input type="radio" id="satisfied2" name="satisfied" value="2">
+                            <label for="satisfied2">2 Stars</label><br>
+                            <input type="radio" id="satisfied3" name="satisfied" value="3">
+                            <label for="satisfied3">3 Stars</label><br>
+                            <input type="radio" id="satisfied4" name="satisfied" value="4">
+                            <label for="satisfied4">4 Stars</label><br>
+                            <input type="radio" id="satisfied5" name="satisfied" value="5">
+                            <label for="satisfied5">5 Stars</label><br>
+                        </div>
+                        <button type="submit" class="edit-details-button">Submit</button>
+                    </form>
+                </div>
+            <?php endif; ?>
 
 
         </div>

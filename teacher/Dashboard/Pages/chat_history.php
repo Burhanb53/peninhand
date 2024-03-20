@@ -123,7 +123,7 @@ $doubts = $stmt->fetchAll();
             transform: scale(1.05);
             /* Adjust the scale factor as needed */
         }
-        
+
         .profile-image {
             width: 60px;
             height: 60px;
@@ -151,7 +151,15 @@ $doubts = $stmt->fetchAll();
             background-color: #82bfe0;
         }
 
+        .unread .message-time{
+            color: #fff;
+        }
+
         .read {
+            background-color: #e6f7ff;
+        }
+
+        .submitted {
             background-color: #f2f2f2;
         }
 
@@ -167,15 +175,13 @@ $doubts = $stmt->fetchAll();
                 margin-top: 20px;
             }
         }
-
-        
     </style>
 </head>
 
 <body class="crm_body_bg">
-    <?php include('../includes/sidebar.php'); ?>
+    <?php include ('../includes/sidebar.php'); ?>
     <section class="main_content dashboard_part">
-        <?php include('../includes/navbar.php'); ?>
+        <?php include ('../includes/navbar.php'); ?>
 
         <div class="chat-wrapper">
             <input type="text" class="search-bar" id="searchInput" placeholder="Search...">
@@ -190,7 +196,21 @@ $doubts = $stmt->fetchAll();
                 $all_doubts = $stmt_doubts->fetchAll();
 
                 foreach ($all_doubts as $doubt):
-                    $student_view_class = ($doubt['teacher_view'] == 0) ? 'unread' : 'read';
+                    $student_view_class = '';
+                    switch ($doubt['teacher_view']) {
+                        case 0:
+                            $student_view_class = 'unread';
+                            break;
+                        case 1:
+                            $student_view_class = 'read';
+                            break;
+                        case 2:
+                            $student_view_class = 'submitted';
+                            break;
+                        default:
+                            // Handle unexpected values
+                            break;
+                    }
                     $profile_image_src = '';
 
                     // Fetch profile image based on user_id from subscription_user table

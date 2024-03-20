@@ -149,12 +149,16 @@ $doubts = $stmt->fetchAll();
         .unread {
             background-color: #82bfe0;
         }
-        
-        .unread .message-time{
+
+        .unread .message-time {
             color: #fff;
         }
 
         .read {
+            background-color: #e6f7ff;
+        }
+
+        .submitted {
             background-color: #f2f2f2;
         }
 
@@ -191,7 +195,21 @@ $doubts = $stmt->fetchAll();
                 $all_doubts = $stmt_doubts->fetchAll();
 
                 foreach ($all_doubts as $doubt):
-                    $student_view_class = ($doubt['student_view'] == 0) ? 'unread' : 'read';
+                    $student_view_class = '';
+                    switch ($doubt['student_view']) {
+                        case 0:
+                            $student_view_class = 'unread';
+                            break;
+                        case 1:
+                            $student_view_class = 'read';
+                            break;
+                        case 2:
+                            $student_view_class = 'submitted';
+                            break;
+                        default:
+                            // Handle unexpected values
+                            break;
+                    }
                     $profile_image_src = '';
 
                     // Fetch profile image based on user_id from subscription_user table

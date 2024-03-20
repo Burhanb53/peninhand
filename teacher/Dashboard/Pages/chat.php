@@ -6,7 +6,7 @@ if (isset ($_GET['doubt_id'])) {
     $doubt_id = $_GET['doubt_id'];
 
     // Update student_view to 1 for the specified doubt_id
-    $sql = "UPDATE doubt SET teacher_view = 1 WHERE doubt_id = :doubt_id";
+    $sql = "UPDATE doubt SET teacher_view = 1 WHERE doubt_id = :doubt_id and feedback = 0";
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':doubt_id', $doubt_id);
     $stmt->execute(); // Execute the update query
@@ -32,6 +32,11 @@ if (isset ($_GET['doubt_id'])) {
     $stmt_doubt->bindParam(':doubt_id', $doubt_id);
     $stmt_doubt->execute();
     $doubt = $stmt_doubt->fetch();
+
+    $stmt_feedback = $dbh->prepare("SELECT * FROM feedback WHERE doubt_id = :doubt_id");
+    $stmt_feedback->bindParam(':doubt_id', $doubt_id);
+    $stmt_feedback->execute();
+    $feedback = $stmt_feedback->fetch();
 
     // Check if doubt is found
     if ($doubt) {
@@ -518,6 +523,20 @@ if (isset ($_GET['doubt_id'])) {
                         </a>
                     </div>
                 <?php endif; ?>
+                <?php if ($doubt['accepted'] == 1): ?>
+                    <?php if ($doubt['doubt_submit'] == 0): ?>
+                        <!-- Show a button to End chat -->
+                        <a href="../backend/end_chat.php?doubt_id=<?php echo $doubt['doubt_id']; ?>"><button
+                                onclick="return confirmEnd()">End Chat</button></a>
+                    <?php elseif ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 0): ?>
+                        <!-- Show text in color that waiting for feedback -->
+                        <p style="color: blue;">Waiting for feedback</p>
+                    <?php elseif ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 1): ?>
+                        <!-- Show "Chat Ended" in red -->
+                        <p style="color: red;">Chat Ended</p>
+                    <?php endif; ?>
+                <?php endif; ?>
+
 
             </div>
 
@@ -582,7 +601,7 @@ if (isset ($_GET['doubt_id'])) {
                                 onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
                         <?php elseif ($doubt_media_type === 'mp4'): ?>
                             <!-- Example 3: Video -->
-                            <video controls >
+                            <video controls>
                                 <source src="../uploads/doubt/<?php echo $doubt['answer_file']; ?>" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
@@ -608,11 +627,11 @@ if (isset ($_GET['doubt_id'])) {
                 </div>
             </div>
 
-            <?php if ($doubt['accepted'] == 1): ?>
+            <?php if ($doubt['accepted'] == 1 && (!($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 1))): ?>
                 <!-- Message input section -->
                 <div class="additional-details" id="additionalDetails">
                     <form id="solutionForm" enctype="multipart/form-data" action="../backend/solution.php" method="post">
-                    <input type="hidden" name="doubt_id" value="<?php echo $doubt_id; ?>">
+                        <input type="hidden" name="doubt_id" value="<?php echo $doubt_id; ?>">
                         <div class="form-group">
                             <label for="solution">Solution:</label>
                             <textarea id="solution" name="solution"
@@ -640,9 +659,24 @@ if (isset ($_GET['doubt_id'])) {
 
                         <button type="submit" class="edit-details-button">Submit</button>
                     </form>
-
-
-
+                </div>
+            <?php endif; ?>
+            <?php if ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 1): ?>
+                <div class="additional-details" id="additionalDetails">
+                    <div style="margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+                        <h2 style="margin-bottom: 5px;">Feedback</h2>
+                        <h4 style="color: blue;">(
+                            <?php echo $feedback['satisfaction_level'] ?> Star)
+                        </h4>
+                        <p style="color: #333;">
+                            <?php echo $feedback['feedback_text'] ?>
+                        </p>
+                    </div>
+                    <div style="text-align:center; ">
+                        <p style="color: #000;">
+                            This Chat Has been Ended. You can view feedback given by Student.
+                        </p>
+                    </div>
                 </div>
             <?php endif; ?>
 
@@ -720,6 +754,10 @@ if (isset ($_GET['doubt_id'])) {
 
         function confirmAccept() {
             return confirm('Are you sure you want to accept this doubt?');
+        }
+
+        function confirmEnd() {
+            return confirm('Are you sure you want to end this chat?');
         }
     </script>
 </body>
