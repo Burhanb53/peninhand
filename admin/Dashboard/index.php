@@ -1,8 +1,9 @@
 <?php
 session_start();
 error_reporting(0);
-include('../includes/config.php');
+include ('includes/config.php');
 ?>
+
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -48,15 +49,193 @@ include('../includes/config.php');
     <link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS">
 </head>
 
+<style>
+    .round-card {
+        width: 12rem;
+        height: 12rem;
+        border-radius: 50%;
+        text-align: center;
+        padding: 2rem;
+        overflow: hidden;
+    }
+
+    .count-wrapper {
+        position: relative;
+    }
+
+    .count {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #fff;
+    }
+
+    .count-description {
+        font-size: 1rem;
+        color: #fff;
+        margin-top: 1rem;
+    }
+
+    @media (max-width: 320px) {
+        .round-card {
+            width: 8rem;
+            height: 8rem;
+            padding: 1.5rem;
+        }
+
+        .count {
+            font-size: 2rem;
+        }
+
+        .count-description {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+    }
+
+    /* Animation */
+    @keyframes count-up {
+        from {
+            transform: translateY(1rem);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .count {
+        animation: count-up 1s ease-out;
+    }
+</style>
+<style>
+    .ask-doubt-btn-container {
+        text-align: right;
+    }
+
+    .ask-doubt-btn {
+        background-color: #3498db;
+        /* Choose your button color */
+        color: #fff;
+        /* Choose your text color */
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+</style>
+
 <body class="crm_body_bg">
 
 
-<?php include('includes/sidebar_index.php'); ?>
+    <?php include ('includes/sidebar_index.php'); ?>
 
     <section class="main_content dashboard_part">
 
-    <?php include('includes/navbar_index.php'); ?>
+        <?php include ('includes/navbar_index.php'); ?>
 
+        <div class="main_content_iner">
+            <div class="container-fluid p-0 sm_padding_15px">
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                        <div class="dashboard_header mb_50">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="dashboard_header_title">
+                                        <h3>Admin Dashboard</h3>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="dashboard_breadcam text-end">
+                                        <p><a href="#">Dashboard</a> <i class="fas fa-caret-right"></i> Performance
+                                            Book</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container text-center">
+    <!-- Card 1: No. of Teachers -->
+    <div class="col-lg-3 col-md-3 col-sm-6 mb-12 d-inline-block align-top">
+        <div class="round-card box_shadow position-relative mb_30 blue_bg">
+            <div class="count-wrapper">
+                <div class="count" data-count="<?php echo $teacher_count ?>">
+                    <?php echo $teacher_count ?>
+                </div>
+                <p class="count-description">Teachers</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 2: No. of Students -->
+    <div class="col-lg-3 col-md-3 col-sm-6 mb-12 d-inline-block align-top">
+        <div class="round-card box_shadow position-relative mb_30 orange_bg">
+            <div class="count-wrapper">
+                <div class="count" data-count="<?php echo $student_count ?>">
+                    <?php echo $student_count ?>
+                </div>
+                <p class="count-description">Students</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 3: No. of Resolved Doubts -->
+<div class="col-lg-3 col-md-3 col-sm-6 mb-12 d-inline-block align-top">
+    <div class="round-card box_shadow position-relative mb_30 green_bg">
+        <div class="count-wrapper">
+            <div class="count" data-count="<?php echo $doubt_count ?>">
+                <?php echo $doubt_count ?>
+            </div>
+            <p class="count-description">Resolved Doubts</p>
+        </div>
+    </div>
+</div>
+
+
+
+                    <div class="col-lg-6">
+                        <div class="white_box card_height_100">
+                            <div class="box_header">
+                                <div class="main-title" style="display: inline-flex;">
+                                    <h3 class="m-0">Recent Doubts</h3>
+                                </div>
+                                <div class="ask-doubt-btn-container" style="display: inline-flex;">
+                                    <a href="Pages/ask_doubt.php">
+                                        <button class="ask-doubt-btn">Ask Doubt</button>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="Activity_timeline">
+                                <ul>
+                                    <!-- PHP loop to display recent doubts -->
+                                    <?php foreach ($doubts as $doubt): ?>
+                                        <li>
+                                            <div class="activity_bell"></div>
+                                            <div class="timeLine_inner d-flex align-items-center">
+                                                <div class="activity_wrap">
+                                                    <h6>
+                                                        <?php echo time_elapsed_string($doubt['doubt_created_at']); ?>
+                                                    </h6>
+                                                    <p>
+                                                        <?php echo substr($doubt['doubt'], 0, 60); ?>...
+                                                    </p> <!-- Displaying the first 40 characters of the doubt -->
+                                                </div>
+                                                <div class="notification_read_btn mb_10" style="margin-left: auto;">
+                                                    <a href="Pages/chat.php?doubt_id=<?php echo $doubt['doubt_id']; ?>"
+                                                        class="notification_btn">Read</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="main_content_iner ">
             <div class="container-fluid p-0 sm_padding_15px">
                 <div class="row justify-content-center">
@@ -496,7 +675,7 @@ include('../includes/config.php');
             </div>
         </div>
 
-        <?php include('includes/footer.php');?>
+        <?php include ('includes/footer.php'); ?>
     </section>
 
 
