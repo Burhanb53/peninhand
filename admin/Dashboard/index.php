@@ -1,10 +1,8 @@
 <?php
 session_start();
 error_reporting(0);
-include('includes/config.php');
+include('../includes/config.php');
 ?>
-
-
 <!DOCTYPE html>
 <html lang="zxx">
 

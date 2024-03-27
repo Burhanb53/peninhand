@@ -12,30 +12,27 @@
                     <img src="img/menu-icon/dashboard.svg" alt>
                     <span>Dashboard</span>
                 </a>
-                <ul>
-                    <li><a class="active" href>Default_active</a></li>
-                </ul>
             </li>
             <li class>
                 <a class="has-arrow" href="#" aria-expanded="false">
                     <img src="img/menu-icon/2.svg" alt>
-                    <span>Pages</span>
+                    <span>Teachers</span>
                 </a>
                 <ul>
-                    <li><a href="error_400.html">Error 404</a></li>
-                    <li><a href="error_500.html">Error 500</a></li>
-                    <li><a href="forgot_pass.html">Forgot Password</a></li>
+                    <li><a href="error_400.html">All Teachers</a></li>
+                    <li><a href="error_500.html">Assign</a></li>
+                    <li><a href="forgot_pass.html">Manage</a></li>
                 </ul>
             </li>
             <li class>
                 <a class="has-arrow" href="#" aria-expanded="false">
                     <img src="img/menu-icon/3.svg" alt>
-                    <span>Applications</span>
+                    <span>Students</span>
                 </a>
                 <ul>
-                    <li><a href="mail_box.html">Mail Box</a></li>
-                    <li><a href="chat.html">Chat</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="mail_box.html">All Students</a></li>
+                    <li><a href="chat.html">Manage</a></li>
+                    <li><a href="faq.html">Doubts</a></li>
                 </ul>
             </li>
             
