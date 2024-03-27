@@ -1,7 +1,95 @@
 <?php
 session_start();
 error_reporting(0);
-include('includes/config.php');
+include('../../includes/config.php');
+if (!(isset($_SESSION['role']) && $_SESSION['role'] == 2)) {
+    // User doesn't have the required role, redirect to index.php
+    header("Location: ../../index.php");
+    exit(); // Make sure to exit after the redirect to prevent further execution
+} else {
+    $teacher_id = $_SESSION['user_id'];
+    $video_call_count = 0;
+    $doubt_count = 0;
+    $answer_count = 0;
+
+    // Fetch all doubt_ids from the doubt table for the user
+    $stmt_doubt_ids = $dbh->prepare("SELECT doubt_id FROM doubt WHERE teacher_id = :teacher_id");
+    $stmt_doubt_ids->bindParam(':teacher_id', $teacher_id);
+    $stmt_doubt_ids->execute();
+    $doubt_ids = $stmt_doubt_ids->fetchAll(PDO::FETCH_COLUMN);
+
+    // Initialize video call count
+    $video_call_count = 0;
+
+    // Loop through each doubt_id and count rows from video_call table
+    foreach ($doubt_ids as $doubt_id) {
+        $stmt_video_call_count = $dbh->prepare("SELECT COUNT(*) AS video_call_count FROM video_call WHERE doubt_id = :doubt_id");
+        $stmt_video_call_count->bindParam(':doubt_id', $doubt_id);
+        $stmt_video_call_count->execute();
+        $video_call_row = $stmt_video_call_count->fetch(PDO::FETCH_ASSOC);
+        $video_call_count += $video_call_row['video_call_count'];
+    }
+
+    // Count rows from doubt table
+    $stmt_doubt = $dbh->prepare("SELECT COUNT(*) AS doubt_count FROM doubt WHERE teacher_id = :teacher_id");
+    $stmt_doubt->bindParam(':teacher_id', $teacher_id);
+    $stmt_doubt->execute();
+    $doubt_row = $stmt_doubt->fetch(PDO::FETCH_ASSOC);
+    $doubt_count = $doubt_row['doubt_count'];
+
+    // Count rows from doubt table where feedback = 1
+    $stmt_feedback = $dbh->prepare("SELECT COUNT(*) AS feedback_count FROM doubt WHERE teacher_id = :teacher_id AND doubt_submit = 1 AND feedback = 1");
+    $stmt_feedback->bindParam(':teacher_id', $teacher_id);
+    $stmt_feedback->execute();
+    $feedback_row = $stmt_feedback->fetch(PDO::FETCH_ASSOC);
+    $feedback_count = $feedback_row['feedback_count'];
+
+    $stmt_answer = $dbh->prepare("SELECT COUNT(*) AS answer_count FROM doubt WHERE teacher_id = :teacher_id AND feedback = 1");
+    $stmt_answer->bindParam(':teacher_id', $teacher_id);
+    $stmt_answer->execute();
+    $answer_row = $stmt_answer->fetch(PDO::FETCH_ASSOC);
+    $answer_count = $answer_row['answer_count'];
+
+    $pending_answer = $doubt_count - $answer_count;
+
+    $stmt = $dbh->prepare("SELECT * FROM doubt WHERE teacher_id = :teacher_id ORDER BY answer_created_at DESC LIMIT 4"); // Limiting to 4 latest doubts
+    $stmt->bindParam(':teacher_id', $teacher_id);
+    $stmt->execute();
+    $doubts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt_category = $dbh->prepare("SELECT COUNT(DISTINCT doubt_category) AS category_count FROM doubt WHERE teacher_id = :teacher_id");
+    $stmt_category->bindParam(':teacher_id', $teacher_id);
+    $stmt_category->execute();
+    $doubt_category = $stmt_category->fetch(PDO::FETCH_ASSOC);
+    $category_count = isset($doubt_category['category_count']) ? intval($doubt_category['category_count']) : 0;
+
+    $stmt_doubt_category = $dbh->prepare("SELECT doubt_category, COUNT(*) AS doubt_count FROM doubt WHERE teacher_id = :teacher_id GROUP BY doubt_category");
+    $stmt_doubt_category->bindParam(':teacher_id', $teacher_id);
+    $stmt_doubt_category->execute();
+    $unique_doubt_category = $stmt_doubt_category->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function time_elapsed_string($datetime)
+{
+    $now = new DateTime;
+    $ago = new DateTime($datetime);
+    $diff = $now->diff($ago);
+
+    if ($diff->y > 0) {
+        return $diff->y . ' year' . ($diff->y > 1 ? 's' : '') . ' ago';
+    } elseif ($diff->m > 0) {
+        return $diff->m . ' month' . ($diff->m > 1 ? 's' : '') . ' ago';
+    } elseif ($diff->d > 0) {
+        return $diff->d . ' day' . ($diff->d > 1 ? 's' : '') . ' ago';
+    } elseif ($diff->h > 0) {
+        return $diff->h . ' hour' . ($diff->h > 1 ? 's' : '') . ' ago';
+    } elseif ($diff->i > 0) {
+        return $diff->i . ' minute' . ($diff->i > 1 ? 's' : '') . ' ago';
+    } else {
+        return 'Just now';
+    }
+}
+
 ?>
 
 
@@ -49,15 +137,141 @@ include('includes/config.php');
     <link rel="stylesheet" href="css/style1.css">
     <link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS">
 </head>
+<style>
+    .gtco-testimonials {
+        position: relative;
+        margin-top: 30px;
+
+        h2 {
+            font-size: 30px;
+            text-align: center;
+            color: #333333;
+            margin-bottom: 50px;
+        }
+
+        .owl-stage-outer {
+            padding: 30px 0;
+        }
+
+        .owl-nav {
+            display: none;
+        }
+
+        .owl-dots {
+            text-align: center;
+
+            span {
+                position: relative;
+                height: 10px;
+                width: 10px;
+                border-radius: 50%;
+                display: block;
+                background: #fff;
+                border: 2px solid #01b0f8;
+                margin: 0 5px;
+            }
+
+            .active {
+                box-shadow: none;
+
+                span {
+                    background: #01b0f8;
+                    box-shadow: none;
+                    height: 12px;
+                    width: 12px;
+                    margin-bottom: -1px;
+                }
+            }
+        }
+
+        .card {
+            background: #fff;
+            box-shadow: 0 8px 30px -7px #c9dff0;
+            margin: 0 20px;
+            padding: 0 10px;
+            border-radius: 20px;
+            border: 0;
+
+            .card-img-top {
+                max-width: 100px;
+                border-radius: 50%;
+                margin: 15px auto 0;
+                box-shadow: 0 8px 20px -4px #95abbb;
+                width: 100px;
+                height: 100px;
+            }
+
+            h5 {
+                color: #01b0f8;
+                font-size: 21px;
+                line-height: 1.3;
+
+                span {
+                    font-size: 18px;
+                    color: #666666;
+                }
+            }
+
+            p {
+                font-size: 18px;
+                color: #555;
+                padding-bottom: 15px;
+            }
+        }
+
+        .active {
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .center {
+            opacity: 1;
+
+            h5 {
+                font-size: 24px;
+
+                span {
+                    font-size: 20px;
+                }
+            }
+
+            .card-img-top {
+                max-width: 100%;
+                height: 120px;
+                width: 120px;
+            }
+        }
+    }
+
+    @media (max-width: 767px) {
+        .gtco-testimonials {
+            margin-top: 20px;
+        }
+    }
+
+    .owl-carousel {
+        .owl-nav button {
+
+            &.owl-next,
+            &.owl-prev {
+                outline: 0;
+            }
+        }
+
+        button.owl-dot {
+            outline: 0;
+        }
+    }
+</style>
 
 <body class="crm_body_bg">
 
 
-<?php include('includes/sidebar_index.php'); ?>
+    <?php include('includes/sidebar_index.php'); ?>
 
     <section class="main_content dashboard_part">
 
-    <?php include('includes/navbar_index.php'); ?>
+        <?php include('includes/navbar_index.php'); ?>
 
         <div class="main_content_iner ">
             <div class="container-fluid p-0 sm_padding_15px">
@@ -67,7 +281,7 @@ include('includes/config.php');
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="dashboard_header_title">
-                                        <h3> Directory Dashboard</h3>
+                                        <h3> Teacher Dashboard</h3>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -78,77 +292,56 @@ include('includes/config.php');
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-8 col-xl-8">
-                        <div class="white_box mb_30">
+                    <div class="col-lg-8">
+                        <div class="white_box card_height_100">
                             <div class="box_header">
-                                <div class="main-title">
-                                    <h3 class="mb_25">Monthly Income stats for November 2020</h3>
+                                <div class="main-title" style="display: inline-flex;">
+                                    <h3 class="m-0">Recent Doubts</h3>
                                 </div>
-                                <div class="float-end d-none d-md-inline-block">
-                                    <div class="btn-group mb-2" role="group">
-                                        <button type="button" class="btn btn-sm btn-light">Today</button>
-                                        <button type="button" class="btn btn-sm btn-light">Weekly</button>
-                                        <button type="button" class="btn btn-sm btn-light">Monthly</button>
-                                    </div>
-                                </div>
+
                             </div>
-                            <div id="line-column-chart2"></div>
-                            <div class="card_footer_white">
-                                <div class="row">
-                                    <div class="col-sm-4 text-center">
-                                        <div class="d-inline-flex">
-                                            <h5 class="me-2">$12,253</h5>
-                                            <div class="text-success">
-                                                <i class="fas fa-caret-up font-size-14 line-height-2 me-2"> </i>2.2 %
-                                            </div>
-                                        </div>
-                                        <p class="text-muted text-truncate mb-0">This month</p>
-                                    </div>
-                                    <div class="col-sm-4 text-center">
-                                        <div class="mt-4 mt-sm-0">
-                                            <p class="mb-2 text-muted text-truncate"><i
-                                                    class="fas fa-circle text-primary me-2 font-size-10 me-1"></i> This
-                                                Year :</p>
-                                            <div class="d-inline-flex align-items-center">
-                                                <h5 class="mb-0 me-2">$ 34,254</h5>
-                                                <div class="text-success">
-                                                    <i class="fas fa-caret-up font-size-14 line-height-2 me-2"> </i>2.1
-                                                    %
+                            <div class="Activity_timeline">
+                                <ul>
+                                    <?php foreach ($doubts as $doubt) : ?>
+                                        <li>
+                                            <div class="activity_bell"></div>
+                                            <div class="timeLine_inner d-flex align-items-center">
+                                                <div class="activity_wrap">
+                                                    <h6>
+                                                        <?php echo time_elapsed_string($doubt['answer_created_at']); ?>
+                                                    </h6>
+                                                    <p>
+                                                        <?php echo substr($doubt['doubt'], 0, 60); ?>...
+                                                    </p> <!-- Displaying the first 40 characters of the doubt -->
+                                                </div>
+                                                <div class="notification_read_btn mb_10" style="margin-left: auto;">
+                                                    <a href="Pages/chat.php?doubt_id=<?php echo $doubt['doubt_id']; ?>" class="notification_btn">Read</a>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4 text-center">
-                                        <div class="mt-4 mt-sm-0">
-                                            <p class="mb-2 text-muted text-truncate"><i
-                                                    class="fas fa-circle text-success font-size-10 me-1"></i> Previous
-                                                Year :</p>
-                                            <div class="d-inline-flex align-items-center">
-                                                <h5 class="mb-0">$ 32,695</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="list_counter_wrapper white_box mb_30 p-0 card_height_100">
                             <div class="single_list_counter">
-                                <h3 class="deep_blue_2"><span class="counter deep_blue_2 ">50</span> + </h3>
+
+                                <h3 class="deep_blue_2"><span class="counter deep_blue_2 "><?php echo $category_count; ?></span> + </h3>
                                 <p>Total categories</p>
                             </div>
                             <div class="single_list_counter">
-                                <h3 class="deep_blue_2"><span class="counter deep_blue_2">100</span> + </h3>
-                                <p>Total Listing</p>
+                                <h3 class="deep_blue_2"><span class="counter deep_blue_2"><?php echo $doubt_count; ?></span> + </h3>
+                                <p>Total Doubt</p>
                             </div>
                             <div class="single_list_counter">
-                                <h3 class="deep_blue_2"><span class="counter deep_blue_2">20</span> + </h3>
-                                <p>Claimed Listing</p>
+                                <h3 class="deep_blue_2"><span class="counter deep_blue_2"><?php echo $answer_count; ?></span> + </h3>
+                                <p>Total Answer</p>
                             </div>
                             <div class="single_list_counter">
-                                <h3 class="deep_blue_2"><span class="counter deep_blue_2">10</span> + </h3>
-                                <p>Reported Listing </p>
+                                <h3 class="deep_blue_2"><span class="counter deep_blue_2"><?php echo $video_call_count; ?></span> + </h3>
+                                <p>Video Call</p>
                             </div>
                         </div>
                     </div>
@@ -156,31 +349,24 @@ include('includes/config.php');
                         <div class="white_box QA_section card_height_100">
                             <div class="box_header m-0">
                                 <div class="main-title">
-                                    <h3 class="m-0">Users according to packages</h3>
+                                    <h3 class="m-0">Users according to Doubt Category</h3>
                                 </div>
                             </div>
-                            <div class="QA_table ">
-
+                            <div class="QA_table">
                                 <table class="table lms_table_active2">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Package name</th>
-                                            <th scope="col">No. of users</th>
+                                            <th scope="col">Doubt Category</th>
+                                            <th scope="col">No. of doubts</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Free package</td>
-                                            <td>2556</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Free package</td>
-                                            <td>2556</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Free package</td>
-                                            <td>2556</td>
-                                        </tr>
+                                        <?php foreach ($unique_doubt_category as $row) : ?>
+                                            <tr>
+                                                <td><?php echo $row['doubt_category']; ?></td>
+                                                <td><?php echo $row['doubt_count']; ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -195,74 +381,69 @@ include('includes/config.php');
                             </div>
                             <div class="activity_progressbar">
                                 <div class="single_progressbar d-flex">
-                                    <h6>Active Listings</h6>
+                                    <h6>Active Doubt</h6>
                                     <div id="bar1" class="barfiller">
                                         <div class="tipWrap">
                                             <span class="tip"></span>
                                         </div>
-                                        <span class="fill" data-percentage="95"></span>
+                                        <span class="fill" data-percentage="<?php echo ($pending_answer * 100 / $doubt_count); ?>"></span>
                                     </div>
                                 </div>
                                 <div class="single_progressbar d-flex">
-                                    <h6>Claimed Listings</h6>
+                                    <h6>Answered Doubt</h6>
                                     <div id="bar2" class="barfiller">
                                         <div class="tipWrap">
                                             <span class="tip"></span>
                                         </div>
-                                        <span class="fill" data-percentage="75"></span>
+                                        <span class="fill" data-percentage="<?php echo ($answer_count * 100 / $doubt_count); ?>"></span>
                                     </div>
                                 </div>
                                 <div class="single_progressbar d-flex">
-                                    <h6>Reported Listings</h6>
+                                    <h6>Feedback</h6>
                                     <div id="bar3" class="barfiller">
                                         <div class="tipWrap">
                                             <span class="tip"></span>
                                         </div>
-                                        <span class="fill" data-percentage="55"></span>
+                                        <span class="fill" data-percentage="<?php echo ($feedback_count * 100 / $doubt_count); ?>"></span>
                                     </div>
                                 </div>
                                 <div class="single_progressbar d-flex">
-                                    <h6>Pending Listings</h6>
+                                    <h6>Video Call</h6>
                                     <div id="bar4" class="barfiller">
                                         <div class="tipWrap">
                                             <span class="tip"></span>
                                         </div>
-                                        <span class="fill" data-percentage="25"></span>
+                                        <span class="fill" data-percentage="<?php echo ($video_call_count * 100 / $doubt_count); ?>"></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-8">
-                        <div class="white_box QA_section card_height_100">
-                            <div class="box_header m-0">
-                                <div class="main-title">
-                                    <h3 class="m-0">Web Visitor and trafic</h3>
-                                </div>
-                            </div>
-                            <div id="home-chart-03" style="height: 280px; position: relative;"></div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="white_box QA_section card_height_100 blud_card">
-                            <div class="box_header m-0">
-                                <div class="main-title">
-                                    <h3 class="m-0 text_white">2400 + New Users</h3>
-                                </div>
-                            </div>
-                            <div class="content_user">
-                                <p>At vero eos et accusamus et iusto odio
-                                    dignissimos ducimus</p>
-                                <a href="#" class="btn_2">Learn more</a>
-                                <img src="img/users_img.png" alt>
-                            </div>
-                        </div>
-                    </div>
+                    <?php
+
+                    // Prepare and execute SQL query to fetch doubt categories and their counts
+                    $stmt = $dbh->prepare("SELECT doubt_category, COUNT(*) AS doubt_count FROM doubt WHERE teacher_id = :teacher_id AND feedback = 0 GROUP BY doubt_category");
+                    $stmt->bindParam(':teacher_id', $teacher_id);
+                    $stmt->execute();
+                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    $stmt = $dbh->prepare("SELECT doubt_category, COUNT(*) AS doubt_count FROM doubt WHERE teacher_id = :teacher_id AND feedback = 1 GROUP BY doubt_category");
+                    $stmt->bindParam(':teacher_id', $teacher_id);
+                    $stmt->execute();
+                    $result_answered = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    $stmt = $dbh->prepare("SELECT d.doubt_category, ROUND(AVG(f.satisfaction_level)) AS average_satisfaction
+                        FROM doubt d
+                        INNER JOIN feedback f ON d.doubt_id = f.doubt_id
+                        GROUP BY d.doubt_category");
+                    $stmt->execute();
+                    $satisfaction_level = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
                     <div class="col-lg-4">
                         <div class="white_box QA_section card_height_100">
                             <div class="box_header m-0">
                                 <div class="main-title">
-                                    <h3 class="m-0">Listings according to Category</h3>
+                                    <h3 class="m-0">Listings according to Active Doubt</h3>
                                 </div>
                             </div>
                             <div class="QA_table ">
@@ -270,35 +451,17 @@ include('includes/config.php');
                                 <table class="table lms_table_active2">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Package name</th>
-                                            <th scope="col">No. of users</th>
+                                            <th scope="col">Doubt Category</th>
+                                            <th scope="col">No. of doubts</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Restaurant</td>
-                                            <td>2556</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Hotel</td>
-                                            <td>25506</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Apartment</td>
-                                            <td>25536</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Salon</td>
-                                            <td>25536</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Automobile</td>
-                                            <td>25536</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Spa</td>
-                                            <td>25536</td>
-                                        </tr>
+                                        <?php foreach ($result as $row) : ?>
+                                            <tr>
+                                                <td><?php echo $row['doubt_category']; ?></td>
+                                                <td> : <?php echo $row['doubt_count']; ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -308,7 +471,7 @@ include('includes/config.php');
                         <div class="white_box QA_section card_height_100">
                             <div class="box_header m-0">
                                 <div class="main-title">
-                                    <h3 class="m-0">Claimed Listings</h3>
+                                    <h3 class="m-0">Listings according to Answered Doubt</h3>
                                 </div>
                             </div>
                             <div class="QA_table ">
@@ -316,35 +479,17 @@ include('includes/config.php');
                                 <table class="table lms_table_active2">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Package name</th>
-                                            <th scope="col">No. of users</th>
+                                            <th scope="col">Doubt Category</th>
+                                            <th scope="col">No. of doubts</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Restaurant</td>
-                                            <td>2556</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Hotel</td>
-                                            <td>25506</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Apartment</td>
-                                            <td>25536</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Salon</td>
-                                            <td>25536</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Automobile</td>
-                                            <td>25536</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Spa</td>
-                                            <td>25536</td>
-                                        </tr>
+                                        <?php foreach ($result_answered as $row) : ?>
+                                            <tr>
+                                                <td><?php echo $row['doubt_category']; ?></td>
+                                                <td> : <?php echo $row['doubt_count']; ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -354,267 +499,80 @@ include('includes/config.php');
                         <div class="white_box QA_section card_height_100">
                             <div class="box_header m-0">
                                 <div class="main-title">
-                                    <h3 class="m-0">Reported Listings</h3>
+                                    <h3 class="m-0">Listings according to Feedback</h3>
                                 </div>
                             </div>
                             <div class="QA_table ">
-
                                 <table class="table lms_table_active2">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Package name</th>
-                                            <th scope="col">No. of users</th>
+                                            <th scope="col">Doubt Category</th>
+                                            <th scope="col">Average Satisfaction Level</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Restaurant</td>
-                                            <td>2556</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Hotel</td>
-                                            <td>25506</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Apartment</td>
-                                            <td>25536</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Salon</td>
-                                            <td>25536</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Automobile</td>
-                                            <td>25536</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Spa</td>
-                                            <td>25536</td>
-                                        </tr>
+                                        <?php foreach ($satisfaction_level as $row) : ?>
+                                            <tr>
+                                                <td><?php echo $row['doubt_category']; ?></td>
+                                                <td> : <?php echo $row['average_satisfaction']; ?> Star</td>
+                                            </tr>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="white_box card_height_100">
-                            <div class="box_header">
-                                <div class="main-title">
-                                    <h3 class="m-0">Recent Activity</h3>
+
+
+
+                    <?php
+                    // Fetch data from the database
+                    $stmt = $dbh->prepare("SELECT f.*, d.doubt_category, d.doubt_id, d.user_id, s.name AS student_name, s.photo AS student_photo
+                        FROM feedback f
+                        INNER JOIN doubt d ON f.doubt_id = d.doubt_id
+                        INNER JOIN subscription_user s ON d.user_id = s.user_id
+                        WHERE d.teacher_id = :teacher_id");
+                    $stmt->bindParam(':teacher_id', $teacher_id);
+                    $stmt->execute();
+                    $feedbacks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
+
+                    <div class="gtco-testimonials">
+                        <h2>Student's Feedback</h2>
+                        <div class="owl-carousel owl-carousel1 owl-theme">
+                            <?php foreach ($feedbacks as $feedback) : ?>
+                                <div>
+                                    <a href="chat.php?doubt_id=<?php echo $doubt['doubt_id']; ?>">
+                                        <div class="card text-center">
+                                            <a href="Pages/chat.php?doubt_id=<?php echo $feedback['doubt_id']; ?>">
+                                                <img class="card-img-top" src="../../student/Dashboard/uploads/profile/<?php echo $feedback['student_photo']; ?>" alt="Student Photo">
+                                            </a>
+                                            <div class="card-body">
+                                                <h5><?php echo $feedback['student_name']; ?><br />
+                                                    <span><?php echo $feedback['doubt_category']; ?> (<?php echo $feedback['satisfaction_level']; ?> Star)</span>
+                                                </h5>
+                                                <p class="card-text"><?php echo $feedback['feedback_text']; ?></p>
+                                                <p><?php echo date('d/m/Y h:i:s A', strtotime($feedback['submission_date'])); ?></p>
+                                            </div>
+                                        </div>
                                 </div>
-                            </div>
-                            <div class="Activity_timeline">
-                                <ul>
-                                    <li>
-                                        <div class="activity_bell"></div>
-                                        <div class="timeLine_inner d-flex align-items-center">
-                                            <div class="activity_wrap">
-                                                <h6>5 min ago</h6>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-                                                    scelerisque
-                                                </p>
-                                            </div>
-                                            <div class="notification_read_btn mb_10">
-                                                <a href="#" class="notification_btn">Read</a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="activity_bell"></div>
-                                        <div class="timeLine_inner d-flex align-items-center">
-                                            <div class="activity_wrap">
-                                                <h6>5 min ago</h6>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-                                                    scelerisque
-                                                </p>
-                                            </div>
-                                            <div class="notification_read_btn mb_10">
-                                                <a href="#" class="notification_btn">Read</a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="activity_bell"></div>
-                                        <div class="timeLine_inner d-flex align-items-center">
-                                            <div class="activity_wrap">
-                                                <h6>5 min ago</h6>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-                                                    scelerisque
-                                                </p>
-                                            </div>
-                                            <div class="notification_read_btn mb_10">
-                                                <a href="#" class="notification_btn">Read</a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="activity_bell"></div>
-                                        <div class="timeLine_inner d-flex align-items-center">
-                                            <div class="activity_wrap">
-                                                <h6>5 min ago</h6>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-                                                    scelerisque
-                                                </p>
-                                            </div>
-                                            <div class="notification_read_btn mb_10">
-                                                <a href="#" class="notification_btn">Read</a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
-                    <div class="col-lg-3">
-                        <div class="white_box QA_section card_height_100">
-                            <div class="box_header m-0">
-                                <div class="main-title">
-                                    <h3 class="m-0">Device</h3>
-                                </div>
-                            </div>
-                            <div id="bar-chart-6" class></div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="white_box">
-                            <div class="box_header">
-                                <div class="main-title">
-                                    <h3 class="m-0">Browser</h3>
-                                </div>
-                            </div>
-                            <div class="casnvas_box">
-                                <canvas height="210" width="210" id="canvasDoughnut"></canvas>
-                            </div>
-                            <div class="legend_style legend_style_grid mt_10px">
-                                <li class="d-block"> <span style="background-color: #525CE5;"></span>Chrome</li>
-                                <li class="d-block"> <span style="background-color: #9C52FD;"></span> Mojila</li>
-                                <li class="d-block"> <span style="background-color: #3B76EF"></span> Safari</li>
-                                <li class="d-block"> <span style="background-color:#00BFBF;"></span> Opera</li>
-                                <li class="d-block"> <span style="background-color:#FFA70B;"></span> Microsoft Edg</li>
-                            </div>
-                        </div>
-                    </div>
+
+
+
+
+
                 </div>
             </div>
         </div>
 
-        <?php include('includes/footer.php');?>
+        <?php include('includes/footer.php'); ?>
     </section>
 
 
-    <div class="CHAT_MESSAGE_POPUPBOX">
-        <div class="CHAT_POPUP_HEADER">
-            <div class="MSEESAGE_CHATBOX_CLOSE">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M7.09939 5.98831L11.772 10.661C12.076 10.965 12.076 11.4564 11.772 11.7603C11.468 12.0643 10.9766 12.0643 10.6726 11.7603L5.99994 7.08762L1.32737 11.7603C1.02329 12.0643 0.532002 12.0643 0.228062 11.7603C-0.0760207 11.4564 -0.0760207 10.965 0.228062 10.661L4.90063 5.98831L0.228062 1.3156C-0.0760207 1.01166 -0.0760207 0.520226 0.228062 0.216286C0.379534 0.0646715 0.578697 -0.0114918 0.777717 -0.0114918C0.976738 -0.0114918 1.17576 0.0646715 1.32737 0.216286L5.99994 4.889L10.6726 0.216286C10.8243 0.0646715 11.0233 -0.0114918 11.2223 -0.0114918C11.4213 -0.0114918 11.6203 0.0646715 11.772 0.216286C12.076 0.520226 12.076 1.01166 11.772 1.3156L7.09939 5.98831Z"
-                        fill="white" />
-                </svg>
-            </div>
-            <h3>Chat with us</h3>
-            <div class="Chat_Listed_member">
-                <ul>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                                <img src="img/staf/1.png" alt>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                                <img src="img/staf/2.png" alt>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                                <img src="img/staf/3.png" alt>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                                <img src="img/staf/4.png" alt>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                                <img src="img/staf/5.png" alt>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <div class="member_thumb">
-                                <div class="more_member_count">
-                                    <span>90+</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="CHAT_POPUP_BODY">
-            <p class="mesaged_send_date">
-                Sunday, 12 January
-            </p>
-            <div class="CHATING_SENDER">
-                <div class="SMS_thumb">
-                    <img src="img/staf/1.png" alt>
-                </div>
-                <div class="SEND_SMS_VIEW">
-                    <p>Hi! Welcome .
-                        How can I help you?</p>
-                </div>
-            </div>
-            <div class="CHATING_SENDER CHATING_RECEIVEr">
-                <div class="SEND_SMS_VIEW">
-                    <p>Hello</p>
-                </div>
-                <div class="SMS_thumb">
-                    <img src="img/staf/1.png" alt>
-                </div>
-            </div>
-        </div>
-        <div class="CHAT_POPUP_BOTTOM">
-            <div class="chat_input_box d-flex align-items-center">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Write your message"
-                        aria-label="Recipient's username" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <button class="btn " type="button">
 
-                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M18.7821 3.21895C14.4908 -1.07281 7.50882 -1.07281 3.2183 3.21792C-1.07304 7.50864 -1.07263 14.4908 3.21872 18.7824C7.50882 23.0729 14.4908 23.0729 18.7817 18.7815C23.0726 14.4908 23.0724 7.50906 18.7821 3.21895ZM17.5813 17.5815C13.9525 21.2103 8.04773 21.2108 4.41871 17.5819C0.78907 13.9525 0.789485 8.04714 4.41871 4.41832C8.04752 0.789719 13.9521 0.789304 17.5817 4.41874C21.2105 8.04755 21.2101 13.9529 17.5813 17.5815ZM6.89503 8.02162C6.89503 7.31138 7.47107 6.73534 8.18131 6.73534C8.89135 6.73534 9.46739 7.31117 9.46739 8.02162C9.46739 8.73228 8.89135 9.30811 8.18131 9.30811C7.47107 9.30811 6.89503 8.73228 6.89503 8.02162ZM12.7274 8.02162C12.7274 7.31138 13.3038 6.73534 14.0141 6.73534C14.7241 6.73534 15.3002 7.31117 15.3002 8.02162C15.3002 8.73228 14.7243 9.30811 14.0141 9.30811C13.3038 9.30811 12.7274 8.73228 12.7274 8.02162ZM15.7683 13.2898C14.9712 15.1332 13.1043 16.3243 11.0126 16.3243C8.8758 16.3243 6.99792 15.1272 6.22834 13.2744C6.09642 12.9573 6.24681 12.593 6.56438 12.4611C6.64238 12.4289 6.72328 12.4136 6.80293 12.4136C7.04687 12.4136 7.27836 12.5577 7.37772 12.7973C7.95376 14.1842 9.38048 15.0799 11.0126 15.0799C12.6077 15.0799 14.0261 14.1836 14.626 12.7959C14.7625 12.4804 15.1288 12.335 15.4441 12.4717C15.7594 12.6084 15.9048 12.9745 15.7683 13.2898Z"
-                                    fill="#707DB7" />
-                            </svg>
-
-                        </button>
-                        <button class="btn" type="button">
-
-                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M11 0.289062C4.92455 0.289062 0 5.08402 0 10.9996C0 16.9152 4.92455 21.7101 11 21.7101C17.0755 21.7101 22 16.9145 22 10.9996C22 5.08472 17.0755 0.289062 11 0.289062ZM11 20.3713C5.68423 20.3713 1.375 16.1755 1.375 10.9996C1.375 5.82371 5.68423 1.62788 11 1.62788C16.3158 1.62788 20.625 5.82371 20.625 10.9996C20.625 16.1755 16.3158 20.3713 11 20.3713ZM15.125 10.3302H11.6875V6.98314C11.6875 6.61363 11.3795 6.31373 11 6.31373C10.6205 6.31373 10.3125 6.61363 10.3125 6.98314V10.3302H6.875C6.4955 10.3302 6.1875 10.6301 6.1875 10.9996C6.1875 11.3691 6.4955 11.669 6.875 11.669H10.3125V15.016C10.3125 15.3855 10.6205 15.6854 11 15.6854C11.3795 15.6854 11.6875 15.3855 11.6875 15.016V11.669H15.125C15.5045 11.669 15.8125 11.3691 15.8125 10.9996C15.8125 10.6301 15.5045 10.3302 15.125 10.3302Z"
-                                    fill="#707DB7" />
-                            </svg>
-
-                        </button><input type="file">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 
@@ -673,6 +631,40 @@ include('includes/config.php');
     <script src="js/custom.js"></script>
     <script src="vendors/apex_chart/bar_active_1.js"></script>
     <script src="vendors/apex_chart/apex_chart_list.js"></script>
+    <script>
+        (function() {
+            "use strict";
+
+            var carousels = function() {
+                $(".owl-carousel1").owlCarousel({
+                    loop: true,
+                    center: true,
+                    margin: 0,
+                    responsiveClass: true,
+                    nav: false,
+                    responsive: {
+                        0: {
+                            items: 1,
+                            nav: false
+                        },
+                        680: {
+                            items: 2,
+                            nav: false,
+                            loop: false
+                        },
+                        1000: {
+                            items: 3,
+                            nav: true
+                        }
+                    }
+                });
+            };
+
+            (function($) {
+                carousels();
+            })(jQuery);
+        })();
+    </script>
 </body>
 
 </html>

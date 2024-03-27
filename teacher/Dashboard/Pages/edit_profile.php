@@ -1,3 +1,39 @@
+<?php
+session_start();
+include('../../../includes/config.php');
+// Fetch the doubt details based on doubt_id from the URL parameter
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $stmt = $dbh->prepare("SELECT * FROM teacher WHERE id = :id");
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    // Fetch all rows from the result set as an array
+    $user = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Store all values in a variable
+    $userData = array();
+
+    foreach ($user as $userInfo) {
+        $id = $userInfo['id'];
+        $photo = $userInfo['photo'];
+        $name = $userInfo['name'];
+        $email = $userInfo['email'];
+        $contact = $userInfo['contact'];
+        $age = $userInfo['age'];
+        $gender = $userInfo['gender'];
+        $tech_stack = $userInfo['tech_stack'];
+        $experience = $userInfo['experience'];
+        $resume = $userInfo['resume'];
+        $address = $userInfo['address'];
+        $city = $userInfo['city'];
+        $state = $userInfo['state'];
+        $pin = $userInfo['pin'];
+        $active = $userInfo['active'];
+
+        // Now you can use these variables as needed
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -56,7 +92,7 @@
             max-width: 800px;
             align-content: center;
             justify-content: center;
-            margin: auto;
+            margin: 10px auto;
         }
 
         .additional-details li {
@@ -140,6 +176,20 @@
                 font-size: 15px;
             }
         }
+
+        .styled-input {
+            border: none;
+            background: none;
+            outline: none;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            /* Adjust the width as needed */
+            display: inline;
+        }
     </style>
 
 </head>
@@ -153,25 +203,43 @@
             <!-- Start DEMO HTML (Use the following code into your project)-->
 
             <div class="additional-details" id="additionalDetails">
-                <h2>Personal Details</h2>
-                <ul>
-                    <li data-label="Name">Samantha Jones</li>
-                    <li data-label="Email">samantha@example.com</li>
-                    <li data-label="Contact">+1234567890</li>
-                    <li data-label="Address">New York, United States, 12345</li>
-                </ul>
+                <form action="../backend/edit_profile.php" method="post" enctype="multipart/form-data">
 
-                <h2>Parent Details</h2>
-                <ul>
-                    <li data-label="Mother Name">Mary Jones</li>
-                    <li data-label="Mother Email">mary@example.com</li>
-                    <li data-label="Mother Contact">+1234567890</li>
-                    <li data-label="Father Name">John Jones</li>
-                    <li data-label="Father Email">john@example.com</li>
-                    <li data-label="Father Contact">+1234567890</li>
-                </ul>
+                    <h2>Personal Details</h2>
+                    <ul>
+                        <input type="hidden" name="id" value="<?php echo $id; ?>">
+                        <li data-label="Name"><input type="text" name="name" value="<?php echo $name ?>" class="styled-input">
+                        </li>
+                        <li data-label="Email"><input type="email" name="email" value="<?php echo $email ?>" class="styled-input">
+                        </li>
+                        <li data-label="Contact"><input type="tel" name="contact" value="<?php echo $contact ?>" class="styled-input">
+                        </li>
+                        <li data-label="Age"><input type="text" name="age" value="<?php echo $age ?>" class="styled-input">
+                        </li>
+                        <li data-label="Gender"><input type="text" name="gender" value="<?php echo $gender ?>" class="styled-input">
+                        </li>
+                        <li data-label="Address"><input type="text" name="address" value="<?php echo $address ?>" class="styled-input">
+                        </li>
+                        <li data-label="City"><input type="text" name="city" value="<?php echo $city ?>" class="styled-input">
+                        </li>
+                        <li data-label="State"><input type="text" name="state" value="<?php echo $state ?>" class="styled-input">
+                        </li>
+                        <li data-label="Pin"><input type="text" name="pin" value="<?php echo $pin ?>" class="styled-input">
+                        </li>
+                    </ul>
 
-                <button class="edit-details-button">Confirm Details</button>
+                    <h2>Professional Details</h2>
+                    <ul>
+                        <li data-label="Tech Stack"><input type="text" name="tech_stack" value="<?php echo $tech_stack?>" class="styled-input"></li>
+                        <li data-label="Experience"><input type="text" name="experience" value="<?php echo $experience ?>" class="styled-input"></li>
+                        <li data-label="Resume"><input type="file" name="resume" value="<?php echo $resume ?>" class="styled-input">
+                        <p><?php echo $resume ?></p>
+                    </li>
+                        
+                    </ul>
+
+                    <button type="submit" class="edit-details-button">Confirm Details</button></a>
+                </form>
             </div>
             <!-- END EDMO HTML (Happy Coding!)-->
         </main>
