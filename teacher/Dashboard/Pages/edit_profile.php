@@ -181,6 +181,7 @@
     <!-- Script JS -->
     <script src="./js/script.js"></script>
     <!--$%analytics%$-->
+    <?php include('../includes/script.php'); ?>
 
 </body>
 

@@ -204,6 +204,21 @@ if (!isset ($_SESSION['role'])) {
         .submit-button:hover {
             background: #2980b9;
         }
+
+
+        #gender {
+            width: 300px;
+            height: 40px;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #gender option {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
     </style>
 
 </head>
@@ -251,8 +266,14 @@ if (!isset ($_SESSION['role'])) {
                 </div>
                 <div class="form-group">
                     <label for="gender">Gender:</label>
-                    <input type="text" id="gender" name="gender" required>
+                    <select id="gender" name="gender" required>
+                        <option value="" disabled>Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
                 </div>
+
         </div>
 
         <div class="section section-right">

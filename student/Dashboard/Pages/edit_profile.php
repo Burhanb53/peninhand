@@ -1,3 +1,45 @@
+<?php
+session_start();
+include ('../../../includes/config.php');
+// Fetch the doubt details based on doubt_id from the URL parameter
+if (isset ($_GET['id'])) {
+    $id = $_GET['id'];
+    $stmt = $dbh->prepare("SELECT * FROM subscription_user WHERE id = :id");
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+    // Fetch all rows from the result set as an array
+    $user = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Store all values in a variable
+    $userData = array();
+
+    foreach ($user as $userInfo) {
+        $id = $userInfo['id'];
+        $user_id = $userInfo['user_id'];
+        $name = $userInfo['name'];
+        $email = $userInfo['email'];
+        $contact = $userInfo['contact'];
+        $photo = $userInfo['photo'];
+        $mother_name = $userInfo['mother_name'];
+        $mother_email = $userInfo['mother_email'];
+        $mother_contact = $userInfo['mother_contact'];
+        $father_name = $userInfo['father_name'];
+        $father_email = $userInfo['father_email'];
+        $father_contact = $userInfo['father_contact'];
+        $address = $userInfo['address'];
+        $city = $userInfo['city'];
+        $state = $userInfo['state'];
+        $pin = $userInfo['pin'];
+        $subscription_id = $userInfo['subscription_id'];
+        $transaction_id = $userInfo['transaction_id'];
+        $created_at = $userInfo['created_at'];
+        $end_date = $userInfo['end_date'];
+
+        // Now you can use these variables as needed
+    }
+
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -56,7 +98,7 @@
             max-width: 800px;
             align-content: center;
             justify-content: center;
-            margin: auto;
+            margin: 10px auto;
         }
 
         .additional-details li {
@@ -140,47 +182,88 @@
                 font-size: 15px;
             }
         }
+
+        .styled-input {
+            border: none;
+            background: none;
+            outline: none;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            /* Adjust the width as needed */
+            display: inline;
+        }
     </style>
 
 </head>
 
 <body>
-    <?php include('../includes/sidebar.php'); ?>
+    <?php include ('../includes/sidebar.php'); ?>
     <section class="main_content dashboard_part">
-        <?php include('../includes/navbar.php'); ?>
+        <?php include ('../includes/navbar.php'); ?>
         <!--$%adsense%$-->
         <main class="cd__main">
             <!-- Start DEMO HTML (Use the following code into your project)-->
 
             <div class="additional-details" id="additionalDetails">
-                <h2>Personal Details</h2>
-                <ul>
-                    <li data-label="Name">Samantha Jones</li>
-                    <li data-label="Email">samantha@example.com</li>
-                    <li data-label="Contact">+1234567890</li>
-                    <li data-label="Address">New York, United States, 12345</li>
-                </ul>
+                <form action="../backend/edit_profile.php" method="post" enctype="multipart/form-data">
 
-                <h2>Parent Details</h2>
-                <ul>
-                    <li data-label="Mother Name">Mary Jones</li>
-                    <li data-label="Mother Email">mary@example.com</li>
-                    <li data-label="Mother Contact">+1234567890</li>
-                    <li data-label="Father Name">John Jones</li>
-                    <li data-label="Father Email">john@example.com</li>
-                    <li data-label="Father Contact">+1234567890</li>
-                </ul>
+                    <h2>Personal Details</h2>
+                    <ul>
+                        <input type="hidden" name="id" value="<?php echo $id; ?>">
+                        <li data-label="Name"><input type="text" name="name" value="<?php echo $name ?>"
+                                class="styled-input">
+                        </li>
+                        <li data-label="Email"><input type="email" name="email" value="<?php echo $email ?>"
+                                class="styled-input"></li>
+                        <li data-label="Contact"><input type="tel" name="contact" value="<?php echo $contact ?>"
+                                class="styled-input">
+                        </li>
+                        <li data-label="Address"><input type="text" name="address" value="<?php echo $address ?>"
+                                class="styled-input">
+                        </li>
+                        <li data-label="City"><input type="text" name="city" value="<?php echo $city ?>"
+                                class="styled-input">
+                        </li>
+                        <li data-label="State"><input type="text" name="state" value="<?php echo $state ?>"
+                                class="styled-input">
+                        </li>
+                        <li data-label="Pin"><input type="text" name="pin" value="<?php echo $pin ?>"
+                                class="styled-input">
+                        </li>
+                    </ul>
 
-                <button class="edit-details-button">Confirm Details</button>
+                    <h2>Parent Details</h2>
+                    <ul>
+                        <li data-label="Mother Name"><input type="text" name="mother_name"
+                                value="<?php echo $mother_name ?>" class="styled-input"></li>
+                        <li data-label="Mother Email"><input type="email" name="mother_email"
+                                value="<?php echo $mother_email ?>" class="styled-input"></li>
+                        <li data-label="Mother Contact"><input type="tel" name="mother_contact"
+                                value="<?php echo $mother_contact ?>" class="styled-input"></li>
+                        <li data-label="Father Name"><input type="text" name="father_name"
+                                value="<?php echo $father_name ?>" class="styled-input"></li>
+                        <li data-label="Father Email"><input type="email" name="father_email"
+                                value="<?php echo $father_email ?>" class="styled-input"></li>
+                        <li data-label="Father Contact"><input type="tel" name="father_contact"
+                                value="<?php echo $father_contact ?>" class="styled-input"></li>
+                    </ul>
+
+                    <button type="submit" class="edit-details-button">Confirm Details</button></a>
+                </form>
             </div>
             <!-- END EDMO HTML (Happy Coding!)-->
         </main>
-        <?php include('../includes/footer.php'); ?>
+        <?php include ('../includes/footer.php'); ?>
     </section>
 
     <!-- Script JS -->
     <script src="./js/script.js"></script>
     <!--$%analytics%$-->
+    <?php include('../includes/script.php'); ?>
 
 </body>
 

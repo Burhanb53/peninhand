@@ -1,3 +1,15 @@
+<?php
+session_start();
+include('../../../includes/config.php');
+
+// Fetch doubts for the current user
+$teacher_id = $_SESSION['user_id'];
+$stmt = $dbh->prepare("SELECT doubt_id, user_id FROM doubt WHERE teacher_id = :teacher_id");
+$stmt->bindParam(':teacher_id', $teacher_id);
+$stmt->execute();
+$doubts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -121,7 +133,7 @@
 
     td {
         background-color: #F9F9F9;
-
+        word-wrap: break-word;
     }
 
     th {
@@ -151,7 +163,7 @@
 
     }
 
-    
+
 
     .call-links button:hover {
         background-color: #357ae8;
@@ -174,8 +186,7 @@
         /* Set the color of the scrollbar track */
     }
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-    integrity="sha384-9aIt2nRpD7/jqTGc8z5p92T6OqN7lKgN8f5dGPI8uZI7TzI7aTS1PbN2C7QyU5s" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha384-9aIt2nRpD7/jqTGc8z5p92T6OqN7lKgN8f5dGPI8uZI7TzI7aTS1PbN2C7QyU5s" crossorigin="anonymous">
 
 </head>
 
@@ -190,169 +201,102 @@
                     <label for="videoLink">Video Call Link:</label>
                     <input type="text" id="videoLink" name="videoLink" placeholder="Enter video call link" required>
 
-                    <label for="joinCode">Join Code:</label>
-                    <input type="text" id="joinCode" name="joinCode" placeholder="Enter join code" required>
-
+                    <!-- <label for="joinCode">Join Code:</label>
+                    <input type="text" id="joinCode" name="joinCode" placeholder="Enter join code" required> -->
+                    <p style="color:red;">Don't forgot to copy JOIN CODE before joining call</p>
                     <button type="button" onclick="joinVideoCall()">Join Video Call</button>
                 </form>
             </div>
-            <div class="call-links">
+            <div class="table" style="flex: 1;">
                 <div style="display:flex; ">
                     <h2 style="margin-right: 20px;">Video Call Links</h2>
                     <button type="button" onclick="joinVideoCall()" style="border-radius: 10px; ">Create Link</button>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Sr. No</th>
-                            <th>Video Call Link</th>
-                            <th>Join Code</th>
-                            <th>Date and Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                Copyable Link
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Link')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>
-                                Copyable Code
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Code')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>2024-03-09 14:30:00</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                Copyable Link
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Link')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>
-                                Copyable Code
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Code')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>2024-03-09 14:30:00</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                Copyable Link
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Link')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>
-                                Copyable Code
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Code')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>2024-03-09 14:30:00</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                Copyable Link
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Link')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>
-                                Copyable Code
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Code')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>2024-03-09 14:30:00</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                Copyable Link
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Link')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>
-                                Copyable Code
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Code')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>2024-03-09 14:30:00</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                Copyable Link
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Link')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>
-                                Copyable Code
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Code')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>2024-03-09 14:30:00</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                Copyable Link
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Link')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>
-                                Copyable Code
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Code')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>2024-03-09 14:30:00</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                Copyable Link
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Link')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>
-                                Copyable Code
-                                <button class="copy-btn" onclick="copyToClipboard('Copyable Code')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </td>
-                            <td>2024-03-09 14:30:00</td>
-                        </tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
+                <div class="call-links">
+                    <?php
+                    if (count($doubts) > 0) {
+                        // Display the table header
+                        echo "<table>";
+                        echo "<thead>";
+                        echo "<tr>";
+                        echo "<th>Sr. No</th>";
+                        echo "<th>Student Name</th>";
+                        echo "<th>Video Call Link</th>";
+                        echo "<th>Join Code</th>";
+                        echo "<th>Date and Time</th>";
+                        echo "</tr>";
+                        echo "</thead>";
+                        echo "<tbody>";
+
+                        // Loop through each doubt and display corresponding video call data
+                        $sr_no = 1;
+                        foreach ($doubts as $doubt) {
+                            // Fetch video call data if available
+                            $video_call_data = null;
+                            $stmt_video_call = $dbh->prepare("SELECT videocall_link, join_code, created_at FROM video_call WHERE doubt_id = :doubt_id");
+                            $stmt_video_call->bindParam(':doubt_id', $doubt['doubt_id']);
+                            $stmt_video_call->execute();
+                            $video_call_data = $stmt_video_call->fetch(PDO::FETCH_ASSOC);
+
+                            // Fetch teacher name
+                            $student_name = '';
+                            if ($doubt['user_id']) {
+                                $stmt_student = $dbh->prepare("SELECT name FROM subscription_user WHERE user_id = :user_id");
+                                $stmt_student->bindParam(':user_id', $doubt['user_id']);
+                                $stmt_student->execute();
+                                $student = $stmt_student->fetch(PDO::FETCH_ASSOC);
+                                if ($student) {
+                                    $student_name = $student['name'];
+                                }
+                            }
+
+                            // Convert date format to 12-hour format
+                            $created_at = $video_call_data ? date("d-m-Y h:i A", strtotime($video_call_data['created_at'])) : '';
+                            if (!empty($video_call_data) && !empty($video_call_data['videocall_link']) && !empty($video_call_data['join_code'])) {
+                                echo "<tr>";
+                                echo "<td>{$sr_no}</td>";
+                                echo "<td>{$student_name}</td>";
+                                echo "<td>" . (!empty($video_call_data) ? $video_call_data['videocall_link'] : '') . "<button class=\"copy-btn\" onclick=\"copyToClipboard('" . (!empty($video_call_data) ? $video_call_data['videocall_link'] : '') . "')\"><i class=\"fas fa-copy\"></i></button></td>";
+                                echo "<td>" . (!empty($video_call_data) ? $video_call_data['join_code'] : '') . "<button class=\"copy-btn\" onclick=\"copyToClipboard('" . (!empty($video_call_data) ? $video_call_data['join_code'] : '') . "')\"><i class=\"fas fa-copy\"></i></button></td>";
+                                echo "<td>{$created_at}</td>";
+                                echo "</tr>";
+
+
+                                $sr_no++;
+                            }
+                        }
+                        // Close the table
+                        echo "</tbody>";
+                        echo "</table>";
+                    } else {
+                        // If no doubts are found
+                        echo "No doubts found.";
+                    }
+                    ?>
+                </div>
             </div>
         </div>
 
         <script>
             function joinVideoCall() {
                 var videoLink = document.getElementById('videoLink').value;
-                var joinCode = document.getElementById('joinCode').value;
+                // var joinCode = document.getElementById('joinCode').value;
 
                 // Add your logic here to handle the video call link and join code
                 // You can redirect or initiate the video call based on the provided information
-                alert('Joining video call:\nVideo Link: ' + videoLink + '\nJoin Code: ' + joinCode);
+
+                var confirmation = confirm('Joining video call:\nVideo Link: ' + videoLink + '\n\nAre you copied join code ? ');
+
+                if (confirmation) {
+                    var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(videoLink);
+
+                    // Open the search URL in a new tab
+                    window.open(searchUrl, '_blank');
+                } else {
+                    // Cancelled
+                    alert('Video call join cancelled.');
+                }
+                
             }
         </script>
 
@@ -375,9 +319,9 @@
             // Optionally, provide user feedback or perform other actions
             alert("Copied to clipboard: " + text);
         }
-
     </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <?php include('../includes/script.php'); ?>
 
 </body>
 

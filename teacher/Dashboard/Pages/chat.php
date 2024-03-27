@@ -192,6 +192,7 @@ if (isset ($_GET['doubt_id'])) {
             border-radius: 10px;
             max-width: 70%;
             max-width: 800px;
+            word-wrap: break-word;
         }
 
         .received {
@@ -341,11 +342,21 @@ if (isset ($_GET['doubt_id'])) {
             font-size: 1rem;
         }
 
-        .sent .message-time {
+        .video {
+            background-color: #638BFE;
+            align-self: flex-end;
+            font-size: 1rem;
+
+        }
+
+        .sent .message-time,
+        .video .message-time {
             color: white
         }
 
         .sent p,
+        a,
+        .video p,
         a {
             color: white;
         }
@@ -556,10 +567,10 @@ if (isset ($_GET['doubt_id'])) {
                     <?php if ($doubt['doubt_file']): ?>
                         <?php
                         $doubt_media_type = strtolower(pathinfo($doubt['doubt_file'], PATHINFO_EXTENSION));
-                        if ($doubt_media_type === 'pdf'): ?>
+                        if ($doubt_media_type === 'pdf' || $doubt_media_type === 'doc' || $doubt_media_type === 'docx'): ?>
                             <!-- Example 2: PDF -->
-                            <a href="../../../student/Dashboard/uploads/doubt/<?php echo $doubt['doubt_file']; ?>"
-                                style="cursor: pointer;" onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
+                            <a href="../uploads/doubt/<?php echo $doubt['doubt_file']; ?>"
+                                style="cursor: pointer;" onclick="zoomMedia(this, '<?php echo $doubt_media_type; ?>')">Click to view <?php echo strtoupper($doubt_media_type); ?></a>
                         <?php elseif ($doubt_media_type === 'mp4'): ?>
                             <!-- Example 3: Video -->
                             <video controls onclick="zoomMedia(this, 'video')">
@@ -595,10 +606,10 @@ if (isset ($_GET['doubt_id'])) {
                     <?php if ($doubt['answer_file']): ?>
                         <?php
                         $doubt_media_type = strtolower(pathinfo($doubt['answer_file'], PATHINFO_EXTENSION));
-                        if ($doubt_media_type === 'pdf'): ?>
+                        if ($doubt_media_type === 'pdf' || $doubt_media_type === 'doc' || $doubt_media_type === 'docx'): ?>
                             <!-- Example 2: PDF -->
-                            <a href="../uploads/doubt/<?php echo $doubt['answer_file']; ?>" style="cursor: pointer;"
-                                onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
+                            <a href="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>"
+                                style="cursor: pointer;" onclick="zoomMedia(this, '<?php echo $doubt_media_type; ?>')">Click to view <?php echo strtoupper($doubt_media_type); ?></a>
                         <?php elseif ($doubt_media_type === 'mp4'): ?>
                             <!-- Example 3: Video -->
                             <video controls>
@@ -619,6 +630,32 @@ if (isset ($_GET['doubt_id'])) {
                         </a>
                     <?php endif; ?>
                 </div>
+                <?php if ($video_call['videocall_link']) : ?>
+                    <div class="message video">
+                        <h5 style="color: #2F2F2F;">
+                            Video Call Link:
+                            <button type="button" style="background-color: #2F2F2F;" onclick="joinVideoCall('<?php echo !empty($video_call) ? $video_call['videocall_link'] : ''; ?>')">Join Video Call</button>
+                            <br />
+                        </h5>
+                        <p>
+                            <?php echo $video_call['videocall_link']; ?>
+                        </p>
+                        <br />
+                        <h5 style="color: #2F2F2F;">
+                            Join Code:
+                            <span style="color: white;"><?php echo $video_call['join_code']; ?></span>
+                            <button class="copy-btn" style="background-color: #2F2F2F;" onclick="copyToClipboard('<?php echo !empty($video_call) ? $video_call['join_code'] : ''; ?>')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <br />
+                        </h5>
+
+                        <p class="message-time">
+                            <?php echo $sent_time; ?>
+                        </p>
+                    </div>
+                <?php endif; ?>
+
                 <!-- Zoom Modal -->
                 <div id="zoomModal" class="modal" onclick="closeZoom()">
                     <span class="close" onclick="closeZoom()">&times;</span>
@@ -689,6 +726,7 @@ if (isset ($_GET['doubt_id'])) {
                 </div>
             </div>
     </section>
+    <?php include('../includes/script.php'); ?>
 
     <script>
         function zoomMedia(element, mediaType) {
@@ -707,7 +745,7 @@ if (isset ($_GET['doubt_id'])) {
                 // Set the href property of the download link for images
                 downloadLink.href = element.src;
                 downloadLink.style.display = 'block'; // Show download link for images
-            } else if (mediaType === 'pdf') {
+            } else if (mediaType === 'pdf' || mediaType === 'doc' || mediaType === 'docx') {
                 // Display PDF in a new tab
 
                 // Hide the download link for PDFs
@@ -758,6 +796,44 @@ if (isset ($_GET['doubt_id'])) {
 
         function confirmEnd() {
             return confirm('Are you sure you want to end this chat?');
+        }
+    </script>
+    <script>
+        function copyToClipboard(text) {
+            // Create a temporary input element
+            var tempInput = document.createElement("input");
+            // Set the input element's value to the text to be copied
+            tempInput.value = text;
+            // Append the input element to the document
+            document.body.appendChild(tempInput);
+            // Select the text in the input element
+            tempInput.select();
+            // Copy the selected text to the clipboard
+            document.execCommand("copy");
+            // Remove the temporary input element from the document
+            document.body.removeChild(tempInput);
+            // Optionally, provide user feedback or perform other actions
+            alert("Copied to clipboard: " + text);
+        }
+    </script>
+    <script>
+        function joinVideoCall(text) {
+            var videoLink = text;
+            // var joinCode = document.getElementById('joinCode').value;
+
+            // Add your logic here to handle the video call link and join code
+            // You can redirect or initiate the video call based on the provided information
+            var confirmation = confirm('Joining video call:\nVideo Link: ' + videoLink + '\n\nAre you copied join code ? ');
+
+            if (confirmation) {
+                var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(videoLink);
+
+                // Open the search URL in a new tab
+                window.open(searchUrl, '_blank');
+            } else {
+                // Cancelled
+                alert('Video call join cancelled.');
+            }
         }
     </script>
 </body>

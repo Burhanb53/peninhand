@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_doubt->bindParam(':fileUpload', $uploadedFileName);
     }
     $stmt_doubt->execute();
-
+if($videoLink!='null' && $joinCode!='null'){
     // Update or insert data into the video_call table
     $stmt_check = $dbh->prepare("SELECT COUNT(*) FROM video_call WHERE doubt_id = :doubt_id");
     $stmt_check->bindParam(':doubt_id', $doubt_id);
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt_video_call->bindParam(':videoLink', $videoLink);
     $stmt_video_call->bindParam(':joinCode', $joinCode);
     $stmt_video_call->execute();
-
+}
     // Redirect back
     header("Location: {$_SERVER['HTTP_REFERER']}");
     exit;

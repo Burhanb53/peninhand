@@ -273,6 +273,7 @@ $doubts = $stmt->fetchAll();
 
 
     </section>
+    <?php include('../includes/script.php'); ?>
 
 </body>
 

@@ -173,8 +173,7 @@ include ('includes/config.php');
                     <form action="../backend/submit_doubt.php" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="doubt_Category">Question Category:</label>
-                            <input type="text" id="doubt_Category" name="doubt_category" class="question-category"
-                                required>
+                                <input type="text"  name="doubt_category" class="question-category" required>
                         </div>
                         <div class="form-group">
                             <label for="doubt">Description:</label>
@@ -228,6 +227,10 @@ include ('includes/config.php');
     </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <?php include('../includes/script.php'); ?>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         // Initialize jQuery UI Autocomplete on the question category input field

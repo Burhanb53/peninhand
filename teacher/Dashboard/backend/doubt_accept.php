@@ -11,11 +11,11 @@ if(isset($_GET['doubt_id'])){
 
     if ($stmt->execute()) {
         // Redirect to a success page or perform any other action
-        header("Location: ../Pages/chat_history.php");
+        header("Location: {$_SERVER['HTTP_REFERER']}");
         exit(); // Stop further execution
     } else {
         // Redirect to an error page or perform any other action
-        header("Location: ../Pages/chat_history.php");
+        header("Location: {$_SERVER['HTTP_REFERER']}");
         exit(); // Stop further execution
     }
 }

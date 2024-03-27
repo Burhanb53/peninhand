@@ -1,11 +1,11 @@
 <?php
 session_start();
-include ('../../../includes/config.php');
+include('../../../includes/config.php');
 // Fetch the doubt details based on doubt_id from the URL parameter
-if (isset ($_GET['doubt_id'])) {
+if (isset($_GET['doubt_id'])) {
     $doubt_id = $_GET['doubt_id'];
     // Update student_view to 1 for the specified doubt_id
-    $sql = "UPDATE doubt SET teacher_view = 1 WHERE doubt_id = :doubt_id and feedback = 0";
+    $sql = "UPDATE doubt SET student_view = 1 WHERE doubt_id = :doubt_id and feedback = 0";
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':doubt_id', $doubt_id);
     $stmt->execute(); // Execute the update query
@@ -21,6 +21,12 @@ if (isset ($_GET['doubt_id'])) {
     $stmt_feedback->bindParam(':doubt_id', $doubt_id);
     $stmt_feedback->execute();
     $feedback = $stmt_feedback->fetch();
+
+
+    $stmt_video_call = $dbh->prepare("SELECT * FROM video_call WHERE doubt_id = :doubt_id");
+    $stmt_video_call->bindParam(':doubt_id', $doubt_id);
+    $stmt_video_call->execute();
+    $video_call = $stmt_video_call->fetch();
 
     // Check if doubt is found
     if ($doubt) {
@@ -177,6 +183,7 @@ if (isset ($_GET['doubt_id'])) {
             border-radius: 10px;
             max-width: 70%;
             max-width: 800px;
+            word-wrap: break-word;
         }
 
         .received {
@@ -326,11 +333,21 @@ if (isset ($_GET['doubt_id'])) {
             font-size: 1rem;
         }
 
-        .sent .message-time {
+        .video {
+            background-color: #638BFE;
+            align-self: flex-end;
+            font-size: 1rem;
+
+        }
+
+        .sent .message-time,
+        .video .message-time {
             color: white
         }
 
         .sent p,
+        a,
+        .video p,
         a {
             color: white;
         }
@@ -475,9 +492,9 @@ if (isset ($_GET['doubt_id'])) {
 </head>
 
 <body class="crm_body_bg">
-    <?php include ('../includes/sidebar.php'); ?>
+    <?php include('../includes/sidebar.php'); ?>
     <section class="main_content dashboard_part">
-        <?php include ('../includes/navbar.php'); ?>
+        <?php include('../includes/navbar.php'); ?>
 
         <div class="chat-page">
             <div class="chat-header">
@@ -494,11 +511,11 @@ if (isset ($_GET['doubt_id'])) {
                         <?php echo $sent_time; ?>
                     </p>
                 </div>
-                <?php if ($doubt['accepted'] == 1): ?>
-                    <?php if ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 0): ?>
+                <?php if ($doubt['accepted'] == 1) : ?>
+                    <?php if ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 0) : ?>
                         <!-- Show text in color that waiting for feedback -->
                         <p style="color: blue;">"Please provide feedback below. Thank you!"</p>
-                    <?php elseif ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 1): ?>
+                    <?php elseif ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 1) : ?>
                         <!-- Show "Chat Ended" in red -->
                         <p style="color: red;">Chat Ended</p>
                     <?php endif; ?>
@@ -507,7 +524,7 @@ if (isset ($_GET['doubt_id'])) {
 
             <div class="chat-content">
                 <!-- Chat messages go here -->
-                <?php if ($doubt['doubt']): ?>
+                <?php if ($doubt['doubt']) : ?>
                     <div class="message sent">
                         <p>
                             <?php echo $doubt_description ?>
@@ -518,34 +535,31 @@ if (isset ($_GET['doubt_id'])) {
                     </div>
                 <?php endif; ?>
                 <div class="message sent">
-                    <?php if ($doubt['doubt_file']): ?>
+                    <?php if ($doubt['doubt_file']) : ?>
                         <?php
                         $doubt_media_type = strtolower(pathinfo($doubt['doubt_file'], PATHINFO_EXTENSION));
-                        if ($doubt_media_type === 'pdf'): ?>
+                        if ($doubt_media_type === 'pdf' || $doubt_media_type === 'doc' || $doubt_media_type === 'docx') : ?>
                             <!-- Example 2: PDF -->
-                            <a href="../uploads/doubt/<?php echo $doubt['doubt_file']; ?>" style="cursor: pointer;"
-                                onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
-                        <?php elseif ($doubt_media_type === 'mp4'): ?>
+                            <a href="../uploads/doubt/<?php echo $doubt['doubt_file']; ?>" style="cursor: pointer;" onclick="zoomMedia(this, '<?php echo $doubt_media_type; ?>')">Click to view <?php echo strtoupper($doubt_media_type); ?></a>
+                        <?php elseif ($doubt_media_type === 'mp4') : ?>
                             <!-- Example 3: Video -->
                             <video controls onclick="zoomMedia(this, 'video')">
                                 <source src="../uploads/doubt/<?php echo $doubt['doubt_file']; ?>" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
-                        <?php else: ?>
+                        <?php else : ?>
                             <!-- Example 1: Image -->
-                            <img src="../uploads/doubt/<?php echo $doubt['doubt_file']; ?>" alt="Image Message"
-                                onclick="zoomMedia(this, 'image')">
+                            <img src="../uploads/doubt/<?php echo $doubt['doubt_file']; ?>" alt="Image Message" onclick="zoomMedia(this, 'image')">
                         <?php endif; ?>
                         <p class="message-time">Sent on
                             <?php echo $sent_time; ?>
                         </p>
-                        <a href="../uploads/doubt/<?php echo $doubt['doubt_file']; ?>" class="download-link"
-                            download>Download
+                        <a href="../uploads/doubt/<?php echo $doubt['doubt_file']; ?>" class="download-link" download>Download
                             <?php echo ucfirst($doubt_media_type); ?>
                         </a>
                     <?php endif; ?>
                 </div>
-                <?php if ($doubt['answer']): ?>
+                <?php if ($doubt['answer']) : ?>
                     <div class="message received">
                         <p>
                             <?php echo $doubt_solution ?>
@@ -556,34 +570,57 @@ if (isset ($_GET['doubt_id'])) {
                     </div>
                 <?php endif; ?>
                 <div class="message received">
-                    <?php if ($doubt['answer_file']): ?>
+                    <?php if ($doubt['answer_file']) : ?>
                         <?php
                         $doubt_media_type = strtolower(pathinfo($doubt['answer_file'], PATHINFO_EXTENSION));
-                        if ($doubt_media_type === 'pdf'): ?>
+
+                        if ($doubt_media_type === 'pdf' || $doubt_media_type === 'doc' || $doubt_media_type === 'docx') : ?>
                             <!-- Example 2: PDF -->
-                            <a href="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>"
-                                style="cursor: pointer;" onclick="zoomMedia(this, 'pdf')">Click to view PDF</a>
-                        <?php elseif ($doubt_media_type === 'mp4'): ?>
+                            <a href="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" style="cursor: pointer;" onclick="zoomMedia(this, '<?php echo $doubt_media_type; ?>')">Click to view <?php echo strtoupper($doubt_media_type); ?></a>
+                        <?php elseif ($doubt_media_type === 'mp4') : ?>
                             <!-- Example 3: Video -->
                             <video controls>
-                                <source src="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>"
-                                    type="video/mp4">
+                                <source src="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
-                        <?php else: ?>
+                        <?php else : ?>
                             <!-- Example 1: Image -->
-                            <img src="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>"
-                                alt="Image Message" onclick="zoomMedia(this, 'image')">
+                            <img src="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" alt="Image Message" onclick="zoomMedia(this, 'image')">
                         <?php endif; ?>
                         <p class="message-time">Sent on
                             <?php echo $received_time; ?>
                         </p>
-                        <a href="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>"
-                            class="download-link" download>Download
+                        <a href="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" class="download-link" download>Download
                             <?php echo ucfirst($doubt_media_type); ?>
                         </a>
                     <?php endif; ?>
                 </div>
+                <?php if ($video_call['videocall_link']) : ?>
+                    <div class="message video">
+                        <h5 style="color: #2F2F2F;">
+                            Video Call Link:
+                            <button type="button" style="background-color: #2F2F2F;" onclick="joinVideoCall('<?php echo !empty($video_call) ? $video_call['videocall_link'] : ''; ?>')">Join Video Call</button>
+                            <br />
+                        </h5>
+                        <p>
+                            <?php echo $video_call['videocall_link']; ?>
+                        </p>
+                        <br />
+                        <h5 style="color: #2F2F2F;">
+                            Join Code:
+                            <span style="color: white;"><?php echo $video_call['join_code']; ?></span>
+                            <button class="copy-btn" style="background-color: #2F2F2F;" onclick="copyToClipboard('<?php echo !empty($video_call) ? $video_call['join_code'] : ''; ?>')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <br />
+                        </h5>
+
+                        <p class="message-time">
+                            <?php echo $sent_time; ?>
+                        </p>
+                    </div>
+                <?php endif; ?>
+
                 <!-- Zoom Modal -->
                 <div id="zoomModal" class="modal" onclick="closeZoom()">
                     <span class="close" onclick="closeZoom()">&times;</span>
@@ -593,21 +630,20 @@ if (isset ($_GET['doubt_id'])) {
 
 
             </div>
-            <?php if ($doubt['accepted'] == 1 && (!($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 1))): ?>
+            <?php if ($doubt['accepted'] == 1 && (!($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 1))) : ?>
                 <!-- Message input section -->
                 <div class="additional-details" id="additionalDetails">
                     <form id="solutionForm" enctype="multipart/form-data" action="../backend/edit_doubt.php" method="post">
                         <input type="hidden" name="doubt_id" value="<?php echo $doubt_id; ?>">
                         <div class="form-group">
                             <label for="solution">Solution:</label>
-                            <textarea id="solution" name="doubt"
-                                placeholder="Type your solution..."><?php if ($doubt['doubt']): ?><?php echo $doubt_description ?><?php endif; ?></textarea>
+                            <textarea id="solution" name="doubt" placeholder="Type your solution..."><?php if ($doubt['doubt']) : ?><?php echo $doubt_description ?><?php endif; ?></textarea>
                         </div>
 
                         <div class="form-group">
                             <label for="fileUpload">Upload File:</label>
                             <input type="file" id="fileUpload" name="fileUpload">
-                            <?php if ($doubt['answer_file']): ?>
+                            <?php if ($doubt['answer_file']) : ?>
                                 <input type="hidden" name="existingFile" value="<?php echo $doubt['doubt_file']; ?>">
                                 <?php echo $doubt['answer_file']; ?> <!-- Display the file name -->
                             <?php endif; ?>
@@ -618,7 +654,7 @@ if (isset ($_GET['doubt_id'])) {
                     </form>
                 </div>
             <?php endif; ?>
-            <?php if ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 1): ?>
+            <?php if ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 1) : ?>
                 <div class="additional-details" id="additionalDetails">
                     <div style="margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
                         <h2 style="margin-bottom: 5px;">Feedback</h2>
@@ -635,7 +671,7 @@ if (isset ($_GET['doubt_id'])) {
                 </div>
             <?php endif; ?>
 
-            <?php if ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 0): ?>
+            <?php if ($doubt['doubt_submit'] == 1 && $doubt['feedback'] == 0) : ?>
                 <div class="additional-details" id="additionalDetails">
                     <p style="color: blue;">You can end the chat by providing feedback below or continuing with your
                         question.</p><br>
@@ -686,7 +722,7 @@ if (isset ($_GET['doubt_id'])) {
                 // Set the href property of the download link for images
                 downloadLink.href = element.src;
                 downloadLink.style.display = 'block'; // Show download link for images
-            } else if (mediaType === 'pdf') {
+            } else if (mediaType === 'pdf' || mediaType === 'doc' || mediaType === 'docx') {
                 // Display PDF in a new tab
 
                 // Hide the download link for PDFs
@@ -723,9 +759,47 @@ if (isset ($_GET['doubt_id'])) {
         function sendMessage() {
             // Add logic to send a message
         }
-
-
     </script>
+    <script>
+        function copyToClipboard(text) {
+            // Create a temporary input element
+            var tempInput = document.createElement("input");
+            // Set the input element's value to the text to be copied
+            tempInput.value = text;
+            // Append the input element to the document
+            document.body.appendChild(tempInput);
+            // Select the text in the input element
+            tempInput.select();
+            // Copy the selected text to the clipboard
+            document.execCommand("copy");
+            // Remove the temporary input element from the document
+            document.body.removeChild(tempInput);
+            // Optionally, provide user feedback or perform other actions
+            alert("Copied to clipboard: " + text);
+        }
+    </script>
+    <script>
+        function joinVideoCall(text) {
+            var videoLink = text;
+            // var joinCode = document.getElementById('joinCode').value;
+
+            // Add your logic here to handle the video call link and join code
+            // You can redirect or initiate the video call based on the provided information
+            var confirmation = confirm('Joining video call:\nVideo Link: ' + videoLink + '\n\nAre you copied join code ? ');
+
+            if (confirmation) {
+                var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(videoLink);
+
+                // Open the search URL in a new tab
+                window.open(searchUrl, '_blank');
+            } else {
+                // Cancelled
+                alert('Video call join cancelled.');
+            }
+        }
+    </script>
+
+    <?php include('../includes/script.php'); ?>
 
 </body>
 
