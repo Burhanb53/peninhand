@@ -43,6 +43,7 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
 
     <?php include ('includes/sidebar_index.php'); ?>
 
+
     <section class="main_content dashboard_part">
 
 
@@ -53,7 +54,7 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                     <div class="col-12">
                         <div class="QA_section">
                             <div class="white_box_tittle list_header">
-                                <h4>All users</h4>
+                                <h4>Manage users</h4>
                                 <div class="box_right d-flex lms_block">
                                     <div class="serach_field_2">
                                         <div class="search_inner">
@@ -73,6 +74,7 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
 
                             <div class="QA_table mb_30 table-container">
                                 <table class="table lms_table_active" style="table-layout: fixed; width: 100%;">
+                                    <col style="width: 10px;">
                                     <col style="width: 20px;">
                                     <col style="width: 20px;">
                                     <col style="width: 20px;">
@@ -83,10 +85,10 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                     <col style="width: 20px;">
                                     <col style="width: 20px;">
                                     <col style="width: 20px;">
-                                    <!-- <col style="width: 20px;"> -->
+                                    <col style="width: 20px;">
                                     <thead>
                                         <tr>
-                                            <th scope="col">ID</th>
+                                        <th scope="col">ID</th>
                                             <th scope="col">User ID</th>
                                             <th scope="col">Name</th>
                                             <th scope="col">Contact</th>
@@ -96,7 +98,8 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                             <th scope="col">State</th>
                                             <th scope="col">Subs. Id</th>
                                             <th scope="col">End Date</th>
-                                            <!-- <th scope="col">Active</th> -->
+                                            <th scope="col">Status</th> <!-- New column for icons -->
+                                            <th scope="col">Manage</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -120,7 +123,6 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                                 <td>
                                                     <?php echo $user['father_name']; ?>
                                                 </td>
-                                                
                                                 <td>
                                                     <?php echo $user['city']; ?>
                                                 </td>
@@ -133,9 +135,41 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                                 <td>
                                                     <?php echo $user['end_date']; ?>
                                                 </td>
+
                                                 <!-- <td>
                                                     <?php echo $user['active'] == 1 ? 'Active' : 'Not Active'; ?>
                                                 </td> -->
+                                                <td>
+                                                    <?php echo $user['verified'] == 1 ? 'Verified' : 'Not Verified'; ?>
+                                                    <!-- Show status -->
+                                                </td>
+                                                <td>
+                                                    <?php if ($user['verified'] == 0): ?>
+                                                        <form method="POST" action="verify_student.php">
+                                                            <input type="hidden" name="user_id"
+                                                                value="<?php echo $user['id']; ?>">
+                                                            <button type="submit" class="btn btn-primary">Verify</button>
+                                                        </form>
+                                                    <?php else: ?>
+                                                        <!-- Update icon with a link to update_user.php -->
+                                                        <a href="update_student.php?id=<?php echo $user['id']; ?>"
+                                                            title="Update">
+                                                            <?php if ($user['active'] == 1): ?>
+                                                                <i style="padding-right: 5px;" class="fas fa-times"></i>
+                                                            <?php else: ?>
+                                                                <i style="padding-right: 5px;" class="fas fa-check"></i>
+                                                            <?php endif; ?>
+                                                        </a>
+                                                        <!-- Placeholder for another action icon -->
+                                                        <a href="view_student.php?id=<?php echo $user['id']; ?>"
+                                                            title="View Details">
+                                                            <i class="fas fa-info-circle"></i>
+                                                        </a>
+
+
+
+                                                    <?php endif; ?>
+                                                </td>
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -162,6 +196,7 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
         </div> -->
     </section>
 </body>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('searchForm');
@@ -236,5 +271,6 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
 <script src="vendors/text_editor/summernote-bs4.js"></script>
 <script src="vendors/apex_chart/apexcharts.js"></script>
 <script src="js/custom.js"></script>
+
 
 </html>

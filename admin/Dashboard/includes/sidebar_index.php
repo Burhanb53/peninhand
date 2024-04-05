@@ -7,7 +7,7 @@
         </div>
         <ul id="sidebar_menu">
             <li <?php if (basename($_SERVER['PHP_SELF']) == 'index.php') echo 'class="mm-active"'; ?>>
-                <a class="has-arrow" href="index.php" aria-expanded="false">
+                <a href="index.php" aria-expanded="false">
                     <img src="img/menu-icon/dashboard.svg" alt>
                     <span>Dashboard</span>
                 </a>
@@ -25,27 +25,27 @@
                     <li><a href="manage_teacher.php">Manage</a></li>
                 </ul>
             </li>
-            <li <?php if (basename($_SERVER['PHP_SELF']) == 'mail_box.html' || 
-                         basename($_SERVER['PHP_SELF']) == 'chat.html' || 
+            <li <?php if (basename($_SERVER['PHP_SELF']) == 'all_student.php' || 
+                         basename($_SERVER['PHP_SELF']) == 'manage_student.php' || 
                          basename($_SERVER['PHP_SELF']) == 'faq.html') echo 'class="mm-active"'; ?>>
                 <a class="has-arrow" href="#" aria-expanded="false">
                     <img src="img/menu-icon/3.svg" alt>
                     <span>Students</span>
                 </a>
                 <ul>
-                    <li><a href="mail_box.html">All Students</a></li>
-                    <li><a href="chat.html">Manage</a></li>
+                    <li><a href="all_student.php">All Students</a></li>
+                    <li><a href="manage_student.php">Manage</a></li>
                     <li><a href="faq.html">Doubts</a></li>
                 </ul>
             </li>
-            <li <?php if (basename($_SERVER['PHP_SELF']) == 'data_table.html') echo 'class="mm-active"'; ?>>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <img src="img/menu-icon/8.svg" alt>
-                    <span>Table</span>
+            <li <?php if (basename($_SERVER['PHP_SELF']) == 'users.php') echo 'class="mm-active"'; ?>>
+                <a href="users.php" >
+                    <img src="img/menu-icon/11.svg" alt>
+                    <span>Users</span>
                 </a>
-                <ul>
-                    <li><a href="data_table.html">Data Tables</a></li>
-                </ul>
+                <!-- <ul>
+                    <li><a href="users.php">Users</a></li>
+                </ul> -->
             </li>
         </ul>
     </nav>

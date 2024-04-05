@@ -8,20 +8,14 @@ if (isset($_GET['id'])) {
     $teacherId = intval($_GET['id']);
 
     // Fetch teacher data from the database based on the ID
-    $sqlTeacher = "SELECT * FROM teacher WHERE id = :id";
-    $stmtTeacher = $dbh->prepare($sqlTeacher);
-    $stmtTeacher->bindParam(':id', $teacherId);
-    $stmtTeacher->execute();
-    $teacherData = $stmtTeacher->fetch(PDO::FETCH_ASSOC);
+    $sql = "SELECT * FROM doubt WHERE id = :uesr_id";
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $teacherId);
+    $stmt->execute();
+    $studentData = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Check if teacher data is found
-    if ($teacherData) {
-        // Fetch doubts of the student from the doubt table using user_id
-        $doubtSql = "SELECT * FROM doubt WHERE teacher_id = :teacher_id";
-        $doubtStmt = $dbh->prepare($doubtSql);
-        $doubtStmt->bindParam(':teacher_id', $teacherData['teacher_id']); // Use user_id from student data
-        $doubtStmt->execute();
-        $doubts = $doubtStmt->fetchAll(PDO::FETCH_ASSOC);
+    if ($studentData) {
         ?>
 
         <!DOCTYPE html>
@@ -31,7 +25,7 @@ if (isset($_GET['id'])) {
             <meta charset="utf-8">
 
 
-            <title>Teacher's Information</title>
+            <title>Student's Information</title>
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
             <style type="text/css">
@@ -434,12 +428,12 @@ if (isset($_GET['id'])) {
                         <div class="panel">
                             <div class="user-heading round">
                                 <a href="#">
-                                    <img src="../../teacher/Dashboard/uploads/profile/<?php echo $teacherData['photo']; ?>"
-                                        alt="Teacher Photo">
+                                    <img src="../../student/Dashboard/uploads/profile/<?php echo $studentData['photo']; ?>"
+                                        alt="Student Photo">
 
                                 </a>
                                 <h1>
-                                    <?php echo $teacherData['name']; ?>
+                                    <?php echo $studentData['name']; ?>
                                 </h1>
 
                             </div>
@@ -477,154 +471,109 @@ if (isset($_GET['id'])) {
                         </div> -->
                         <div class="panel">
                             <div class="bio-graph-heading">
-                                Teacher Profile Information
+                                Student Profile Information
                             </div>
                             <div class="panel-body bio-graph-info">
-                                <h1>Teacher Information <span>ID </span>:
-                                            <?php echo $teacherData['teacher_id']; ?></h1>
+                                <h1>Student Information</h1>
                                 <div class="row">
-                                    
                                     <div class="bio-row">
-                                        <p><span>Name </span>:
-                                            <?php echo $teacherData['name']; ?>
+                                        <p><span>id </span>:
+                                            <?php echo $studentData['user_id']; ?>
                                         </p>
                                     </div>
                                     <!-- <div class="bio-row">
-                                <p><span>Last Name </span><p><?php echo $teacherData['name']; ?></p>
+                                <p><span>Last Name </span><p><?php echo $studentData['name']; ?></p>
                             </div> -->
                                     <div class="bio-row">
-                                        <p><span>Gender </span>:
-                                            <?php echo $teacherData['gender']; ?>
+                                        <p><span>Name </span>:
+                                            <?php echo $studentData['name']; ?>
                                         </p>
                                     </div>
                                     <div class="bio-row">
-                                        <p><span>Age </span>:
-                                            <?php echo $teacherData['age']; ?>
+                                        <p><span>E-mail </span>:
+                                            <?php echo $studentData['email']; ?>
+                                        </p>
+                                    </div>
+                                    <div class="bio-row">
+                                        <p><span>Contact </span>:
+                                            <?php echo $studentData['contact']; ?>
+                                        </p>
+                                    </div>
+                                    <div class="bio-row">
+                                        <p><span>Mother Name </span>:
+                                            <?php echo $studentData['mother_name']; ?>
+                                        </p>
+                                    </div>
+
+                                    <div class="bio-row">
+                                        <p><span>Mother Contact </span>:
+                                            <?php echo $studentData['mother_contact']; ?>
+                                        </p>
+                                    </div>
+
+                                    <div class="bio-row">
+                                        <p><span>Father Name </span>:
+                                            <?php echo $studentData['father_name']; ?>
+                                        </p>
+                                    </div>
+                                    <div class="bio-row">
+                                        <p><span>Father Contact </span>:
+                                            <?php echo $studentData['father_contact']; ?>
+                                        </p>
+                                    </div>
+                                    <div class="bio-row">
+                                        <p><span>Address </span>:
+                                            <?php echo $studentData['address']; ?>
+                                        </p>
+                                    </div>
+                                    <div class="bio-row">
+                                        <p><span>City </span>:
+                                            <?php echo $studentData['city']; ?>
                                         </p>
                                     </div>
                                     <div class="bio-row">
                                         <p><span>State </span>:
-                                            <?php echo $teacherData['state']; ?>
+                                            <?php echo $studentData['state']; ?>
                                         </p>
                                     </div>
                                     <div class="bio-row">
-                                        <p><span>Tech Stack</span>:
-                                            <?php echo $teacherData['tech_stack']; ?>
+                                        <p><span>PIN </span>:
+                                            <?php echo $studentData['pin']; ?>
                                         </p>
                                     </div>
                                     <div class="bio-row">
-                                        <p><span>Experience </span>:
-                                            <?php echo $teacherData['experience']; ?>
+                                        <p><span>Plan </span>:
+                                            <?php
+                                            $subscription_id = $studentData['subscription_id'];
+                                            if ($subscription_id == 0) {
+                                                echo "Free Plan";
+                                            } else {
+                                                echo $subscription_id . " month" . ($subscription_id > 1 ? "s" : ""); // Adds 's' if subscription_id is greater than 1
+                                            }
+                                            ?>
                                         </p>
                                     </div>
                                     <div class="bio-row">
-                                        <p><span>Email </span>:
-                                            <?php echo $teacherData['email']; ?>
-                                        </p>
-                                    </div>
-                                    <div class="bio-row">
-                                        <p><span>Mobile </span>:
-                                            <?php echo $teacherData['contact']; ?>
+                                        <p><span>Transaction ID </span>:
+                                            <?php echo $studentData['transaction_id']; ?>
                                         </p>
                                     </div>
                                     <div class="bio-row">
                                         <p><span>Joined </span>:
-                                            <?php echo date('Y-m-d', strtotime($teacherData['created_at'])); ?>
-                                        </p>
-                                    </div>
-
-                                    <div class="bio-row">
-                                        <p><span>Status </span>:
-                                            <?php echo $teacherData['active'] == 1 ? 'Active' : 'Not Active'; ?>
+                                            <?php echo date('Y-m-d', strtotime($studentData['created_at'])); ?>
                                         </p>
                                     </div>
                                     <div class="bio-row">
-                                        <p><span>Resume</span>: <a
-                                                href="../../teacher/Dashboard/uploads/resume/<?php echo $teacherData['resume']; ?>"
-                                                target="_blank">View Resume</a></p>
-                                    </div>
-                                    <div class="bio-row">
-                                        <p>
-                                            <span>Verification</span>:
-                                            <?php
-                                            if ($teacherData['verified'] == 0) {
-                                                // echo "Not Verified";
-                                                echo '<a href="update_verified.php?id=' . $teacherData['id'] . '&status=1">Verify</a>';
-                                            } else {
-                                                // echo "Verified";
-                                                echo '<a href="update_verified.php?id=' . $teacherData['id'] . '&status=0">Unverify</a>';
-                                            }
-                                            ?>
+                                        <p><span>Plan End </span>:
+                                            <?php echo date('Y-m-d', strtotime($studentData['end_date'])); ?>
                                         </p>
-
                                     </div>
-                                   
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Display Doubts -->
-            <div style="padding-left: 35px;padding-right: 35px" class="container-flex">
-                                        <h1>Doubts</h1>
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered table-striped table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="width: 50px;">Doubt ID</th>
-                                                        <th style="width: 50px;">Student ID</th>
-                                                        <th style="width: 40px;">Doubt Category</th>
-                                                        <th style="width: 80px;">Doubt</th>
-                                                        <th style="width: 10px;">Doubt File</th>
-                                                        <th style="width: 50px;">Created At</th>
-                                                        <th style="width: 2px;">Answered</th>
-                                                        <th style="width: 5px;">Answered at</th>
-                                                        <th style="width: 5px;">Answer</th>
-                                                        <th style="width: 5px;">Answer File</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php foreach ($doubts as $doubt): ?>
-                                                        <tr>
-                                                            <td>
-                                                                <?php echo $doubt['doubt_id']; ?>
-                                                            </td>
-                                                            <td>
-                                                                <?php echo $doubt['user_id'] != null ? $doubt['user_id'] : 'Not Assigned'; ?>
-                                                            </td>
-                                                            <td>
-                                                                <?php echo $doubt['doubt_category']; ?>
-                                                            </td>
-                                                            <td style="max-width: 30px; overflow: hidden; text-overflow: ellipsis;">
-                                                                <?php echo $doubt['doubt']; ?>
-                                                            </td>
-                                                            <td style="max-width: 10px; overflow: hidden; text-overflow: ellipsis;">
-                                                                <a href="../../student/Dashboard/uploads/doubt/<?php echo $doubt['doubt_file']; ?>"
-                                                                    target="_blank">View File</a>
-                                                            </td>
-                                                            <td>
-                                                                <?php echo $doubt['doubt_created_at']; ?>
-                                                            </td>
-                                                            <td>
-                                                                <?php echo $doubt['answer'] != null ? 'Yes' : 'No'; ?>
-                                                            </td>
-                                                            <td>
-                                                                <?php echo $doubt['answer_created_at']; ?>
-                                                            </td>
-                                                            <td>
-                                                                <?php echo $doubt['answer']; ?>
-                                                            </td>
-                                                            <td>
-                                                            <a href="../../student/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>"
-                                                                    target="_blank">View File</a>
-                                                            </td>
-                                                        </tr>
-                                                    <?php endforeach; ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
             <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
             <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
             <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>

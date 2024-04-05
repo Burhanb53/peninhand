@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 27, 2024 at 01:13 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Apr 05, 2024 at 02:33 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -128,6 +128,7 @@ CREATE TABLE `subscription_plan` (
 --
 
 INSERT INTO `subscription_plan` (`id`, `subscription_id`, `plan_name`, `description`, `duration`, `price`, `created_at`) VALUES
+(0, 0, 'Free Plan', 'No Access', 0, 0, '2024-04-05 13:26:47'),
 (1, 1, 'Basic', 'Access to basic features', 1, 10, '2024-03-14 12:40:54'),
 (2, 2, 'Premium', 'Access to premium features', 3, 25, '2024-03-14 12:41:04'),
 (3, 3, 'Pro', 'Access to all features', 6, 50, '2024-03-14 12:41:10');
@@ -167,8 +168,8 @@ CREATE TABLE `subscription_user` (
 --
 
 INSERT INTO `subscription_user` (`id`, `user_id`, `name`, `email`, `contact`, `photo`, `mother_name`, `mother_email`, `mother_contact`, `father_name`, `father_email`, `father_contact`, `address`, `city`, `state`, `pin`, `subscription_id`, `transaction_id`, `created_at`, `end_date`, `verified`) VALUES
-(7, 873068, 'Burhanuddin Bohra', 'burhanuddinb542@gmail.com', '8890919295', '65f69f4727751_bohra.jpg', 'Sakina Bohra', 'burhanuddinb542@gmail.com', '8890919295', 'Mustafa Bohra', 'burhanuddinb542@gmail.com', '8890919295', 'Burhani mohalla', 'Chhoti Sadri', 'Rajasthan', '312604', 3, '112378945678', '2024-03-17 13:14:07', '2024-09-17', 0),
-(8, 504414, 'Bohra', 'murtazabohra786110@gmail.com', '9057543501', '65f84d68d83e8_burhan.jpg', 'Sakina Bohra', 'burhanuddinb542@gmail.com', '1234567890', 'Mustafa Bohra', 'burhanuddinb542@gmail.com', '9876543210', 'Bohra Colony Scheme no.36B', 'Neemuch', 'Madhya Pradesh', '312604', 1, '1234567890', '2024-03-18 19:49:20', '2024-04-18', 0);
+(7, 873068, 'Burhanuddin Bohra', 'burhanuddinb542@gmail.com', '8890919295', '65f69f4727751_bohra.jpg', 'Sakina Bohra', 'burhanuddinb542@gmail.com', '8890919295', 'Mustafa Bohra', 'burhanuddinb542@gmail.com', '8890919295', 'Burhani mohalla', 'Chhoti Sadri', 'Rajasthan', '312604', 3, '112378945678', '2024-03-17 13:14:07', '2024-09-17', 1),
+(8, 504414, 'Bohra', 'murtazabohra786110@gmail.com', '9057543501', '65f84d68d83e8_burhan.jpg', 'Sakina Bohra', 'burhanuddinb542@gmail.com', '1234567890', 'Mustafa Bohra', 'burhanuddinb542@gmail.com', '9876543210', 'Bohra Colony Scheme no.36B', 'Neemuch', 'Madhya Pradesh', '312604', 1, '1234567890', '2024-03-18 19:49:20', '2024-04-18', 1);
 
 -- --------------------------------------------------------
 
@@ -202,11 +203,11 @@ CREATE TABLE `teacher` (
 --
 
 INSERT INTO `teacher` (`id`, `teacher_id`, `photo`, `name`, `email`, `contact`, `age`, `gender`, `tech_stack`, `experience`, `resume`, `address`, `city`, `state`, `pin`, `created_at`, `active`, `verified`) VALUES
-(1, 201, 'teacher1_photo.jpg', 'Alice Teacher', 'alice@example.com', '9876543210', '30', 'Female', 'Mathematics', '5 years', 'alice_resume.pdf', '456 Oak St', 'Cityville', 'CA', '12345', '2024-03-08 18:46:39', 1, 1),
-(2, 202, 'teacher2_photo.jpg', 'Bob Educator', 'bob@example.com', '8765432109', '35', 'Male', 'Physics', '8 years', 'bob_resume.pdf', '789 Pine St', 'Townsville', 'NY', '54321', '2024-03-08 18:46:39', 1, 1),
-(3, 203, 'teacher3_photo.jpg', 'Charlie Instructor', 'charlie@example.com', '7654321098', '28', 'Male', 'Chemistry', '3 years', 'charlie_resume.pdf', '123 Main St', 'Villageville', 'TX', '67890', '2024-03-08 18:46:39', 0, 0),
-(4, 586611, '65f6a7bbe9ff5_bohra.jpg', 'Burhanuddin Bohra', 'paawan0304@proton.me', '8890919295', '19', 'Male', 'HTML, CSS, Java', '2 year experience in coding', '65f6a7bbea017_Burhanuddin Bohra resume.pdf', 'Burhani mohalla', 'Chhoti Sadri', 'Rajasthan', '312604', '2024-03-16 15:14:18', 0, 1),
-(5, 826177, '65f6a7bbe9ff5_bohra.jpg', 'Burhanuddin Bohra', '2022pietadburhanuddin013@poornima.org', '8890919295', '19', 'Male', 'HTML, CSS, Java', '3 years experience in coding', '65f6a7bbea017_Burhanuddin Bohra resume.pdf', 'ISI - 2, Poornima Marg, Sitapura, Jaipur, Rajasthan 302022', 'Jaipur', 'Rajasthan', '312604', '2024-03-17 13:50:11', 0, 0);
+(1, 201, 'teacher1_photo.jpg', 'Alice Teacher', 'alice@example.com', '9876543210', '30', 'Female', 'Mathematics', '5 years', 'alice_resume.pdf', '456 Oak St', 'Cityville', 'CA', '12345', '2024-03-08 18:46:39', 0, 1),
+(2, 202, 'teacher2_photo.jpg', 'Bob Educator', 'bob@example.com', '8765432109', '35', 'Male', 'Physics', '8 years', 'bob_resume.pdf', '789 Pine St', 'Townsville', 'NY', '54321', '2024-03-08 18:46:39', 0, 1),
+(3, 203, 'teacher3_photo.jpg', 'Charlie Instructor', 'charlie@example.com', '7654321098', '28', 'Male', 'Chemistry', '3 years', 'charlie_resume.pdf', '123 Main St', 'Villageville', 'TX', '67890', '2024-03-08 18:46:39', 0, 1),
+(4, 586611, '65f6a7bbe9ff5_bohra.jpg', 'Burhanuddin Bohra', 'paawan0304@proton.me', '8890919295', '19', 'Male', 'HTML, CSS, Java', '2 year experience in coding', '65f6a7bbea017_Burhanuddin Bohra resume.pdf', 'Burhani mohalla', 'Chhoti Sadri', 'Rajasthan', '312604', '2024-03-16 15:14:18', 1, 1),
+(5, 826177, '65f6a7bbe9ff5_bohra.jpg', 'Burhanuddin Bohra', '2022pietadburhanuddin013@poornima.org', '8890919295', '19', 'Male', 'HTML, CSS, Java', '3 years experience in coding', '65f6a7bbea017_Burhanuddin Bohra resume.pdf', 'ISI - 2, Poornima Marg, Sitapura, Jaipur, Rajasthan 302022', 'Jaipur', 'Rajasthan', '312604', '2024-03-17 13:50:11', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -231,7 +232,9 @@ INSERT INTO `user` (`id`, `user_id`, `email`, `password`, `created_at`, `role`) 
 (4, 873068, 'burhanuddinb542@gmail.com', '$2y$10$aLOpar8GdOEfwrh1Nl2Mye173uMAU/UW6ENwzpDP9VjjshjT.wKM2', '2024-03-09 22:34:02', 1),
 (5, 826177, '2022pietadburhanuddin013@poornima.org', '$2y$10$29uKfVNer/vd5EDDZ4qzxuiu36nWQAZ/QprFxGzH0WV39g97rjO7e', '2024-03-14 11:14:53', 2),
 (6, 586611, 'paawan0304@proton.me', '$2y$10$cx.k60hqssIBsIQAd37CSuoy3VajJvlwnMWUX2vjAwYjczO5jsRm6', '2024-03-16 15:06:19', 2),
-(7, 504414, 'murtazabohra786110@gmail.com', '$2y$10$G9VH3ZPk9duqwY/gx0o/DeStTGLUKJv8y7PIAy3kd6y2ATIw4Epqm', '2024-03-18 19:46:33', 1);
+(7, 504414, 'murtazabohra786110@gmail.com', '$2y$10$G9VH3ZPk9duqwY/gx0o/DeStTGLUKJv8y7PIAy3kd6y2ATIw4Epqm', '2024-03-18 19:46:33', 1),
+(8, 880147, 'admin@admin.org', '$2y$10$VLvfsmHqfkKh3FqAXSNvMuQGboBw/gAHIfuBB314PTDiDFbPaeytS', '2024-04-03 21:14:48', 3),
+(9, 287549, 'gunjan@gmail.com', '$2y$10$gVHBLLrAroVwOFfGpKM15ef6fWMxB3AnNFXAcwUH8jfxJfWi.8sbO', '2024-04-05 17:34:32', 0);
 
 -- --------------------------------------------------------
 
@@ -361,7 +364,7 @@ ALTER TABLE `feedback`
 -- AUTO_INCREMENT for table `subscription_plan`
 --
 ALTER TABLE `subscription_plan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `subscription_user`
@@ -379,7 +382,7 @@ ALTER TABLE `teacher`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `videocall_link`
