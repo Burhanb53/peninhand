@@ -83,6 +83,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
                                     <col style="width: 20px;">
                                     <col style="width: 20px;">
                                     <col style="width: 20px;">
+                                    <col style="width: 20px;">
                                     <thead>
                                         <tr>
                                             <th scope="col">ID</th>
@@ -95,6 +96,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
                                             <th scope="col">Tech Stack</th>
                                             <th scope="col">Experience</th>
                                             <th scope="col">Active</th>
+                                            <th scope="col">Verified</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -129,6 +131,9 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
                                                 </td>
                                                 <td>
                                                     <?php echo $teacher['active'] == 1 ? 'Active' : 'Not Active'; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $teacher['verified'] == 1 ? 'Yes' : 'No'; ?>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

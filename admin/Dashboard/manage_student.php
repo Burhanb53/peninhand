@@ -152,22 +152,19 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                                         </form>
                                                     <?php else: ?>
                                                         <!-- Update icon with a link to update_user.php -->
-                                                        <a href="update_student.php?id=<?php echo $user['id']; ?>"
+                                                        <!-- <a href="update_student.php?id=<?php echo $user['id']; ?>"
                                                             title="Update">
-                                                            <?php if ($user['active'] == 1): ?>
+                                                            <?php if ($user['subscription_id'] != 0): ?>
                                                                 <i style="padding-right: 5px;" class="fas fa-times"></i>
                                                             <?php else: ?>
                                                                 <i style="padding-right: 5px;" class="fas fa-check"></i>
                                                             <?php endif; ?>
-                                                        </a>
+                                                        </a> -->
                                                         <!-- Placeholder for another action icon -->
                                                         <a href="view_student.php?id=<?php echo $user['id']; ?>"
                                                             title="View Details">
                                                             <i class="fas fa-info-circle"></i>
                                                         </a>
-
-
-
                                                     <?php endif; ?>
                                                 </td>
                                             </tr>
