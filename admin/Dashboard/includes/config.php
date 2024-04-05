@@ -1,42 +1,15 @@
-<?php
-// Database connection
-$host = 'localhost';
-$username = 'root';
-$password = ''; // Your database password
-$dbname = 'peninhand';
-
-// Create a PDO connection
+<?php 
+// DB credentials.
+define('DB_HOST','localhost');
+define('DB_USER','root');
+define('DB_PASS','');
+define('DB_NAME','peninhand');
+// Establish database connection.
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $dbh = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME,DB_USER, DB_PASS,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+    // Add debugging info
+    // echo "Database connection successful!";
 } catch (PDOException $e) {
-    die("Error: Could not connect. " . $e->getMessage());
+    exit("Error: " . $e->getMessage());
 }
-
-// Function to fetch and return count from the database based on role
-function getCountByRole($pdo, $role) {
-    $sql = "SELECT COUNT(*) as count FROM user WHERE role = :role";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':role', $role, PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result['count'];
-}
-
-function getCountResolvedDoubts($pdo) {
-    $sql = "SELECT COUNT(*) as count FROM doubt WHERE feedback = 1";
-    $stmt = $pdo->query($sql);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result['count'];
-}
-
-// Fetch counts from the database
-$doubt_count = getCountResolvedDoubts($pdo); // Count of resolved doubts
-
-// Fetch counts for teachers and students from the database
-$teacher_count = getCountByRole($pdo, 2); // Assuming role 2 is for teachers
-$student_count = getCountByRole($pdo, 1); // Assuming role 1 is for students
-
-// Close the connection
-$pdo = null;
 ?>
