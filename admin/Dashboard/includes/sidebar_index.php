@@ -38,14 +38,14 @@
                     <li><a href="faq.html">Doubts</a></li>
                 </ul>
             </li>
-            <li <?php if (basename($_SERVER['PHP_SELF']) == 'users.php') echo 'class="mm-active"'; ?>>
+            <!-- <li <?php if (basename($_SERVER['PHP_SELF']) == 'users.php') echo 'class="mm-active"'; ?>>
                 <a href="users.php" >
                     <img src="img/menu-icon/11.svg" alt>
                     <span>Users</span>
                 </a>
-                <!-- <ul>
+                <ul>
                     <li><a href="users.php">Users</a></li>
-                </ul> -->
-            </li>
+                </ul>
+            </li> -->
         </ul>
     </nav>
