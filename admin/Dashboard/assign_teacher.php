@@ -66,21 +66,24 @@ if (isset($_GET['doubt_id'])) {
     <link rel="stylesheet" href="vendors/material_icon/material-icons.css">
     <link rel="stylesheet" href="css/metisMenu.css">
     <link rel="stylesheet" href="css/style1.css">
-    <link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS"> 
+    <link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS">
     <style>
-        
-        .lms_table_active button {
-            padding: 8px 16px;
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
             border: none;
-            background-color: #4CAF50;
-            color: white;
+            padding: 8px 16px;
             cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            border-radius: 4px;
         }
 
-        .lms_table_active button:hover {
-            background-color: #45a049;
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        button[type="submit"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
         }
     </style>
 </head>
@@ -91,108 +94,122 @@ if (isset($_GET['doubt_id'])) {
     <section class="main_content dashboard_part">
         <div class="main_content_iner ">
             <div class="container-fluid p-0">
-                <div class="row justify-content-center">
 
-                </div>
                 <h1>Assign Teacher</h1>
-                <div class="row justify-content-center">
-                    <div class="col-12">
-                        <div class="QA_table mb_30 table-container">
-                            <table class="table lms_table_active" style="table-layout: fixed; width: 100%;">
-                                <col style="width: 10px;">
-                                <col style="width: 20px;">
-                                <col style="width: 20px;">
-                                <col style="width: 20px;">
-                                <col style="width: 20px;">
-                                <col style="width: 20px;">
-                                <col style="width: 20px;">
-                                <col style="width: 20px;">
-                                <col style="width: 20px;">
-                                <col style="width: 20px;">
-                                <col style="width: 20px;">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">Teacher ID</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Gender</th>
-                                        <th scope="col">Contact</th>
-                                        <th scope="col">City</th>
-                                        <th scope="col">State</th>
-                                        <th scope="col">Tech Stack</th>
-                                        <th scope="col">Experience</th>
-                                        <th scope="col">Active</th>
-                                        <!-- <th scope="col">Assign</th> -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-        <?php foreach ($teachers as $teacher): ?>
-            <?php if ($teacher['active'] == 1): ?>
-                <tr>
-                    <td><?php echo $teacher['id']; ?></td>
-                    <td><?php echo $teacher['teacher_id']; ?></td>
-                    <td><?php echo $teacher['name']; ?></td>
-                    <td><?php echo $teacher['gender']; ?></td>
-                    <td><?php echo $teacher['contact']; ?></td>
-                    <td><?php echo $teacher['city']; ?></td>
-                    <td><?php echo $teacher['state']; ?></td>
-                    <td><?php echo $teacher['tech_stack']; ?></td>
-                    <td><?php echo $teacher['experience']; ?></td>
-                    <td class="stunning-text"><?php echo $teacher['active'] == 1 ? 'Active' : 'Not Active'; ?></td>
-                    <td>
-                        <form method="POST">
-                            <input type="hidden" name="doubt_id" value="<?php echo $doubt_id; ?>">
-                            <input type="hidden" name="teacher_id" value="<?php echo $teacher['teacher_id']; ?>">
-                            <!-- <input type="text" name="teacher_name"> -->
-                            <button type="submit">Assign</button>
-                        </form>
-                    </td>
-                </tr>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    </tbody>
+                <div class="box_right d-flex lms_block">
+                    <div class="serach_field_2">
+                        <div class="search_inner">
+                            <form id="searchForm">
+                                <div class="search_field">
+                                    <input id="searchInput" type="text" placeholder="Search Name ...">
+                                </div>
 
-                            </table>
+                            </form>
                         </div>
                     </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover" id="dataTable">
+                        <!-- Table Headings -->
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Teacher ID</th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Contact</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Tech Stack</th>
+                                <th>Experience</th>
+                                <th>Active</th>
+                                <!-- <th>Verified</th> -->
+                                <th>Assign</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <?php foreach ($teachers as $teacher): ?>
+                                <?php if ($teacher['active'] == 1): ?>
+                                    <tr>
+                                        <td>
+                                            <?php echo $teacher['id']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $teacher['teacher_id']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $teacher['name']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $teacher['gender']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $teacher['contact']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $teacher['city']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $teacher['state']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $teacher['tech_stack']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $teacher['experience']; ?>
+                                        </td>
+                                        <td class="stunning-text">
+                                            <?php echo $teacher['active'] == 1 ? 'Active' : 'Not Active'; ?>
+                                        </td>
+                                        <td>
+                                            <form method="POST">
+                                                <input type="hidden" name="doubt_id" value="<?php echo $doubt_id; ?>">
+                                                <input type="hidden" name="teacher_id"
+                                                    value="<?php echo $teacher['teacher_id']; ?>">
+                                                <button type="submit">Assign</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </section>
-</body>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('searchForm');
-        const input = document.getElementById('searchInput');
-        const tableRows = document.querySelectorAll('.lms_table_active tbody tr');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('searchInput');
+    const tableRows = document.querySelectorAll('#dataTable tbody tr');
 
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const searchTerm = input.value.toLowerCase();
+    input.addEventListener('input', function () {
+        const searchTerm = input.value.trim().toLowerCase();
 
-            tableRows.forEach(row => {
-                let found = false;
-                row.querySelectorAll('td').forEach(cell => {
-                    if (cell.textContent.toLowerCase().includes(searchTerm)) {
-                        found = true;
-                    }
-                });
-
-                if (found) {
-                    row.style.display = 'table-row';
-                } else {
-                    row.style.display = 'none';
+        tableRows.forEach(row => {
+            let found = false;
+            row.querySelectorAll('td').forEach(cell => {
+                const cellText = cell.textContent.trim().toLowerCase();
+                if (cellText.includes(searchTerm)) {
+                    found = true;
                 }
             });
-        });
 
-        document.getElementById('searchButton').addEventListener('click', function () {
-            form.dispatchEvent(new Event('submit'));
+            if (found) {
+                row.style.display = 'table-row';
+            } else {
+                row.style.display = 'none';
+            }
         });
     });
+});
 
-</script>
+
+    </script>
+
+</body>
 
 
 <script src="js/jquery1-3.4.1.min.js"></script>

@@ -190,7 +190,7 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
                                 </td>
                                 <td style="max-width: 10px; overflow: hidden; text-overflow: ellipsis;">
                                     <?php if ($doubt['answer_file'] !== null): ?>
-                                        <a href="../../student/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>"
+                                        <a href="../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>"
                                             target="_blank">View File</a>
                                     <?php endif; ?>
                                 </td>

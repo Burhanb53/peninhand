@@ -36,146 +36,143 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="css/metisMenu.css">
     <link rel="stylesheet" href="css/style1.css">
     <link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS">
+    <!-- <style>
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        .table th,
+        .table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+    </style> -->
 </head>
 
 <body class="crm_body_bg">
 
     <?php include ('includes/sidebar_index.php'); ?>
 
-
     <section class="main_content dashboard_part">
-
-
         <div class="main_content_iner ">
             <div class="container-fluid p-0">
-                <div class="row justify-content-center">
-
-                    <div class="col-12">
-                        <div class="QA_section">
-                            <div class="white_box_tittle list_header">
-                                <h4>Manage Teachers</h4>
-                                <div class="box_right d-flex lms_block">
-                                    <div class="serach_field_2">
-                                        <div class="search_inner">
-                                            <form id="searchForm">
-                                                <div class="search_field">
-                                                    <input id="searchInput" type="text" placeholder="Search Name ...">
-                                                </div>
-                                                <button type="submit"> <i class="ti-search"></i> </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="add_button ms-2">
-                                        <button id="searchButton" class="btn_1">Search</button>
-                                    </div>
+                <h1>Manage Teacher</h1>
+                <div class="box_right d-flex lms_block">
+                    <div class="serach_field_2">
+                        <div class="search_inner">
+                            <form id="searchForm">
+                                <div class="search_field">
+                                    <input id="searchInput" type="text" placeholder="Search Name ...">
                                 </div>
-                            </div>
-
-                            <div class="QA_table mb_30 table-container">
-                                <table class="table lms_table_active" style="table-layout: fixed; width: 100%;">
-                                    <col style="width: 10px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">Teacher ID</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Gender</th>
-                                            <th scope="col">Contact</th>
-                                            <th scope="col">City</th>
-                                            <th scope="col">State</th>
-                                            <th scope="col">Tech Stack</th>
-                                            <th scope="col">Experience</th>
-                                            <th scope="col">Active</th>
-                                            <th scope="col">Status</th> <!-- New column for icons -->
-                                            <th scope="col">Manage</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($teachers as $teacher): ?>
-                                            <tr>
-                                                <td>
-                                                    <?php echo $teacher['id']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['teacher_id']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['name']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['gender']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['contact']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['city']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['state']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['tech_stack']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['experience']; ?>
-                                                </td>
-
-                                                <td>
-                                                    <?php echo $teacher['active'] == 1 ? 'Active' : 'Not Active'; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['verified'] == 1 ? 'Verified' : 'Not Verified'; ?>
-                                                    <!-- Show status -->
-                                                </td>
-                                                <td>
-                                                    <?php if ($teacher['verified'] == 0): ?>
-                                                        <form method="POST" action="verify_teacher.php">
-                                                            <input type="hidden" name="teacher_id"
-                                                                value="<?php echo $teacher['id']; ?>">
-                                                            <button type="submit" class="btn btn-primary">Verify</button>
-                                                        </form>
-                                                    <?php else: ?>
-                                                        <!-- Update icon with a link to update_teacher.php -->
-                                                        <a href="update_teacher.php?id=<?php echo $teacher['id']; ?>"
-                                                            title="Update">
-                                                            <?php if ($teacher['active'] == 1): ?>
-                                                                <i style="padding-right: 5px;" class="fas fa-times"></i>
-                                                            <?php else: ?>
-                                                                <i style="padding-right: 5px;" class="fas fa-check"></i>
-                                                            <?php endif; ?>
-                                                        </a>
-                                                        <!-- Placeholder for another action icon -->
-                                                        <a href="view_teacher.php?id=<?php echo $teacher['id']; ?>"
-                                                            title="View Details">
-                                                            <i class="fas fa-info-circle"></i>
-                                                        </a>
-
-
-
-                                                    <?php endif; ?>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover" id="dataTable">
+                        <!-- Table Headings -->
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Teacher ID</th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Contact</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Tech Stack</th>
+                                <th>Experience</th>
+                                <th>Active</th>
+                                <th>Status</th>
+                                <th>Manage</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <?php foreach ($teachers as $teacher): ?>
+                                <tr>
+                                    <td>
+                                        <?php echo $teacher['id']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['teacher_id']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['name']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['gender']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['contact']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['city']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['state']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['tech_stack']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['experience']; ?>
+                                    </td>
+
+                                    <td>
+                                        <?php echo $teacher['active'] == 1 ? 'Active' : 'Not Active'; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['verified'] == 1 ? 'Verified' : 'Not Verified'; ?>
+                                        <!-- Show status -->
+                                    </td>
+                                    <td>
+                                        <?php if ($teacher['verified'] == 0): ?>
+                                            <form method="POST" action="verify_teacher.php">
+                                                <input type="hidden" name="teacher_id" value="<?php echo $teacher['id']; ?>">
+                                                <button type="submit" class="btn btn-primary">Verify</button>
+                                            </form>
+                                        <?php else: ?>
+                                            <!-- Update icon with a link to update_teacher.php -->
+                                            <a href="update_teacher.php?id=<?php echo $teacher['id']; ?>" title="Update">
+                                                <?php if ($teacher['active'] == 1): ?>
+                                                    <i style="padding-right: 5px;" class="fas fa-times text-danger"></i>
+                                                <?php else: ?>
+                                                    <i style="padding-right: 5px; color: #28a745;" class="fas fa-check"></i>
+                                                <?php endif; ?>
+                                            </a>
+                                            <!-- Placeholder for another action icon -->
+                                            <a href="view_teacher.php?id=<?php echo $teacher['id']; ?>" title="View Details">
+                                                <i style="color: #000;" class="fas fa-info-circle"></i>
+                                            </a>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+
+                </div>
             </div>
+        </div>
+        </div>
+        </div>
         </div>
 
         <!-- <div class="footer_part">

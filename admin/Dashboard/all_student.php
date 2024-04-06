@@ -44,61 +44,38 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
     <?php include ('includes/sidebar_index.php'); ?>
 
     <section class="main_content dashboard_part">
-
-
         <div class="main_content_iner ">
             <div class="container-fluid p-0">
-                <div class="row justify-content-center">
-
-                    <div class="col-12">
-                        <div class="QA_section">
-                            <div class="white_box_tittle list_header">
-                                <h4>All users</h4>
-                                <div class="box_right d-flex lms_block">
-                                    <div class="serach_field_2">
-                                        <div class="search_inner">
-                                            <form id="searchForm">
-                                                <div class="search_field">
-                                                    <input id="searchInput" type="text" placeholder="Search Name ...">
-                                                </div>
-                                                <button type="submit"> <i class="ti-search"></i> </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="add_button ms-2">
-                                        <button id="searchButton" class="btn_1">Search</button>
-                                    </div>
+                <h1>Manage Students</h1>
+                <div class="box_right d-flex lms_block">
+                    <div class="serach_field_2">
+                        <div class="search_inner">
+                            <form id="searchForm">
+                                <div class="search_field">
+                                    <input id="searchInput" type="text" placeholder="Search Name ...">
                                 </div>
-                            </div>
-
-                            <div class="QA_table mb_30 table-container">
-                                <table class="table lms_table_active" style="table-layout: fixed; width: 100%;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <!-- <col style="width: 20px;"> -->
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">User ID</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Contact</th>
-                                            <th scope="col">Mother Name</th>
-                                            <th scope="col">Father Name</th>
-                                            <th scope="col">City</th>
-                                            <th scope="col">State</th>
-                                            <th scope="col">Subs. Id</th>
-                                            <th scope="col">End Date</th>
-                                            <!-- <th scope="col">Active</th> -->
-                                        </tr>
-                                    </thead>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover" id="dataTable">
+                        <!-- Table Headings -->
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Contact</th>
+                                <th>Mother Name</th>
+                                <th>Father Namge</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Subscription</th>
+                                <th>End Date</th>
+                            </tr>
+                        </thead>
+                                        
                                     <tbody>
                                         <?php foreach ($users as $user): ?>
                                             <tr>
