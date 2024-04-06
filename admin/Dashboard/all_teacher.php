@@ -37,162 +37,155 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="css/metisMenu.css">
     <link rel="stylesheet" href="css/style1.css">
     <link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS">
+    <!-- <style>
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        .table th,
+        .table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+    </style> -->
 </head>
 
 <body class="crm_body_bg">
-
     <?php include ('includes/sidebar_index.php'); ?>
+    <a id="btn-toggle" href="#" class="sidebar-toggler break-point-sm">
+        <i class="ri-menu-line ri-xl"></i>
+    </a>
 
     <section class="main_content dashboard_part">
-
-
         <div class="main_content_iner ">
             <div class="container-fluid p-0">
-                <div class="row justify-content-center">
-
-                    <div class="col-12">
-                        <div class="QA_section">
-                            <div class="white_box_tittle list_header">
-                                <h4>All Teachers</h4>
-                                <div class="box_right d-flex lms_block">
-                                    <div class="serach_field_2">
-                                        <div class="search_inner">
-                                            <form id="searchForm">
-                                                <div class="search_field">
-                                                    <input id="searchInput" type="text" placeholder="Search Name ...">
-                                                </div>
-                                                <button type="submit"> <i class="ti-search"></i> </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="add_button ms-2">
-                                        <button id="searchButton" class="btn_1">Search</button>
-                                    </div>
+                <h1>All Teacher</h1>
+                <div class="box_right d-flex lms_block">
+                    <div class="serach_field_2">
+                        <div class="search_inner">
+                            <form id="searchForm">
+                                <div class="search_field">
+                                    <input id="searchInput" type="text" placeholder="Search Name ...">
                                 </div>
-                            </div>
-
-                            <div class="QA_table mb_30 table-container">
-                                <table class="table lms_table_active" style="table-layout: fixed; width: 100%;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <col style="width: 20px;">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">Teacher ID</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Gender</th>
-                                            <th scope="col">Contact</th>
-                                            <th scope="col">City</th>
-                                            <th scope="col">State</th>
-                                            <th scope="col">Tech Stack</th>
-                                            <th scope="col">Experience</th>
-                                            <th scope="col">Active</th>
-                                            <th scope="col">Verified</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($teachers as $teacher): ?>
-                                            <tr>
-                                                <td>
-                                                    <?php echo $teacher['id']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['teacher_id']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['name']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['gender']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['contact']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['city']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['state']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['tech_stack']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['experience']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['active'] == 1 ? 'Active' : 'Not Active'; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $teacher['verified'] == 1 ? 'Yes' : 'No'; ?>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover" id="dataTable">
+                        <!-- Table Headings -->
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Teacher ID</th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Contact</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Tech Stack</th>
+                                <th>Experience</th>
+                                <th>Active</th>
+                                <th>Verified</th>
+                            </tr>
+                        </thead>
 
-        <!-- <div class="footer_part">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="footer_iner text-center">
-                            <p>2020 © Influence - Designed by <a href="#"> <i class="ti-heart"></i> </a><a href="#">
-                                    Dashboard</a></p>
-                        </div>
-                    </div>
+                        <!-- Table Body -->
+                        <tbody>
+                            <?php foreach ($teachers as $teacher): ?>
+                                <tr>
+                                    <td>
+                                        <?php echo $teacher['id']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['teacher_id']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['name']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['gender']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['contact']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['city']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['state']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['tech_stack']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['experience']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['active'] == 1 ? 'Active' : 'Not Active'; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $teacher['verified'] == 1 ? 'Yes' : 'No'; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div> -->
     </section>
-</body>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('searchForm');
-        const input = document.getElementById('searchInput');
-        const tableRows = document.querySelectorAll('.lms_table_active tbody tr');
 
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const searchTerm = input.value.toLowerCase();
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById("searchInput");
+            const dataTable = document.getElementById("dataTable");
 
-            tableRows.forEach(row => {
-                let found = false;
-                row.querySelectorAll('td').forEach(cell => {
-                    if (cell.textContent.toLowerCase().includes(searchTerm)) {
-                        found = true;
+            searchInput.addEventListener("input", function () {
+                const searchValue = searchInput.value.trim().toLowerCase();
+                const rows = dataTable.getElementsByTagName("tr");
+
+                for (let i = 1; i < rows.length; i++) { // Start loop from index 1 to skip header row
+                    const row = rows[i];
+                    const cells = row.getElementsByTagName("td");
+                    let found = false;
+
+                    for (let cell of cells) {
+                        if (cell.textContent.toLowerCase().includes(searchValue)) {
+                            found = true;
+                            break;
+                        }
                     }
-                });
 
-                if (found) {
-                    row.style.display = 'table-row';
-                } else {
-                    row.style.display = 'none';
+                    if (searchValue === "") {
+                        row.style.display = ""; // Show the row if search is empty
+                        row.style.backgroundColor = ""; // Remove background color
+                    } else if (found) {
+                        row.style.display = ""; // Show the row if it matches search
+                        // row.style.backgroundColor = "yellow"; // Highlight matching rows
+                    } else {
+                        row.style.display = "none"; // Hide rows that don't match search
+                    }
                 }
             });
         });
-
-        document.getElementById('searchButton').addEventListener('click', function () {
-            form.dispatchEvent(new Event('submit'));
-        });
-    });
-
-</script>
+    </script>
+</body>
 
 
 <script src="js/jquery1-3.4.1.min.js"></script>

@@ -616,9 +616,10 @@ if (isset($_GET['id'])) {
                                                                 <?php echo $doubt['answer']; ?>
                                                             </td>
                                                             <td>
-                                                            <a href="../../student/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>"
-                                                                    target="_blank">View File</a>
-                                                            </td>
+        <?php if ($doubt['answer'] != null): ?>
+            <a href="../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" target="_blank">View Answer File</a>
+        <?php endif; ?>
+    </td>
                                                         </tr>
                                                     <?php endforeach; ?>
                                                 </tbody>
