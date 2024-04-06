@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_doubt->bindParam(':fileUpload', $uploadedFileName);
     }
     $stmt_doubt->execute();
-if($videoLink!='null' && $joinCode!='null'){
+if($videoLink!='null' && $joinCode!='null' && $videoLink!='' && $joinCode!=''){
     // Update or insert data into the video_call table
     $stmt_check = $dbh->prepare("SELECT COUNT(*) FROM video_call WHERE doubt_id = :doubt_id");
     $stmt_check->bindParam(':doubt_id', $doubt_id);

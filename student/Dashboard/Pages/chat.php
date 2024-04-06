@@ -534,8 +534,8 @@ if (isset($_GET['doubt_id'])) {
                         </p>
                     </div>
                 <?php endif; ?>
+                <?php if ($doubt['doubt_file']) : ?>
                 <div class="message sent">
-                    <?php if ($doubt['doubt_file']) : ?>
                         <?php
                         $doubt_media_type = strtolower(pathinfo($doubt['doubt_file'], PATHINFO_EXTENSION));
                         if ($doubt_media_type === 'pdf' || $doubt_media_type === 'doc' || $doubt_media_type === 'docx') : ?>
@@ -557,8 +557,8 @@ if (isset($_GET['doubt_id'])) {
                         <a href="../uploads/doubt/<?php echo $doubt['doubt_file']; ?>" class="download-link" download>Download
                             <?php echo ucfirst($doubt_media_type); ?>
                         </a>
-                    <?php endif; ?>
                 </div>
+                <?php endif; ?>
                 <?php if ($doubt['answer']) : ?>
                     <div class="message received">
                         <p>
@@ -569,8 +569,8 @@ if (isset($_GET['doubt_id'])) {
                         </p>
                     </div>
                 <?php endif; ?>
+                <?php if ($doubt['answer_file']) : ?>
                 <div class="message received">
-                    <?php if ($doubt['answer_file']) : ?>
                         <?php
                         $doubt_media_type = strtolower(pathinfo($doubt['answer_file'], PATHINFO_EXTENSION));
 
@@ -593,8 +593,8 @@ if (isset($_GET['doubt_id'])) {
                         <a href="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" class="download-link" download>Download
                             <?php echo ucfirst($doubt_media_type); ?>
                         </a>
-                    <?php endif; ?>
                 </div>
+                <?php endif; ?>
                 <?php if ($video_call['videocall_link']) : ?>
                     <div class="message video">
                         <h5 style="color: #2F2F2F;">
