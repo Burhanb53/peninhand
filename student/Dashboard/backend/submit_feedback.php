@@ -98,7 +98,7 @@ function sendFeedbackEmailToTeacher($dbh, $teacher_id, $doubt_id, $satisfaction_
                 <p>A feedback has been received for the doubt with ID: <strong>$doubt_id</strong>.</p>
                 <div class='feedback-details'>
                     <p><strong>Doubt ID:</strong> $doubt_id</p>
-                    <p><strong>Satisfaction Level:</strong> $satisfaction_level</p>
+                    <p><strong>Satisfaction Level:</strong> $satisfaction_level Star</p>
                     <p><strong>Feedback Text:</strong> $feedback_text</p>
                 </div>
                 <p>Please review and take any necessary action.</p>
