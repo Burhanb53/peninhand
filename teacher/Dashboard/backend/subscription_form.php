@@ -1,6 +1,10 @@
 <?php
 session_start();
 include('../../../includes/config.php');
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require '../../../vendor/autoload.php'; // Adjust the path as needed
 
 if (isset(
     $_POST['name'], $_POST['email'], $_POST['contact'], $_POST['age'], $_POST['gender'],
@@ -72,6 +76,9 @@ if (isset(
             $stmt->bindParam(':pin', $pin);
 
             if ($stmt->execute()) {
+                // Send verification email to admin
+                sendVerificationEmailToAdmin($name, $email, $contact, $age, $gender, $address, $city, $state, $pin, $experience, $tech_stack, $targetFilePathResume);
+
                 header("Location: ../Pages/success_registration.html");
                 exit();
             } else {
@@ -91,6 +98,99 @@ if (isset(
     $_SESSION['registration_message'] = $errorMessage;
     header("Location: ../Pages/error.php");
     exit();
+}
+
+function sendVerificationEmailToAdmin($name, $email, $contact, $age, $gender, $address, $city, $state, $pin, $experience, $tech_stack, $resumeFilePath)
+{
+    // Create a new PHPMailer instance
+    $mail = new PHPMailer(true);
+
+    try {
+        //Server settings
+        $mail->isSMTP();
+        $mail->Host = 'smtp.hostinger.com';
+        $mail->Port = 587;
+        $mail->SMTPAuth = true;
+        $mail->Username = 'no-reply@mybazzar.me';
+        $mail->Password = 'Burh@n60400056';
+
+        //Recipients
+        $mail->setFrom('no-reply@mybazzar.me', 'Pen in Hand');
+        $mail->addAddress('peninhand.official@gmail.com');
+
+        //Content
+        $mail->isHTML(true);
+        $mail->Subject = 'New Teacher Registration - Verification Required';
+        $mail->Body ="<html>
+        <head>
+            <style>
+                table {
+                    border-collapse: collapse;
+                    width: 100%;
+                    margin-bottom: 20px;
+                }
+                th, td {
+                    padding: 8px;
+                    text-align: left;
+                    border-bottom: 1px solid #ddd;
+                }
+                th {
+                    background-color: #f2f2f2;
+                }
+            </style>
+        </head>
+        <body>
+        <p>Hello Admin,</p>
+        <p>A new teacher has registered and is waiting for verification. Below are the details:</p>
+        <table>
+            <tr>
+                <th>Name</th>
+                <td>$name</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>$email</td>
+            </tr>
+            <tr>
+                <th>Contact</th>
+                <td>$contact</td>
+            </tr>
+            <tr>
+                <th>Age</th>
+                <td>$age</td>
+            </tr>
+            <tr>
+                <th>Gender</th>
+                <td>$gender</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>$address, $city, $state, $pin</td>
+            </tr>
+            <tr>
+                <th>Experience</th>
+                <td>$experience</td>
+            </tr>
+            <tr>
+                <th>Tech Stack</th>
+                <td>$tech_stack</td>
+            </tr>
+        </table>
+        <p>Please take necessary actions to verify the teacher account.</p>
+        <p>Regards,<br>Pen in Hand Team</p>
+        <p style=\"font-size: 10px; color: #999; text-align: center;\" >This is an system-generated email. Please do not reply.</p>
+
+        </body>
+        </html>";
+
+        // Attach the resume file
+        $mail->addAttachment($resumeFilePath);
+
+        // Send the email
+        $mail->send();
+    } catch (Exception $e) {
+        // Log any errors if needed
+    }
 }
 
 ?>

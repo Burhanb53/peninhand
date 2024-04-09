@@ -1,4 +1,5 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -8,10 +9,23 @@ session_start();
 include('../../../includes/config.php');
 
 if (isset(
-    $_POST['name'], $_POST['contact'], $_POST['mother_name'], $_POST['mother_email'],
-    $_POST['mother_contact'], $_POST['father_name'], $_POST['father_email'], $_POST['father_contact'],
-    $_POST['address'], $_POST['city'], $_POST['state'], $_POST['pin'], $_POST['subscription_id'],
-    $_POST['transaction_id'], $_SESSION['user_id'], $_FILES['photo'], $_POST['end_date']
+    $_POST['name'],
+    $_POST['contact'],
+    $_POST['mother_name'],
+    $_POST['mother_email'],
+    $_POST['mother_contact'],
+    $_POST['father_name'],
+    $_POST['father_email'],
+    $_POST['father_contact'],
+    $_POST['address'],
+    $_POST['city'],
+    $_POST['state'],
+    $_POST['pin'],
+    $_POST['subscription_id'],
+    $_POST['transaction_id'],
+    $_SESSION['user_id'],
+    $_FILES['photo'],
+    $_POST['end_date']
 )) {
     // Collect form data
     $user_id = $_SESSION['user_id'];
@@ -31,6 +45,22 @@ if (isset(
     $subscription_id = $_POST['subscription_id'];
     $transaction_id = $_POST['transaction_id'];
     $end_date = $_POST['end_date'];
+
+    // Fetch data from subscription_plan based on subscription_id
+    $subscriptionQuery = $dbh->prepare("SELECT plan_name, duration, price FROM subscription_plan WHERE subscription_id = :subscription_id");
+    $subscriptionQuery->bindParam(':subscription_id', $subscription_id);
+    $subscriptionQuery->execute();
+    $subscriptionData = $subscriptionQuery->fetch(PDO::FETCH_ASSOC);
+
+    // Check if data is fetched successfully
+    if ($subscriptionData) {
+        $plan_name = $subscriptionData['plan_name'];
+        $duration = $subscriptionData['duration'];
+        $price = $subscriptionData['price'];
+    } else {
+        // Handle error if subscription data is not found
+        handleRegistrationError("Subscription data not found.");
+    }
 
     // File upload handling
     $targetDir = "../uploads/profile/";
@@ -163,8 +193,16 @@ if (isset(
                             <td>$pin</td>
                         </tr>
                         <tr>
-                            <td>Subscription ID</td>
-                            <td>$subscription_id</td>
+                            <td>Plan Name</td>
+                            <td>$plan_name</td>
+                        </tr>
+                        <tr>
+                            <td>Duration</td>
+                            <td>$duration Months</td>
+                        </tr>
+                        <tr>
+                            <td>Price</td>
+                            <td>₹ $price</td>
                         </tr>
                         <tr>
                             <td>Transaction ID</td>
@@ -182,7 +220,7 @@ if (isset(
                 </body>
                 </html>";
                 $userMail->send();
-                
+
                 // Email content for admin
                 $adminMail = new PHPMailer();
                 $adminMail->isSMTP();
@@ -275,8 +313,16 @@ if (isset(
                             <td>$pin</td>
                         </tr>
                         <tr>
-                            <td>Subscription ID</td>
-                            <td>$subscription_id</td>
+                            <td>Plan Name</td>
+                            <td>$plan_name</td>
+                        </tr>
+                        <tr>
+                            <td>Duration</td>
+                            <td>$duration Months</td>
+                        </tr>
+                        <tr>
+                            <td>Price</td>
+                            <td>₹ $price</td>
                         </tr>
                         <tr>
                             <td>Transaction ID</td>
@@ -294,7 +340,7 @@ if (isset(
                 </body>
                 </html>";
                 $adminMail->send();
-                
+
                 header("Location: ../Pages/success_registration.html");
                 exit();
             } else {
@@ -310,9 +356,9 @@ if (isset(
     handleRegistrationError("All fields are required. Please fill all the fields and try again.");
 }
 
-function handleRegistrationError($errorMessage) {
+function handleRegistrationError($errorMessage)
+{
     $_SESSION['registration_message'] = $errorMessage;
     header("Location: ../Pages/error.php");
     exit();
 }
-?>

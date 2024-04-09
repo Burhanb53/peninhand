@@ -220,7 +220,7 @@ if (!isset($_SESSION['role'])) {
                 <div class="form-group">
                     <input type="hidden" name="subscription_id" value="<?php echo $_GET['subscription_id']; ?>">
                     <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
-                    <label for="photo">Upload Profile:
+                    <label for="photo">Upload Profile:*
                         <i class="fas fa-camera"></i> <!-- Your icon, replace with the appropriate icon class -->
                     </label>
                     <input type="file" id="fileInput" name="photo" accept=".jpg, .jpeg, .png" style="display: none;"
