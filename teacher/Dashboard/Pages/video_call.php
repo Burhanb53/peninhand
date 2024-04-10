@@ -279,25 +279,24 @@ $doubts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <script>
             function joinVideoCall() {
-                var videoLink = document.getElementById('videoLink').value;
-                // var joinCode = document.getElementById('joinCode').value;
+    var confirmation = confirm('Are you sure you want to compose an email?');
 
-                // Add your logic here to handle the video call link and join code
-                // You can redirect or initiate the video call based on the provided information
-
-                var confirmation = confirm('Joining video call:\nVideo Link: ' + videoLink + '\n\nAre you copied join code ? ');
-
-                if (confirmation) {
-                    var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(videoLink);
-
-                    // Open the search URL in a new tab
-                    window.open(searchUrl, '_blank');
-                } else {
-                    // Cancelled
-                    alert('Video call join cancelled.');
-                }
-                
+    if (confirmation) {
+        // Make an AJAX request to the backend script to send the email
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "../backend/send_email.php", true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                alert('Email sent successfully!');
             }
+        };
+        xhr.send();
+    } else {
+        // Cancelled
+        alert('Email composition cancelled.');
+    }
+}
+
         </script>
 
         <?php include('../includes/footer.php'); ?>

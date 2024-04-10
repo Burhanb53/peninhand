@@ -643,9 +643,9 @@ if (isset($_GET['doubt_id'])) {
                         <div class="form-group">
                             <label for="fileUpload">Upload File:</label>
                             <input type="file" id="fileUpload" name="fileUpload">
-                            <?php if ($doubt['answer_file']) : ?>
+                            <?php if ($doubt['doubt_file']) : ?>
                                 <input type="hidden" name="existingFile" value="<?php echo $doubt['doubt_file']; ?>">
-                                <?php echo $doubt['answer_file']; ?> <!-- Display the file name -->
+                                <?php echo $doubt['doubt_file']; ?> <!-- Display the file name -->
                             <?php endif; ?>
                         </div>
 

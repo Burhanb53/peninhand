@@ -220,14 +220,14 @@ if (!isset($_SESSION['role'])) {
                 <div class="form-group">
                     <input type="hidden" name="subscription_id" value="<?php echo $_GET['subscription_id']; ?>">
                     <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
-                    <label for="photo">Upload Profile:
+                    <label for="photo">Upload Profile:*
                         <i class="fas fa-camera"></i> <!-- Your icon, replace with the appropriate icon class -->
                     </label>
                     <input type="file" id="fileInput" name="photo" accept=".jpg, .jpeg, .png" style="display: none;"
                         required>
                     <label for="fileInput" class="file-label">
                         <div id="filePreview" class="upload-photo">
-                            <img src="../img/card.jpg" alt="Uploaded Photo" id="previewImage" style="display: none;">
+                            <img src="../img/profile.jpg" alt="Uploaded Photo" id="previewImage" style="display: none;">
                         </div>
                     </label>
 
@@ -272,7 +272,7 @@ if (!isset($_SESSION['role'])) {
                 <input type="text" id="mother-name" name="mother_name">
             </div>
             <div class="form-group">
-                <label for="mother-email">Mother Email:</label>
+                <label for="mother-email">Mother Email:(Different from User & Father E-mail)</label>
                 <input type="email" id="mother-email" name="mother_email">
             </div>
             <div class="form-group">
@@ -284,7 +284,7 @@ if (!isset($_SESSION['role'])) {
                 <input type="text" id="father-name" name="father_name">
             </div>
             <div class="form-group">
-                <label for="father-email">Father Email:</label>
+                <label for="father-email">Father Email:(Different from User & Mother E-mail)</label>
                 <input type="email" id="father-email" name="father_email">
             </div>
             <div class="form-group">
@@ -394,7 +394,7 @@ if (!isset($_SESSION['role'])) {
             } else {
                 // Display the dummy image if no file is selected
                 const dummyImage = document.createElement('img');
-                dummyImage.src = '../img/card.jpg';
+                dummyImage.src = '../img/profile.jpg';
                 dummyImage.alt = 'Dummy Image';
                 dummyImage.classList.add('preview-image'); // Add class for styling
                 filePreview.appendChild(dummyImage);

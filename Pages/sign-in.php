@@ -73,8 +73,11 @@ include('includes/config.php');
                                 <form action="../auth/signin.php" class="account-form" method="post">
                                     <div class="account-form-item mb-20">
                                         <div class="card-content">
-                                            <p
-                                                style="color: <?php echo ($registrationMessage === "Congratulations! You have successfully registered.") ? "green" : "red"; ?>">
+                                            <?php if (isset($_SESSION['message'])) : ?>
+                                                <div style="color: green;"><?php echo $_SESSION['message']; ?></div>
+                                                <?php unset($_SESSION['message']); ?> <!-- Clear the error message -->
+                                            <?php endif; ?>
+                                            <p style="color: <?php echo ($registrationMessage === "Congratulations! You have successfully registered.") ? "green" : "red"; ?>">
                                                 <?php echo $registrationMessage; ?>
                                             </p>
                                         </div>
@@ -89,11 +92,10 @@ include('includes/config.php');
                                     <div class="account-form-item mb-15">
                                         <div class="account-form-label">
                                             <label>Your Password</label>
-                                            <a href="#">Forgot Password ?</a>
+                                            <a href="forgot_password.php">Forgot Password ?</a>
                                         </div>
                                         <div class="account-form-input account-form-input-pass">
-                                            <input type="password" id="passwordInput" name="password"
-                                                placeholder="*********" required>
+                                            <input type="password" id="passwordInput" name="password" placeholder="*********" required>
                                             <span id="togglePassword"><i class="fa-thin fa-eye"></i></span>
                                         </div>
                                     </div>
