@@ -35,7 +35,7 @@ if (isset($_GET['id'])) {
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
             <style type="text/css">
-                body {
+                /* body {
                     color: #797979;
                     background: #f1f2f7;
                     font-family: 'Open Sans', sans-serif;
@@ -45,7 +45,7 @@ if (isset($_GET['id'])) {
                     text-rendering: optimizeLegibility;
                     -webkit-font-smoothing: antialiased;
                     -moz-font-smoothing: antialiased;
-                }
+                } */
 
                 .profile-nav,
                 .profile-info {
@@ -443,13 +443,18 @@ if (isset($_GET['id'])) {
                                 </h1>
 
                             </div>
+                            
                             <ul class="nav nav-pills nav-stacked">
-                                <!-- <li class="active"><a href="#"> <i class="fa fa-user"></i> Profile</a></li> -->
+                            <!-- <li class="active"><a href="#"> <i class="fa fa-user"></i> Profile</a></li> -->
                                 <li><a href="#"> <i class="fa fa-calendar"></i> Recent Activity <span
                                             class="label label-warning pull-right r-activity">9</span></a></li>
                                 <li><a href="#"> <i class="fa fa-edit"></i> Edit profile</a></li>
+                                
                             </ul>
                         </div>
+                        <div>
+        <a href="manage_teacher.php" style="display: inline-block; padding: 10px 20px; background-color: orange; color: white; text-decoration: none; border-radius: 5px; transition: background-color 0.3s ease;">Back</a>
+    </div>
                     </div>
                     <div class="profile-info col-md-9">
                         <!-- <div class="panel">
@@ -475,6 +480,7 @@ if (isset($_GET['id'])) {
                                 </ul>
                             </footer>
                         </div> -->
+                        
                         <div class="panel">
                             <div class="bio-graph-heading">
                                 Teacher Profile Information
@@ -549,10 +555,10 @@ if (isset($_GET['id'])) {
                                             <?php
                                             if ($teacherData['verified'] == 0) {
                                                 // echo "Not Verified";
-                                                echo '<a href="update_verified.php?id=' . $teacherData['id'] . '&status=1">Verify</a>';
+                                                echo '<a href="backend/update_verified.php?id=' . $teacherData['id'] . '&status=1">Verify</a>';
                                             } else {
                                                 // echo "Verified";
-                                                echo '<a href="update_verified.php?id=' . $teacherData['id'] . '&status=0">Unverify</a>';
+                                                echo '<a href="backend/update_verified.php?id=' . $teacherData['id'] . '&status=0">Unverify</a>';
                                             }
                                             ?>
                                         </p>

@@ -34,7 +34,7 @@ if (isset($_GET['id'])) {
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
             <style type="text/css">
-                body {
+                /* body {
                     color: #797979;
                     background: #f1f2f7;
                     font-family: 'Open Sans', sans-serif;
@@ -44,7 +44,7 @@ if (isset($_GET['id'])) {
                     text-rendering: optimizeLegibility;
                     -webkit-font-smoothing: antialiased;
                     -moz-font-smoothing: antialiased;
-                }
+                } */
 
                 .profile-nav,
                 .profile-info {
@@ -449,6 +449,9 @@ if (isset($_GET['id'])) {
                                 <li><a href="#"> <i class="fa fa-edit"></i> Edit profile</a></li>
                             </ul>
                         </div>
+                        <div>
+        <a href="manage_teacher.php" style="display: inline-block; padding: 10px 20px; background-color: orange; color: white; text-decoration: none; border-radius: 5px; transition: background-color 0.3s ease;">Back</a>
+    </div>
                     </div>
                     <div class="profile-info col-md-9">
                         <!-- <div class="panel">

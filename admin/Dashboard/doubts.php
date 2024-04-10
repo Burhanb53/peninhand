@@ -140,6 +140,7 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
         <!-- Display Doubts -->
         <div style="padding-left: 35px;padding-right: 35px" class="container-flex">
             <h1>All Doubts</h1>
+            
             <div class="table-responsive">
                 <table class="table table-bordered table-striped table-hover">
                     <thead>

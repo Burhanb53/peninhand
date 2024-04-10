@@ -197,19 +197,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </section>
 
     <script>
-document.getElementById('assignForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the form from submitting normally
-        
-        // Get the teacher_id and doubt_id from the form inputs
-        var teacherId = document.querySelector('input[name="teacher_id"]').value;
-        var doubtId = document.querySelector('input[name="doubt_id"]').value;
+        document.getElementById('assignForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
 
-        // Show the popup message
-        alert('Teacher Assigned Successfully\nTeacher ID: ' + teacherId + '\nDoubt ID: ' + doubtId);
+            // Get the teacher_id and doubt_id from the form inputs
+            var teacherId = document.querySelector('input[name="teacher_id"]').value;
+            var doubtId = document.querySelector('input[name="doubt_id"]').value;
 
-        // Submit the form programmatically
-        this.submit();
-    });
+            // Show the popup message
+            alert('Teacher Assigned Successfully\nTeacher ID: ' + teacherId + '\nDoubt ID: ' + doubtId);
+
+            // Submit the form programmatically
+            this.submit();
+        });
         document.addEventListener('DOMContentLoaded', function () {
             const input = document.getElementById('searchInput');
             const tableRows = document.querySelectorAll('#dataTable tbody tr');

@@ -1,7 +1,7 @@
 <?php
 session_start();
 error_reporting(0);
-include ('includes/config.php');
+include ('../includes/config.php');
 
 // Check if the ID and status parameters are provided in the URL
 if (isset($_GET['id']) && isset($_GET['status'])) {

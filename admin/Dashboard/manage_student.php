@@ -78,58 +78,74 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                 <th>Manage</th>
                             </tr>
                         </thead>
-                                        
-                                    <tbody>
-                                        <?php foreach ($users as $user): ?>
-                                            <tr>
-                                                <td>
-                                                    <?php echo $user['id']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $user['user_id']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $user['name']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $user['contact']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $user['mother_name']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $user['father_name']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $user['city']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $user['state']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $user['subscription_id']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $user['end_date']; ?>
-                                                </td>
 
-                                                <!-- <td>
+                        <tbody>
+                            <?php foreach ($users as $user): ?>
+                                <tr>
+                                    <td>
+                                        <?php echo $user['id']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $user['user_id']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $user['name']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $user['contact']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $user['mother_name']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $user['father_name']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $user['city']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $user['state']; ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $subscription_id = $user['subscription_id'];
+                                        switch ($subscription_id) {
+                                            case 1:
+                                                echo '1 month';
+                                                break;
+                                            case 2:
+                                                echo '2 months';
+                                                break;
+                                            case 3:
+                                                echo '3 months';
+                                                break;
+                                            default:
+                                                echo 'Unknown subscription';
+                                                break;
+                                        }
+                                        ?>
+                                    </td>
+
+                                    <td>
+                                        <?php echo $user['end_date']; ?>
+                                    </td>
+
+                                    <!-- <td>
                                                     <?php echo $user['active'] == 1 ? 'Active' : 'Not Active'; ?>
                                                 </td> -->
-                                                <td>
-                                                    <?php echo $user['verified'] == 1 ? 'Verified' : 'Not Verified'; ?>
-                                                    <!-- Show status -->
-                                                </td>
-                                                <td>
-                                                    <?php if ($user['verified'] == 0): ?>
-                                                        <form method="POST" action="verify_student.php">
-                                                            <input type="hidden" name="user_id"
-                                                                value="<?php echo $user['id']; ?>">
-                                                            <button type="submit" class="btn btn-primary">Verify</button>
-                                                        </form>
-                                                    <?php else: ?>
-                                                        <!-- Update icon with a link to update_user.php -->
-                                                        <!-- <a href="update_student.php?id=<?php echo $user['id']; ?>"
+                                    <td>
+                                        <?php echo $user['verified'] == 1 ? 'Verified' : 'Not Verified'; ?>
+                                        <!-- Show status -->
+                                    </td>
+                                    <td>
+                                        <?php if ($user['verified'] == 0): ?>
+                                            <form method="POST" action="verify_student.php">
+                                                <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                                                <button type="submit" class="btn btn-primary">Verify</button>
+                                            </form>
+                                        <?php else: ?>
+                                            <!-- Update icon with a link to update_user.php -->
+                                            <!-- <a href="update_student.php?id=<?php echo $user['id']; ?>"
                                                             title="Update">
                                                             <?php if ($user['subscription_id'] != 0): ?>
                                                                 <i style="padding-right: 5px;" class="fas fa-times"></i>
@@ -137,23 +153,22 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                                                 <i style="padding-right: 5px;" class="fas fa-check"></i>
                                                             <?php endif; ?>
                                                         </a> -->
-                                                        <!-- Placeholder for another action icon -->
-                                                        <a href="view_student.php?id=<?php echo $user['id']; ?>"
-                                                            title="View Details">
-                                                            <i class="fas fa-info-circle"></i>
-                                                        </a>
-                                                    <?php endif; ?>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
+                                            <!-- Placeholder for another action icon -->
+                                            <a href="view_student.php?id=<?php echo $user['id']; ?>" title="View Details">
+                                                <i class="fas fa-info-circle"></i>
+                                            </a>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
 
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
+        </div>
+        </div>
+        </div>
         </div>
 
         <!-- <div class="footer_part">
@@ -172,38 +187,41 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
 </body>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('searchForm');
-        const input = document.getElementById('searchInput');
-        const tableRows = document.querySelectorAll('.lms_table_active tbody tr');
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('searchInput');
+            const tableRows = document.querySelectorAll('#dataTable tbody tr');
 
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const searchTerm = input.value.toLowerCase();
+            input.addEventListener('input', function () {
+                const searchTerm = input.value.trim().toLowerCase();
 
-            tableRows.forEach(row => {
-                let found = false;
-                row.querySelectorAll('td').forEach(cell => {
-                    if (cell.textContent.toLowerCase().includes(searchTerm)) {
-                        found = true;
+                tableRows.forEach(row => {
+                    const cells = Array.from(row.querySelectorAll('td'));
+                    const found = cells.some(cell => {
+                        const cellText = cell.textContent.trim().toLowerCase();
+                        const regex = new RegExp(searchTerm, 'gi');
+                        const highlightedText = cellText.replace(regex, '<span style="background-color: yellow;">$&</span>');
+                        cell.innerHTML = highlightedText;
+                        return cellText.includes(searchTerm);
+                    });
+
+                    if (found) {
+                        row.style.display = 'table-row';
+                    } else {
+                        row.style.display = 'none';
                     }
                 });
-
-                if (found) {
-                    row.style.display = 'table-row';
-                } else {
-                    row.style.display = 'none';
-                }
             });
+
+            const searchForm = document.getElementById('searchForm');
+            searchForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                // Add your search logic here, such as updating the table based on the search term
+            });
+
         });
 
-        document.getElementById('searchButton').addEventListener('click', function () {
-            form.dispatchEvent(new Event('submit'));
-        });
-    });
-
-</script>
-
+    </script>
 
 <script src="js/jquery1-3.4.1.min.js"></script>
 

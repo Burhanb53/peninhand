@@ -1,7 +1,7 @@
 <?php
 session_start();
 error_reporting(0);
-include ('includes/config.php');
+include ('../includes/config.php');
 
 // Check if user ID is provided in the URL
 if (isset($_GET['id'])) {
@@ -25,7 +25,7 @@ if (isset($_GET['id'])) {
         $updateStmt->execute();
 
         // Redirect back to view_user.php after updating
-        header("Location: manage_student.php?id=$userId");
+        header("Location: ../manage_student.php?id=$userId");
         exit();
     } else {
         echo "user not found.";

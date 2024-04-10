@@ -1,7 +1,7 @@
 <?php
 session_start();
 error_reporting(0);
-include('includes/config.php');
+include('../includes/config.php');
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute();
 
     // Redirect to a confirmation page or back to the teacher management page
-    header("Location: manage_teacher.php");
+    header("Location: ../manage_teacher.php");
     exit();
 } else {
     // Redirect to an error page or back to the update form

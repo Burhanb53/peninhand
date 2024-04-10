@@ -140,37 +140,41 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
     </section>
 </body>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('searchForm');
-        const input = document.getElementById('searchInput');
-        const tableRows = document.querySelectorAll('.lms_table_active tbody tr');
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('searchInput');
+            const tableRows = document.querySelectorAll('#dataTable tbody tr');
 
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const searchTerm = input.value.toLowerCase();
+            input.addEventListener('input', function () {
+                const searchTerm = input.value.trim().toLowerCase();
 
-            tableRows.forEach(row => {
-                let found = false;
-                row.querySelectorAll('td').forEach(cell => {
-                    if (cell.textContent.toLowerCase().includes(searchTerm)) {
-                        found = true;
+                tableRows.forEach(row => {
+                    const cells = Array.from(row.querySelectorAll('td'));
+                    const found = cells.some(cell => {
+                        const cellText = cell.textContent.trim().toLowerCase();
+                        const regex = new RegExp(searchTerm, 'gi');
+                        const highlightedText = cellText.replace(regex, '<span style="background-color: yellow;">$&</span>');
+                        cell.innerHTML = highlightedText;
+                        return cellText.includes(searchTerm);
+                    });
+
+                    if (found) {
+                        row.style.display = 'table-row';
+                    } else {
+                        row.style.display = 'none';
                     }
                 });
-
-                if (found) {
-                    row.style.display = 'table-row';
-                } else {
-                    row.style.display = 'none';
-                }
             });
+
+            const searchForm = document.getElementById('searchForm');
+            searchForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                // Add your search logic here, such as updating the table based on the search term
+            });
+
         });
 
-        document.getElementById('searchButton').addEventListener('click', function () {
-            form.dispatchEvent(new Event('submit'));
-        });
-    });
-
-</script>
+    </script>
 
 
 <script src="js/jquery1-3.4.1.min.js"></script>

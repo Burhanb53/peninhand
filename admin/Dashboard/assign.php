@@ -77,36 +77,41 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
     <?php include ('includes/sidebar_index.php'); ?>
 
     <section class="main_content dashboard_part">
-        <div class="main_content_iner ">
-            <div class="container-fluid p-0">
-                <h1>Active Doubts</h1>
-                <div class="box_right d-flex lms_block">
-                    <div class="serach_field_2">
-                        <div class="search_inner">
-                            <form id="searchForm">
-                                <div class="search_field">
-                                    <input id="searchInput" type="text" placeholder="Search...">
-                                </div>
-                            </form>
-                        </div>
+    <div class="main_content_iner ">
+        <div class="container-fluid p-0">
+            <h1>Active Doubts</h1>
+            <div class="box_right d-flex lms_block">
+                <div class="serach_field_2">
+                    <div class="search_inner">
+                        <form id="searchForm">
+                            <div class="search_field">
+                                <input id="searchInput" type="text" placeholder="Search...">
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover" id="dataTable">
-                        <!-- Table Headings -->
-                        <thead>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover" id="dataTable">
+                    <!-- Table Headings -->
+                    <thead>
+                        <tr>
+                            <th>Doubt ID</th>
+                            <th>User ID</th>
+                            <th>Doubt Category</th>
+                            <th>Doubt</th>
+                            <th>Doubt File</th>
+                            <th>Created At</th>
+                            <th>Assign Teacher</th>
+                        </tr>
+                    </thead>
+                    <tbody class="lms_table_active">
+                        <?php if (empty($doubts)) : ?>
                             <tr>
-                                <th>Doubt ID</th>
-                                <th>User ID</th>
-                                <th>Doubt Category</th>
-                                <th>Doubt</th>
-                                <th>Doubt File</th>
-                                <th>Created At</th>
-                                <th>Assign Teacher</th>
+                                <td colspan="7" class="text-center">No Active Doubts Available</td>
                             </tr>
-                        </thead>
-                        <tbody class="lms_table_active">
-                            <?php foreach ($doubts as $doubt): ?>
+                        <?php else : ?>
+                            <?php foreach ($doubts as $doubt) : ?>
                                 <tr>
                                     <td><?php echo $doubt['doubt_id']; ?></td>
                                     <td><?php echo $doubt['user_id']; ?></td>
@@ -121,27 +126,30 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', function () {
             const input = document.getElementById('searchInput');
-            const tableRows = document.querySelectorAll('.lms_table_active tbody tr');
+            const tableRows = document.querySelectorAll('#dataTable tbody tr');
 
             input.addEventListener('input', function () {
                 const searchTerm = input.value.trim().toLowerCase();
 
                 tableRows.forEach(row => {
-                    let found = false;
-                    row.querySelectorAll('td').forEach(cell => {
-                        if (cell.textContent.trim().toLowerCase().includes(searchTerm)) {
-                            found = true;
-                        }
+                    const cells = Array.from(row.querySelectorAll('td'));
+                    const found = cells.some(cell => {
+                        const cellText = cell.textContent.trim().toLowerCase();
+                        const regex = new RegExp(searchTerm, 'gi');
+                        const highlightedText = cellText.replace(regex, '<span style="background-color: yellow;">$&</span>');
+                        cell.innerHTML = highlightedText;
+                        return cellText.includes(searchTerm);
                     });
 
                     if (found) {
@@ -151,7 +159,16 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
                     }
                 });
             });
+
+            const searchForm = document.getElementById('searchForm');
+            searchForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                // Add your search logic here, such as updating the table based on the search term
+            });
+
         });
+
     </script>
 
 </body>

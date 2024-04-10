@@ -27,7 +27,7 @@ try {
         $stmt->execute();
 
         // Redirect back to the previous page or a success page
-        header('Location: assign.php');
+        header('Location: ./assign.php');
         exit();
     } else {
         // Redirect to an error page if doubt_id or teacher_id is not provided
