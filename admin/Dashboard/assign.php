@@ -85,9 +85,8 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
                         <div class="search_inner">
                             <form id="searchForm">
                                 <div class="search_field">
-                                    <input id="searchInput" type="text" placeholder="Search Name ...">
+                                    <input id="searchInput" type="text" placeholder="Search...">
                                 </div>
-
                             </form>
                         </div>
                     </div>
@@ -104,51 +103,61 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
                                 <th>Doubt File</th>
                                 <th>Created At</th>
                                 <th>Assign Teacher</th>
-                                <!-- <th>Tech Stack</th> -->
-                                <!-- <th>Experience</th> -->
-                                <!-- <th>Active</th> -->
-                                <!-- <th>Verified</th> -->
-                                <!-- <th>Assign</th> -->
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="lms_table_active">
                             <?php foreach ($doubts as $doubt): ?>
                                 <tr>
-                                    <td>
-                                        <?php echo $doubt['doubt_id']; ?>
-                                    </td>
-                                    <td>
-                                        <?php echo $doubt['user_id']; ?>
-                                    </td>
-                                    <!-- <td>
-                                    <?php echo $doubt['teacher_id'] != null ? $doubt['teacher_id'] : 'Not Assigned'; ?>
-                                </td> -->
-                                    <td>
-                                        <?php echo $doubt['doubt_category']; ?>
-                                    </td>
-                                    <td style="max-width: 500px; overflow: hidden; text-overflow: ellipsis;">
-                                        <?php echo $doubt['doubt']; ?>
-                                    </td>
+                                    <td><?php echo $doubt['doubt_id']; ?></td>
+                                    <td><?php echo $doubt['user_id']; ?></td>
+                                    <td><?php echo $doubt['doubt_category']; ?></td>
+                                    <td style="max-width: 500px; overflow: hidden; text-overflow: ellipsis;"><?php echo $doubt['doubt']; ?></td>
                                     <td style="max-width: 10px; overflow: hidden; text-overflow: ellipsis;">
-                                        <a href="../../student/Dashboard/uploads/doubt/<?php echo $doubt['doubt_file']; ?>"
-                                            target="_blank">View File</a>
+                                        <a href="../../student/Dashboard/uploads/doubt/<?php echo $doubt['doubt_file']; ?>" target="_blank">View File</a>
                                     </td>
-                                    <td>
-                                        <?php echo $doubt['doubt_created_at']; ?>
-                                    </td>
+                                    <td><?php echo $doubt['doubt_created_at']; ?></td>
                                     <td style="max-width: 10px; overflow: hidden; text-overflow: ellipsis;">
-                                        <a href="assign_teacher.php?doubt_id=<?php echo $doubt['doubt_id']; ?>"
-                                            target="_blank">Assign</a>
+                                        <a href="assign_teacher.php?doubt_id=<?php echo $doubt['doubt_id']; ?>" target="_blank">Assign</a>
                                     </td>
-
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <script src="js/jquery1-3.4.1.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('searchInput');
+            const tableRows = document.querySelectorAll('.lms_table_active tbody tr');
+
+            input.addEventListener('input', function () {
+                const searchTerm = input.value.trim().toLowerCase();
+
+                tableRows.forEach(row => {
+                    let found = false;
+                    row.querySelectorAll('td').forEach(cell => {
+                        if (cell.textContent.trim().toLowerCase().includes(searchTerm)) {
+                            found = true;
+                        }
+                    });
+
+                    if (found) {
+                        row.style.display = 'table-row';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+<script>
+    <script src="js/jquery1-3.4.1.min.js"></script>
 
             <script src="js/popper1.min.js"></script>
 
@@ -203,4 +212,5 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
             <script src="js/custom.js"></script>
             <script src="vendors/apex_chart/bar_active_1.js"></script>
             <script src="vendors/apex_chart/apex_chart_list.js"></script>
-</body>
+
+    </script>

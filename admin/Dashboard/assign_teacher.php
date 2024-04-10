@@ -37,6 +37,22 @@ if (isset($_GET['doubt_id'])) {
     header('Location: error_page.php');
     exit;
 }
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $assigned_teacher_id = $_POST['teacher_id'];
+
+    // Update the 'teacher_id' for the corresponding doubt in the 'doubt' table
+    $updateSql = "UPDATE doubt SET teacher_id = :assigned_teacher_id WHERE doubt_id = :doubt_id";
+    $updateStmt = $dbh->prepare($updateSql);
+    $updateStmt->bindParam(':assigned_teacher_id', $assigned_teacher_id);
+    $updateStmt->bindParam(':doubt_id', $doubt_id);
+    $updateStmt->execute();
+
+    // Redirect back to assign.php or wherever you want after updating the assignment
+    header('Location: assign.php');
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -160,10 +176,10 @@ if (isset($_GET['doubt_id'])) {
                                             <?php echo $teacher['experience']; ?>
                                         </td>
                                         <td class="stunning-text">
-                                            <?php echo $teacher['active'] == 1 ? 'Active' : 'Not Active'; ?>
+                                            <?php echo $teacher['active'] == 1 ? 'Yes' : 'No'; ?>
                                         </td>
                                         <td>
-                                            <form method="POST">
+                                            <form id="assignForm" method="POST">
                                                 <input type="hidden" name="doubt_id" value="<?php echo $doubt_id; ?>">
                                                 <input type="hidden" name="teacher_id"
                                                     value="<?php echo $teacher['teacher_id']; ?>">
@@ -181,36 +197,57 @@ if (isset($_GET['doubt_id'])) {
     </section>
 
     <script>
+document.getElementById('assignForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+        
+        // Get the teacher_id and doubt_id from the form inputs
+        var teacherId = document.querySelector('input[name="teacher_id"]').value;
+        var doubtId = document.querySelector('input[name="doubt_id"]').value;
+
+        // Show the popup message
+        alert('Teacher Assigned Successfully\nTeacher ID: ' + teacherId + '\nDoubt ID: ' + doubtId);
+
+        // Submit the form programmatically
+        this.submit();
+    });
         document.addEventListener('DOMContentLoaded', function () {
-    const input = document.getElementById('searchInput');
-    const tableRows = document.querySelectorAll('#dataTable tbody tr');
+            const input = document.getElementById('searchInput');
+            const tableRows = document.querySelectorAll('#dataTable tbody tr');
 
-    input.addEventListener('input', function () {
-        const searchTerm = input.value.trim().toLowerCase();
+            input.addEventListener('input', function () {
+                const searchTerm = input.value.trim().toLowerCase();
 
-        tableRows.forEach(row => {
-            let found = false;
-            row.querySelectorAll('td').forEach(cell => {
-                const cellText = cell.textContent.trim().toLowerCase();
-                if (cellText.includes(searchTerm)) {
-                    found = true;
-                }
+                tableRows.forEach(row => {
+                    const cells = Array.from(row.querySelectorAll('td'));
+                    const found = cells.some(cell => {
+                        const cellText = cell.textContent.trim().toLowerCase();
+                        const regex = new RegExp(searchTerm, 'gi');
+                        const highlightedText = cellText.replace(regex, '<span style="background-color: yellow;">$&</span>');
+                        cell.innerHTML = highlightedText;
+                        return cellText.includes(searchTerm);
+                    });
+
+                    if (found) {
+                        row.style.display = 'table-row';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
             });
 
-            if (found) {
-                row.style.display = 'table-row';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    });
-});
+            const searchForm = document.getElementById('searchForm');
+            searchForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
 
+                // Add your search logic here, such as updating the table based on the search term
+            });
+
+        });
 
     </script>
 
-</body>
 
+</body>
 
 <script src="js/jquery1-3.4.1.min.js"></script>
 
@@ -255,21 +292,3 @@ if (isset($_GET['doubt_id'])) {
 
 
 </html>
-
-<?php
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $assigned_teacher_id = $_POST['teacher_id'];
-
-    // Update the 'teacher_id' for the corresponding doubt in the 'doubt' table
-    $updateSql = "UPDATE doubt SET teacher_id = :assigned_teacher_id WHERE doubt_id = :doubt_id";
-    $updateStmt = $dbh->prepare($updateSql);
-    $updateStmt->bindParam(':assigned_teacher_id', $assigned_teacher_id);
-    $updateStmt->bindParam(':doubt_id', $doubt_id);
-    $updateStmt->execute();
-
-    // Redirect back to assign.php or wherever you want after updating the assignment
-    header('Location: assign.php');
-    exit;
-}
-?>
