@@ -145,7 +145,9 @@ if ($stmt->execute()) {
         $mail->addAttachment($doubt_file_path);
     }
 
-    $mail->send(); // Send email notification to admin
+    $mail->send(); 
+    
+    // Send email notification to admin
     $adminMail = new PHPMailer();
 
     // SMTP Server Configuration for admin email

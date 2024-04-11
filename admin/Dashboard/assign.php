@@ -105,7 +105,7 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
                             <th>Assign Teacher</th>
                         </tr>
                     </thead>
-                    <tbody class="lms_table_active">
+                    <tbody>
                         <?php if (empty($doubts)) : ?>
                             <tr>
                                 <td colspan="7" class="text-center">No Active Doubts Available</td>
@@ -122,7 +122,7 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
                                     </td>
                                     <td><?php echo $doubt['doubt_created_at']; ?></td>
                                     <td style="max-width: 10px; overflow: hidden; text-overflow: ellipsis;">
-                                        <a href="assign_teacher.php?doubt_id=<?php echo $doubt['doubt_id']; ?>" target="_blank">Assign</a>
+                                        <a href="assign_teacher.php?doubt_id=<?php echo $doubt['doubt_id']; ?>" >Assign</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -173,7 +173,6 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
 
 </body>
 
-<script>
     <script src="js/jquery1-3.4.1.min.js"></script>
 
             <script src="js/popper1.min.js"></script>
@@ -230,4 +229,3 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
             <script src="vendors/apex_chart/bar_active_1.js"></script>
             <script src="vendors/apex_chart/apex_chart_list.js"></script>
 
-    </script>
