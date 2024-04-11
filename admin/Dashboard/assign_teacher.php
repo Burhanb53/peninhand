@@ -140,7 +140,7 @@ function sendEmailToTeacher($pdo, $teacher_id, $doubt_id)
                                     <p><strong>Doubt:</strong> {$doubtData['doubt']}</p>";
             // Attach doubt file if exists
             if (!empty($doubtData['doubt_file'])) {
-                $mail->addAttachment($doubtData['doubt_file']);
+                $mail->addAttachment("../../student/Dashboard/uploads/doubt/" . $doubtData['doubt_file']);
                 $mail->Body .= "<p><strong>Doubt File:</strong> {$doubtData['doubt_file']}</p>";
             }
             $mail->Body .= "<p>Please login to your account to view and solve the doubt.</p>
