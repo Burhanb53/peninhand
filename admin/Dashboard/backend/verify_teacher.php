@@ -14,9 +14,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $teacherId = $_POST['teacher_id'];
 
         // Update the 'verified' column in the database for the specified teacher_id
-        $sql = "UPDATE teacher SET verified = 1 WHERE id = :teacherId";
+        $sql = "UPDATE teacher SET verified = 1 WHERE teacher_id = :teacherId";
         $stmt = $dbh->prepare($sql);
         $stmt->bindParam(':teacherId', $teacherId, PDO::PARAM_INT);
+
+        // Update the 'role' column in the 'user' table
+        $sql = "UPDATE user SET role = 2 WHERE user_id = :teacherId";
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindParam(':teacherId', $teacherId, PDO::PARAM_INT);
+        $stmt->execute();
 
         // Execute the update query
         if ($stmt->execute()) {
@@ -41,7 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Function to send verification success email to the teacher
-function sendVerificationSuccessEmail($teacherId) {
+function sendVerificationSuccessEmail($teacherId)
+{
     global $dbh;
 
     // Fetch teacher's email based on teacher ID
@@ -126,4 +133,3 @@ function sendVerificationSuccessEmail($teacherId) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
 }
-?>

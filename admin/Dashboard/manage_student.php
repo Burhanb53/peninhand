@@ -64,7 +64,7 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                         <!-- Table Headings -->
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Sr. No.</th>
                                 <th>User ID</th>
                                 <th>Name</th>
                                 <th>Contact</th>
@@ -74,16 +74,18 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                 <th>State</th>
                                 <th>Subscription</th>
                                 <th>End Date</th>
-                                <th>Ststus</th>
+                                <th>Transaction ID</th>
+                                <th>Status</th>
                                 <th>Manage</th>
                             </tr>
                         </thead>
 
                         <tbody>
+                            <?php $counter = 1; // Initialize the counter variable ?>
                             <?php foreach ($users as $user): ?>
                                 <tr>
                                     <td>
-                                        <?php echo $user['id']; ?>
+                                        <?php echo $counter; ?>
                                     </td>
                                     <td>
                                         <?php echo $user['user_id']; ?>
@@ -129,6 +131,9 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                     <td>
                                         <?php echo $user['end_date']; ?>
                                     </td>
+                                    <td>
+                                        <?php echo $user['transaction_id']; ?>
+                                    </td>
 
                                     <!-- <td>
                                                     <?php echo $user['active'] == 1 ? 'Active' : 'Not Active'; ?>
@@ -139,7 +144,7 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                     </td>
                                     <td>
                                         <?php if ($user['verified'] == 0): ?>
-                                            <form method="POST" action="verify_student.php">
+                                            <form method="POST" action="backend/verify_student.php">
                                                 <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
                                                 <button type="submit" class="btn btn-primary">Verify</button>
                                             </form>
@@ -160,6 +165,7 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                         <?php endif; ?>
                                     </td>
                                 </tr>
+                                <?php $counter++; // Increment the counter variable ?>
                             <?php endforeach; ?>
                         </tbody>
                     </table>

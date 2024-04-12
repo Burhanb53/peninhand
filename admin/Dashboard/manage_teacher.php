@@ -98,6 +98,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
                                 <th>State</th>
                                 <th>Tech Stack</th>
                                 <th>Experience</th>
+                                <th>Resume</th>
                                 <th>Active</th>
                                 <th>Status</th>
                                 <th>Manage</th>
@@ -105,10 +106,11 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
                         </thead>
 
                         <tbody>
+                            <?php $counter = 1; // Initialize the counter variable ?>
                             <?php foreach ($teachers as $teacher): ?>
                                 <tr>
                                     <td>
-                                        <?php echo $teacher['id']; ?>
+                                        <?php echo $counter; ?>
                                     </td>
                                     <td>
                                         <?php echo $teacher['teacher_id']; ?>
@@ -133,6 +135,9 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
                                     </td>
                                     <td>
                                         <?php echo $teacher['experience']; ?>
+                                    </td>
+                                    <td>
+                                        <a href="../../teacher/Dashboard/uploads/resume/<?php echo $teacher['resume']; ?>" target="_blank">View Resume</a>
                                     </td>
 
                                     <td>
@@ -164,6 +169,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
                                         <?php endif; ?>
                                     </td>
                                 </tr>
+                                <?php $counter++; // Increment the counter variable ?>
                             <?php endforeach; ?>
                         </tbody>
                     </table>

@@ -17,6 +17,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "UPDATE  subscription_user SET verified = 1 WHERE id = :userId";
         $stmt = $dbh->prepare($sql);
         $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $stmt = $dbh->prepare('SELECT user_id FROM subscription_user WHERE id = :userId');
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        $user_id = $stmt->fetchColumn();
+
+        $sql = "UPDATE user SET role = 1 WHERE user_id = :userId";
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindParam(':userId', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
 
         // Execute the update query
         if ($stmt->execute()) {

@@ -23,6 +23,26 @@ if (isset($_GET['id']) && isset($_GET['status'])) {
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
+        // Fetch teacherId from teacher table
+        $stmt = $pdo->prepare('SELECT teacher_id FROM teacher WHERE id = :id');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $teacherId = $stmt->fetchColumn();
+
+        // Update the 'role' column in the 'user' table based on status
+        if ($status == 0) {
+            $role = 0;
+        } elseif ($status == 1) {
+            $role = 2;
+        }
+
+        $sql = "UPDATE user SET role = :role WHERE user_id = :teacherId";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':role', $role, PDO::PARAM_INT);
+        $stmt->bindParam(':teacherId', $teacherId, PDO::PARAM_INT);
+        $stmt->execute();
+
+
         // Send email notification to the teacher
         sendVerificationStatusEmail($id, $status);
 
@@ -39,7 +59,8 @@ if (isset($_GET['id']) && isset($_GET['status'])) {
 }
 
 // Function to send verification status email to the teacher
-function sendVerificationStatusEmail($teacherId, $status) {
+function sendVerificationStatusEmail($teacherId, $status)
+{
     global $dbh;
 
     // Fetch teacher's email based on teacher ID
@@ -116,4 +137,3 @@ function sendVerificationStatusEmail($teacherId, $status) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
 }
-?>

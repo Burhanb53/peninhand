@@ -1,12 +1,22 @@
 <?php
 session_start();
 error_reporting(0);
-include ('includes/config.php');
+include('includes/config.php');
 
-// Fetch data from the 'user' table
-$sql = "SELECT * FROM doubt";
-$result = $dbh->query($sql);
-$doubts = $result->fetchAll(PDO::FETCH_ASSOC);
+// Fetch records where teacher_id is null
+$sqlNull = "SELECT * FROM doubt WHERE teacher_id IS NULL";
+$stmtNull = $dbh->query($sqlNull);
+$doubtsNull = $stmtNull->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch remaining records
+$sqlRemaining = "SELECT * FROM doubt WHERE teacher_id IS NOT NULL";
+$stmtRemaining = $dbh->query($sqlRemaining);
+$doubtsRemaining = $stmtRemaining->fetchAll(PDO::FETCH_ASSOC);
+
+// Combine the results
+$doubts = array_merge($doubtsNull, $doubtsRemaining);
+
+
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -111,6 +121,7 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
         .count {
             animation: count-up 1s ease-out;
         }
+        
     </style>
     <style>
         .ask-doubt-btn-container {
@@ -128,23 +139,49 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
             cursor: pointer;
             font-size: 14px;
         }
+
+        .not-assigned {
+            color: red;
+        }
+
+        .green {
+            color: green;
+        }
+
+        .red {
+            color: red;
+        }
     </style>
 </head>
 
 <body class="crm_body_bg">
-    <?php include ('includes/sidebar_index.php'); ?>
+    <?php include('includes/sidebar_index.php'); ?>
 
     <section class="main_content dashboard_part">
-        <?php include ('includes/navbar_index.php'); ?>
+        <?php include('includes/navbar_index.php'); ?>
 
         <!-- Display Doubts -->
         <div style="padding-left: 35px;padding-right: 35px" class="container-flex">
             <h1>All Doubts</h1>
-            
+            <div class="form-group">
+                <label for="filter">Filter by:</label>
+                <select class="form-control" id="filter">
+                    <option value="all">All</option>
+                    <option value="accepted">Accepted</option>
+                    <option value="not_accepted">Not Accepted</option>
+                    <option value="answered">Answered</option>
+                    <option value="not_answered">Not Answered</option>
+                    <option value="feedback_given">Feedback Given</option>
+                    <option value="no_feedback">No Feedback</option>
+                </select>
+            </div>
+
+
             <div class="table-responsive">
                 <table class="table table-bordered table-striped table-hover">
                     <thead>
                         <tr>
+                            <th style="width: 10px;">Sr. No.</th>
                             <th style="width: 10px;">Doubt ID</th>
                             <th style="width: 10px;">User ID</th>
                             <th style="width: 10px;">Teacher ID</th>
@@ -152,15 +189,20 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
                             <th style="width: 80px;">Doubt</th>
                             <th style="width: 10px;">Doubt File</th>
                             <th style="width: 10px;">Created At</th>
-                            <th style="width: 5px;">Answered</th>
+                            <th style="width: 5px;">Status</th>
                             <th style="width: 5px;">Answer</th>
                             <th style="width: 5px;">Answer File</th>
                             <!-- <th style="width: 5px;">Answer At</th> -->
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($doubts as $doubt): ?>
+                        <?php $counter = 1; // Initialize the counter variable 
+                        ?>
+                        <?php foreach ($doubts as $doubt) : ?>
                             <tr>
+                                <td>
+                                    <?php echo $counter; ?>
+                                </td>
                                 <td>
                                     <?php echo $doubt['doubt_id']; ?>
                                 </td>
@@ -168,7 +210,14 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
                                     <?php echo $doubt['user_id']; ?>
                                 </td>
                                 <td>
-                                    <?php echo $doubt['teacher_id'] != null ? $doubt['teacher_id'] : 'Not Assigned'; ?>
+                                    <?php
+                                    $teacherId = $doubt['teacher_id'];
+                                    if ($teacherId !== null) {
+                                        echo $teacherId;
+                                    } else {
+                                        echo '<span class="not-assigned">Not Assigned</span>';
+                                    }
+                                    ?>
                                 </td>
                                 <td>
                                     <?php echo $doubt['doubt_category']; ?>
@@ -177,22 +226,36 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
                                     <?php echo $doubt['doubt']; ?>
                                 </td>
                                 <td style="max-width: 10px; overflow: hidden; text-overflow: ellipsis;">
-                                    <a href="../../student/Dashboard/uploads/doubt/<?php echo $doubt['doubt_file']; ?>"
-                                        target="_blank">View File</a>
+                                    <a href="../../student/Dashboard/uploads/doubt/<?php echo $doubt['doubt_file']; ?>" target="_blank">View File</a>
                                 </td>
                                 <td>
-                                    <?php echo $doubt['doubt_created_at']; ?>
+                                    <?php $timestamp = strtotime($doubt['doubt_created_at']);
+                                    $date = date('d F Y', $timestamp);
+                                    $time = date('h:i A', $timestamp); ?>
+                                    <?php echo $date; ?> <?php echo $time; ?>
                                 </td>
                                 <td>
-                                    <?php echo $doubt['answer'] != null ? 'Yes' : 'No'; ?>
+                                    <?php if ($doubt['teacher_id'] !== null) : ?>
+                                        Doubt Accepted:
+                                        <?php echo $doubt['accepted'] == 1 ? '<span class="green">Yes</span>' : '<span class="red">No</span>'; ?>
+                                    <?php else : ?>
+                                        <a href="assign_teacher.php?doubt_id=<?php echo $doubt['doubt_id']; ?>" class="btn btn-primary">Assign Teacher</a>
+                                    <?php endif; ?>
+
+                                    <?php if ($doubt['accepted'] == 1) : ?>
+                                        <br>Answer :
+                                        <?php echo $doubt['answer'] != null ? '<span class="green">Yes</span>' : '<span class="red">No</span>'; ?>
+                                        <br>Feedback :
+                                        <?php echo $doubt['feedback'] == 1 ? '<span class="green">Yes</span>' : '<span class="red">No</span>'; ?>
+                                    <?php endif; ?>
                                 </td>
+
                                 <td>
                                     <?php echo $doubt['answer']; ?>
                                 </td>
                                 <td style="max-width: 10px; overflow: hidden; text-overflow: ellipsis;">
-                                    <?php if ($doubt['answer_file'] !== null): ?>
-                                        <a href="../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>"
-                                            target="_blank">View File</a>
+                                    <?php if ($doubt['answer_file'] !== null) : ?>
+                                        <a href="../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" target="_blank">View File</a>
                                     <?php endif; ?>
                                 </td>
 
@@ -200,6 +263,7 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
                                                                 <?php echo $doubt['answer_created_at']; ?>
                                                             </td> -->
                             </tr>
+                            <?php $counter++; // Increment the counter variable ?>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -261,4 +325,40 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
         <script src="js/custom.js"></script>
         <script src="vendors/apex_chart/bar_active_1.js"></script>
         <script src="vendors/apex_chart/apex_chart_list.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#filter').change(function() {
+                    var selectedOption = $(this).val();
+                    if (selectedOption === 'all') {
+                        // Show all rows
+                        $('tbody tr').show();
+                    } else if (selectedOption === 'accepted') {
+                        // Show rows with accepted doubts
+                        $('tbody tr').hide();
+                        $('tbody tr:has(.green)').show();
+                    } else if (selectedOption === 'not_accepted') {
+                        // Show rows with doubts not accepted
+                        $('tbody tr').hide();
+                        $('tbody tr:has(.red)').show();
+                    } else if (selectedOption === 'answered') {
+                        // Show rows with answered doubts
+                        $('tbody tr').hide();
+                        $('tbody tr:has(.green)').show();
+                    } else if (selectedOption === 'not_answered') {
+                        // Show rows with doubts not answered
+                        $('tbody tr').hide();
+                        $('tbody tr:has(.red)').show();
+                    } else if (selectedOption === 'feedback_given') {
+                        // Show rows with feedback given
+                        $('tbody tr').hide();
+                        $('tbody tr:has(.green)').show();
+                    } else if (selectedOption === 'no_feedback') {
+                        // Show rows with no feedback
+                        $('tbody tr').hide();
+                        $('tbody tr:has(.red)').show();
+                    }
+                });
+            });
+        </script>
+
 </body>

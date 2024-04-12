@@ -450,7 +450,7 @@ if (isset($_GET['id'])) {
                             </ul>
                         </div>
                         <div>
-        <a href="manage_teacher.php" style="display: inline-block; padding: 10px 20px; background-color: orange; color: white; text-decoration: none; border-radius: 5px; transition: background-color 0.3s ease;">Back</a>
+        <a href="manage_student.php" style="display: inline-block; padding: 10px 20px; background-color: orange; color: white; text-decoration: none; border-radius: 5px; transition: background-color 0.3s ease;">Back</a>
     </div>
                     </div>
                     <div class="profile-info col-md-9">

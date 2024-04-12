@@ -137,13 +137,8 @@ function sendEmailToTeacher($pdo, $teacher_id, $doubt_id)
                                     <p>Hello Teacher,</p>
                                     <p>A new doubt has been assigned to you:</p>
                                     <p><strong>Doubt Category:</strong> {$doubtData['doubt_category']}</p>
-                                    <p><strong>Doubt:</strong> {$doubtData['doubt']}</p>";
-            // Attach doubt file if exists
-            if (!empty($doubtData['doubt_file'])) {
-                $mail->addAttachment("../../student/Dashboard/uploads/doubt/" . $doubtData['doubt_file']);
-                $mail->Body .= "<p><strong>Doubt File:</strong> {$doubtData['doubt_file']}</p>";
-            }
-            $mail->Body .= "<p>Please login to your account to view and solve the doubt.</p>
+                                    <p><strong>Doubt:</strong> {$doubtData['doubt']}</p>
+                                    <p>Please login to your account to view and solve the doubt.</p>
                                     <p>Thank you for your cooperation.</p>
                                     <p>Best regards,<br>Pen in Hand Team</p>
                                     <p>For any query : peninhand.official@gmail.com</p>
