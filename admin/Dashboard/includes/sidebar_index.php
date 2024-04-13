@@ -39,6 +39,12 @@
                     <li><a href="doubts.php">Doubts</a></li>
                 </ul>
             </li>
+            <li <?php if (basename($_SERVER['PHP_SELF']) == 'manage_subscription.php') echo 'class="mm-active"'; ?>>
+                <a href="manage_subscription.php" aria-expanded="false">
+                    <img src="img/menu-icon/dashboard.svg" alt>
+                    <span>Subscription</span>
+                </a>
+            </li>
             <!-- <li <?php if (basename($_SERVER['PHP_SELF']) == 'users.php') echo 'class="mm-active"'; ?>>
                 <a href="users.php" >
                     <img src="img/menu-icon/11.svg" alt>
