@@ -45,6 +45,12 @@
                     <span>Subscription</span>
                 </a>
             </li>
+            <li <?php if (basename($_SERVER['PHP_SELF']) == 'manage_mail.php') echo 'class="mm-active"'; ?>>
+                <a href="manage_mail.php" aria-expanded="false">
+                    <img src="img/menu-icon/dashboard.svg" alt>
+                    <span>Mails</span>
+                </a>
+            </li>
             <!-- <li <?php if (basename($_SERVER['PHP_SELF']) == 'users.php') echo 'class="mm-active"'; ?>>
                 <a href="users.php" >
                     <img src="img/menu-icon/11.svg" alt>
