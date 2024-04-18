@@ -568,12 +568,12 @@ if (isset($_GET['id'])) {
                                     </div>
                                     <div class="bio-row">
                                         <p><span>Joined </span>:
-                                            <?php echo date('Y-m-d', strtotime($studentData['created_at'])); ?>
+                                            <?php echo date('d-m-Y', strtotime($studentData['created_at'])); ?>
                                         </p>
                                     </div>
                                     <div class="bio-row">
                                         <p><span>Plan End </span>:
-                                            <?php echo date('Y-m-d', strtotime($studentData['end_date'])); ?>
+                                            <?php echo date('d-m-Y', strtotime($studentData['end_date'])); ?>
                                         </p>
                                     </div>
                                     

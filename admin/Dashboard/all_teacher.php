@@ -68,13 +68,16 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
 
 <body class="crm_body_bg">
     <?php include ('includes/sidebar_index.php'); ?>
+
     <a id="btn-toggle" href="#" class="sidebar-toggler break-point-sm">
         <i class="ri-menu-line ri-xl"></i>
     </a>
 
     <section class="main_content dashboard_part">
+    <?php include ('includes/navbar_index.php'); ?>
+
         <div class="main_content_iner ">
-            <div class="container-fluid p-0">
+            <div class="container-fluid p-2">
                 <h1>All Teacher</h1>
                 <div class="box_right d-flex lms_block">
                     <div class="serach_field_2">
@@ -92,7 +95,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
                         <!-- Table Headings -->
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Sr. No.</th>
                                 <th>Teacher ID</th>
                                 <th>Name</th>
                                 <th>Gender</th>
@@ -101,6 +104,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
                                 <th>State</th>
                                 <th>Tech Stack</th>
                                 <th>Experience</th>
+                                <th>Joining Date</th>
                                 <th>Active</th>
                                 <th>Verified</th>
                             </tr>
@@ -108,10 +112,11 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
 
                         <!-- Table Body -->
                         <tbody>
+                        <?php $counter = 1; ?>
                             <?php foreach ($teachers as $teacher): ?>
                                 <tr>
                                     <td>
-                                        <?php echo $teacher['id']; ?>
+                                        <?php echo $counter; ?>
                                     </td>
                                     <td>
                                         <?php echo $teacher['teacher_id']; ?>
@@ -138,12 +143,16 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
                                         <?php echo $teacher['experience']; ?>
                                     </td>
                                     <td>
+                                        <?php echo date('d/m/Y', strtotime($teacher['created_at'])); ?>
+                                    </td>
+                                    <td>
                                         <?php echo $teacher['active'] == 1 ? 'Active' : 'Not Active'; ?>
                                     </td>
                                     <td>
                                         <?php echo $teacher['verified'] == 1 ? 'Yes' : 'No'; ?>
                                     </td>
                                 </tr>
+                                <?php $counter++; ?>
                             <?php endforeach; ?>
                         </tbody>
                     </table>

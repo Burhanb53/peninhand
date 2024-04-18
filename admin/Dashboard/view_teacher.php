@@ -535,7 +535,7 @@ if (isset($_GET['id'])) {
                                     </div>
                                     <div class="bio-row">
                                         <p><span>Joined </span>:
-                                            <?php echo date('Y-m-d', strtotime($teacherData['created_at'])); ?>
+                                            <?php echo date('d-m-Y', strtotime($teacherData['created_at'])); ?>
                                         </p>
                                     </div>
 

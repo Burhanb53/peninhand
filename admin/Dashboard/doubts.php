@@ -158,12 +158,12 @@ $doubts = array_merge($doubtsNull, $doubtsRemaining);
     <?php include('includes/sidebar_index.php'); ?>
 
     <section class="main_content dashboard_part">
-        <?php include('includes/navbar_index.php'); ?>
+    <?php include ('includes/navbar_index.php'); ?>
 
         <!-- Display Doubts -->
-        <div style="padding-left: 35px;padding-right: 35px" class="container-flex">
+        <div class="container-flex p-2">
             <h1>All Doubts</h1>
-            <div class="form-group">
+            <div class="form-group pb-3">
                 <label for="filter">Filter by:</label>
                 <select class="form-control" id="filter">
                     <option value="all">All</option>

@@ -272,7 +272,7 @@ if (!isset($_SESSION['role'])) {
                 <input type="text" id="mother-name" name="mother_name">
             </div>
             <div class="form-group">
-                <label for="mother-email">Mother Email:(Different from User & Father E-mail)</label>
+                <label for="mother-email">Mother Email:</label>
                 <input type="email" id="mother-email" name="mother_email">
             </div>
             <div class="form-group">
@@ -284,7 +284,7 @@ if (!isset($_SESSION['role'])) {
                 <input type="text" id="father-name" name="father_name">
             </div>
             <div class="form-group">
-                <label for="father-email">Father Email:(Different from User & Mother E-mail)</label>
+                <label for="father-email">Father Email:</label>
                 <input type="email" id="father-email" name="father_email">
             </div>
             <div class="form-group">

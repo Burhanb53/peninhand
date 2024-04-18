@@ -70,8 +70,10 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
     <?php include ('includes/sidebar_index.php'); ?>
 
     <section class="main_content dashboard_part">
+    <?php include ('includes/navbar_index.php'); ?>
+
         <div class="main_content_iner ">
-            <div class="container-fluid p-0">
+            <div class="container-fluid p-2">
                 <h1>Manage Teacher</h1>
                 <div class="box_right d-flex lms_block">
                     <div class="serach_field_2">

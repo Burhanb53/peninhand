@@ -1,7 +1,7 @@
 <?php
 session_start();
 error_reporting(0);
-include ('includes/config.php');
+include('includes/config.php');
 
 // Fetch data from the 'user' table
 $sql = "SELECT * FROM subscription_user";
@@ -41,14 +41,16 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
 
 <body class="crm_body_bg">
 
-    <?php include ('includes/sidebar_index.php'); ?>
+    <?php include('includes/sidebar_index.php'); ?>
 
 
     <section class="main_content dashboard_part">
+        <?php include('includes/navbar_index.php'); ?>
+
         <div class="main_content_iner ">
-            <div class="container-fluid p-0">
+            <div class="container-fluid p-2">
                 <h1>Manage Students</h1>
-                <div class="box_right d-flex lms_block">
+                <div class="box_right d-flex lms_block pb-3">
                     <div class="serach_field_2">
                         <div class="search_inner">
                             <form id="searchForm">
@@ -73,6 +75,7 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                 <th>City</th>
                                 <th>State</th>
                                 <th>Subscription</th>
+                                <th>Subscription Date</th>
                                 <th>End Date</th>
                                 <th>Transaction ID</th>
                                 <th>Status</th>
@@ -81,8 +84,9 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                         </thead>
 
                         <tbody>
-                            <?php $counter = 1; // Initialize the counter variable ?>
-                            <?php foreach ($users as $user): ?>
+                            <?php $counter = 1; // Initialize the counter variable 
+                            ?>
+                            <?php foreach ($users as $user) : ?>
                                 <tr>
                                     <td>
                                         <?php echo $counter; ?>
@@ -109,28 +113,15 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                         <?php echo $user['state']; ?>
                                     </td>
                                     <td>
-                                        <?php
-                                        $subscription_id = $user['subscription_id'];
-                                        switch ($subscription_id) {
-                                            case 1:
-                                                echo '1 month';
-                                                break;
-                                            case 2:
-                                                echo '2 months';
-                                                break;
-                                            case 3:
-                                                echo '3 months';
-                                                break;
-                                            default:
-                                                echo 'Unknown subscription';
-                                                break;
-                                        }
-                                        ?>
+                                        <?php echo $user['subscription_id']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo date('d/m/Y', strtotime($user['created_at'])); ?>
+                                    </td>
+                                    <td>
+                                        <?php echo date('d/m/Y', strtotime($user['end_date'])); ?>
                                     </td>
 
-                                    <td>
-                                        <?php echo $user['end_date']; ?>
-                                    </td>
                                     <td>
                                         <?php echo $user['transaction_id']; ?>
                                     </td>
@@ -143,18 +134,24 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                         <!-- Show status -->
                                     </td>
                                     <td>
-                                        <?php if ($user['verified'] == 0): ?>
+                                        <?php if ($user['verified'] == 0) : ?>
                                             <form method="POST" action="backend/verify_student.php">
                                                 <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
                                                 <button type="submit" class="btn btn-primary">Verify</button>
                                             </form>
-                                        <?php else: ?>
+                                            <a href="view_student.php?id=<?php echo $user['id']; ?>" title="View Details">
+                                                <i class="fas fa-info-circle"></i>
+                                            </a>
+                                            <a href="#" onclick="confirmDelete(<?php echo $user['id']; ?>)" title="Delete Student">
+                                                <i class="fas fa-trash-alt" style="color: red; padding-left: 5px;"></i>
+                                            </a>
+                                        <?php else : ?>
                                             <!-- Update icon with a link to update_user.php -->
                                             <!-- <a href="update_student.php?id=<?php echo $user['id']; ?>"
                                                             title="Update">
-                                                            <?php if ($user['subscription_id'] != 0): ?>
+                                                            <?php if ($user['subscription_id'] != 0) : ?>
                                                                 <i style="padding-right: 5px;" class="fas fa-times"></i>
-                                                            <?php else: ?>
+                                                            <?php else : ?>
                                                                 <i style="padding-right: 5px;" class="fas fa-check"></i>
                                                             <?php endif; ?>
                                                         </a> -->
@@ -162,10 +159,14 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                             <a href="view_student.php?id=<?php echo $user['id']; ?>" title="View Details">
                                                 <i class="fas fa-info-circle"></i>
                                             </a>
+                                            <a href="#" onclick="confirmDelete(<?php echo $user['id']; ?>)" title="Delete Student">
+                                                <i class="fas fa-trash-alt" style="color: red; padding-left: 5px;"></i>
+                                            </a>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
-                                <?php $counter++; // Increment the counter variable ?>
+                                <?php $counter++; // Increment the counter variable 
+                                ?>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -193,41 +194,40 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
 </body>
 
 <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const input = document.getElementById('searchInput');
-            const tableRows = document.querySelectorAll('#dataTable tbody tr');
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.getElementById('searchInput');
+        const tableRows = document.querySelectorAll('#dataTable tbody tr');
 
-            input.addEventListener('input', function () {
-                const searchTerm = input.value.trim().toLowerCase();
+        input.addEventListener('input', function() {
+            const searchTerm = input.value.trim().toLowerCase();
 
-                tableRows.forEach(row => {
-                    const cells = Array.from(row.querySelectorAll('td'));
-                    const found = cells.some(cell => {
-                        const cellText = cell.textContent.trim().toLowerCase();
-                        const regex = new RegExp(searchTerm, 'gi');
-                        const highlightedText = cellText.replace(regex, '<span style="background-color: yellow;">$&</span>');
-                        cell.innerHTML = highlightedText;
-                        return cellText.includes(searchTerm);
-                    });
-
-                    if (found) {
-                        row.style.display = 'table-row';
-                    } else {
-                        row.style.display = 'none';
-                    }
+            tableRows.forEach(row => {
+                const cells = Array.from(row.querySelectorAll('td'));
+                const found = cells.some(cell => {
+                    const cellText = cell.textContent.trim().toLowerCase();
+                    const regex = new RegExp(searchTerm, 'gi');
+                    const highlightedText = cellText.replace(regex, '<span style="background-color: yellow;">$&</span>');
+                    cell.innerHTML = highlightedText;
+                    return cellText.includes(searchTerm);
                 });
+
+                if (found) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
             });
-
-            const searchForm = document.getElementById('searchForm');
-            searchForm.addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent the default form submission
-
-                // Add your search logic here, such as updating the table based on the search term
-            });
-
         });
 
-    </script>
+        const searchForm = document.getElementById('searchForm');
+        searchForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Add your search logic here, such as updating the table based on the search term
+        });
+
+    });
+</script>
 
 <script src="js/jquery1-3.4.1.min.js"></script>
 
@@ -269,6 +269,14 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
 <script src="vendors/text_editor/summernote-bs4.js"></script>
 <script src="vendors/apex_chart/apexcharts.js"></script>
 <script src="js/custom.js"></script>
-
+<script>
+    function confirmDelete(studentId) {
+        if (confirm("Are you sure you want to delete this student?")) {
+            window.location.href = 'backend/delete_student.php?id=' + studentId;
+        } else {
+            // Cancelled
+        }
+    }
+</script>
 
 </html>

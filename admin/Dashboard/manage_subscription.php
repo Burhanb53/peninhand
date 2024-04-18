@@ -221,7 +221,9 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
     <?php include('includes/sidebar_index.php'); ?>
 
     <section class="main_content dashboard_part">
-        <div class="main_content_iner ">
+    <?php include ('includes/navbar_index.php'); ?>
+
+        <div class="main_content_iner p-1">
             <div class="container">
                 <?php
                 // Database connection

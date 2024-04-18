@@ -44,11 +44,13 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
     <?php include ('includes/sidebar_index.php'); ?>
 
     <section class="main_content dashboard_part">
+    <?php include ('includes/navbar_index.php'); ?>
+
         <div class="main_content_iner ">
-            <div class="container-fluid p-0">
+            <div class="container-fluid p-1">
                 <h1>Manage Students</h1>
-                <div class="box_right d-flex lms_block">
-                    <div class="serach_field_2">
+                <div class="box_right d-flex lms_block pb-3">
+                    <div class="serach_field_1">
                         <div class="search_inner">
                             <form id="searchForm">
                                 <div class="search_field">
@@ -61,9 +63,10 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover" id="dataTable">
                         <!-- Table Headings -->
+                        
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Sr. No.</th>
                                 <th>User ID</th>
                                 <th>Name</th>
                                 <th>Contact</th>
@@ -72,15 +75,17 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                 <th>City</th>
                                 <th>State</th>
                                 <th>Subscription</th>
+                                <th>Subscription Date</th>
                                 <th>End Date</th>
                             </tr>
                         </thead>
                                         
                                     <tbody>
+                                    <?php $counter = 1; ?>
                                         <?php foreach ($users as $user): ?>
                                             <tr>
                                                 <td>
-                                                    <?php echo $user['id']; ?>
+                                                    <?php echo $counter; ?>
                                                 </td>
                                                 <td>
                                                     <?php echo $user['user_id']; ?>
@@ -108,12 +113,16 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                                                     <?php echo $user['subscription_id']; ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $user['end_date']; ?>
+                                                    <?php echo date('d/m/Y', strtotime($user['created_at'])); ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo date('d/m/Y', strtotime($user['end_date'])); ?>
                                                 </td>
                                                 <!-- <td>
                                                     <?php echo $user['active'] == 1 ? 'Active' : 'Not Active'; ?>
                                                 </td> -->
                                             </tr>
+                                            <?php $counter++; ?>
                                         <?php endforeach; ?>
                                     </tbody>
                                 </table>

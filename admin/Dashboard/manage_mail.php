@@ -248,7 +248,9 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
     <?php include('includes/sidebar_index.php'); ?>
 
     <section class="main_content dashboard_part">
-        <div class="main_content_iner ">
+    <?php include ('includes/navbar_index.php'); ?>
+
+        <div class="main_content_iner p-2">
             <!-- Scenario: Mail Student Whose Subscription is Ended -->
             <div class="card ended-subscription">
                 <div class="content">
@@ -345,9 +347,9 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
             <div id="loader"></div>
         </div>
 
-        <div id="buffering-message">
+        <!-- <div id="buffering-message">
             <p>Sending...</p>
-        </div>
+        </div> -->
 
         </div>
         </div>
