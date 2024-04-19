@@ -58,6 +58,14 @@ try {
         $stmt->execute();
         $categoryDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        // Fetch average satisfaction level  for the user within the specified month
+        $stmt = $dbh->prepare("SELECT ROUND(AVG(satisfaction_level)) AS average_satisfaction_level FROM feedback WHERE teacher_id = :teacher_id AND submission_date BETWEEN :start_date AND :end_date");
+        $stmt->bindParam(':teacher_id', $userId);
+        $stmt->bindParam(':start_date', $startDate);
+        $stmt->bindParam(':end_date', $endDate);
+        $stmt->execute();
+        $satisfaction_level = $stmt->fetch(PDO::FETCH_ASSOC)['average_satisfaction_level'];
+
         // Fetch average satisfaction level for each doubt category
         $stmt = $dbh->prepare("SELECT d.doubt_category, ROUND(AVG(f.satisfaction_level)) AS average_satisfaction
             FROM doubt d
@@ -153,6 +161,7 @@ try {
                 <div class="card">
                     <h2>Feedback Details</h2>
                     <p>Feedback satisfaction levels for doubt categories in the previous month:</p>
+                    <p>Average Satisfaction Level:<h4>'. $satisfaction_level .' Star(s)</h4></p>
                     <table>
                         <thead>
                             <tr>
