@@ -133,6 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['doubt_id'])) {
                     .solution strong {
                         color: #007bff;
                     }
+                    
                 </style>
             </head>
             <body>
@@ -141,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['doubt_id'])) {
                     <div class='solution'>
                         <p>Hello,</p>
                         <p>Your doubt has been resolved. Here is the solution:</p>
-                        <p>" . $solution . "</p>
+                        <p><h3><p>Solution : </p>" . $solution . "</h3></p>
                         <table>";
         
         // Check if video link is provided and add it to the email body
