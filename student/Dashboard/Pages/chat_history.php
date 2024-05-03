@@ -273,6 +273,8 @@ $doubts = $stmt->fetchAll();
 
 
     </section>
+    <?php include('../includes/notes.php'); ?>
+
     <?php include('../includes/script.php'); ?>
 
 </body>

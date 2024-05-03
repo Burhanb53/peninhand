@@ -259,6 +259,7 @@ if (isset ($_GET['id'])) {
         </main>
         <?php include ('../includes/footer.php'); ?>
     </section>
+    <?php include('../includes/notes.php'); ?>
 
     <!-- Script JS -->
     <script src="./js/script.js"></script>

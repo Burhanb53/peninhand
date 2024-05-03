@@ -358,6 +358,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
 
 
     </section>
+    <?php include('includes/notes.php'); ?>
 
 
     <script>

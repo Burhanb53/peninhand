@@ -272,6 +272,8 @@ $availableCategories = array_unique($availableCategories);
 
         <?php include('../includes/footer.php'); ?>
     </section>
+    <?php include('../includes/notes.php'); ?>
+
     <script>
         document.getElementById('file').addEventListener('change', function(event) {
             const fileInput = event.target;

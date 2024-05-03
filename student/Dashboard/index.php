@@ -1,6 +1,7 @@
 <?php
 session_start();
 error_reporting(0);
+$page_url = "index.php";
 include ('../../includes/config.php');
 if (!(isset ($_SESSION['role']) && $_SESSION['role'] == 1)) {
     // User doesn't have the required role, redirect to index.php
@@ -342,6 +343,7 @@ function time_elapsed_string($datetime)
 
         <?php include ('includes/footer.php'); ?>
     </section>
+    <?php include('includes/notes.php'); ?>
 
 
 
@@ -402,19 +404,7 @@ function time_elapsed_string($datetime)
     <script src="js/custom.js"></script>
     <script src="vendors/apex_chart/bar_active_1.js"></script>
     <script src="vendors/apex_chart/apex_chart_list.js"></script>
-    <script>
-        history.pushState(null, null, document.URL);
-        window.addEventListener('popstate', function () {
-            history.pushState(null, null, document.URL);
-        });
-
-        // Optional: Disable the backspace key to prevent accidental navigation
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Backspace') {
-                e.preventDefault();
-            }
-        });
-    </script>
+    
     <script>
         // Counter Animation
         document.addEventListener("DOMContentLoaded", function () {

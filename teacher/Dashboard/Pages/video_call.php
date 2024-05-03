@@ -53,12 +53,14 @@ $doubts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <link rel="stylesheet" href="../css/colors/default.css" id="colorSkinCSS">
 <style>
     .videocall {
-        display: flex;
-        ;
         justify-content: center;
         align-items: center;
         max-width: 1200px;
         margin: auto;
+        margin-top:20px;
+        margin-bottom:20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
     }
 
     .form-container {
@@ -68,8 +70,10 @@ $doubts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         width: 300px;
         text-align: center;
-        margin-right: 10px;
-        margin-top: 20px;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+
     }
 
     .form-container h2 {
@@ -109,7 +113,6 @@ $doubts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     .call-links {
-        flex-grow: 1;
         max-height: 400px;
         overflow-y: scroll;
 
@@ -133,7 +136,8 @@ $doubts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     td {
         background-color: #F9F9F9;
-        word-wrap: break-word;
+        overflow: hidden;
+
     }
 
     th {
@@ -160,9 +164,11 @@ $doubts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .form-container {
             margin-bottom: 20px;
         }
+        th,tr{
+            min-width: 100px;
+        }
 
     }
-
 
 
     .call-links button:hover {
@@ -207,10 +213,10 @@ $doubts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <button type="button" onclick="joinVideoCall()">Join Video Call</button>
                 </form>
             </div>
-            <div class="table" style="flex: 1;">
+            <div class="table">
                 <div style="display:flex; ">
                     <h2 style="margin-right: 20px;">Video Call Links</h2>
-                    <button type="button" onclick="joinVideoCall()" style="border-radius: 10px; ">Create Link</button>
+                    <!-- <button type="button" onclick="joinVideoCall()" style="border-radius: 10px; ">Create Link</button> -->
                 </div>
                 <div class="call-links">
                     <?php
@@ -301,6 +307,8 @@ $doubts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <?php include('../includes/footer.php'); ?>
     </section>
+    <?php include('../includes/notes.php'); ?>
+
     <script>
         function copyToClipboard(text) {
             // Create a temporary input element

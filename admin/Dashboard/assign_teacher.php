@@ -293,6 +293,7 @@ function sendEmailToTeacher($pdo, $teacher_id, $doubt_id)
             </div>
         </div>
     </section>
+    <?php include('includes/notes.php'); ?>
 
     <script>
         document.getElementById('assignForm').addEventListener('submit', function(event) {

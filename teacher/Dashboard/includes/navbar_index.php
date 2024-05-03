@@ -93,6 +93,11 @@ if (!(isset($_SESSION['role']) && $_SESSION['role'] == 2)) {
                                 </div>
                             </div>
                         </li>
+                        <li>
+                            <a class="CHATBOX_open">
+                                <img src="img/icon/notes.svg" alt />
+                            </a>
+                        </li>
                     </div>
                     <div class="profile_info">
                         <?php if (!empty($user['photo'])) : ?>
@@ -101,7 +106,7 @@ if (!(isset($_SESSION['role']) && $_SESSION['role'] == 2)) {
                             <a href="#"><img src="img/profile.jpg" alt></a>
                         <?php endif; ?>
                         <div class="profile_info_iner">
-                            <div class="profile_author_name">
+                            <div class="profile_author_name" >
                                 <h5>
                                     <?php echo $user['name']; ?>
                                 </h5>

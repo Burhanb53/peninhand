@@ -1,5 +1,7 @@
 <?php
 session_start();
+$page_url = "chat.php";
+
 include ('../../../includes/config.php');
 // Fetch the doubt details based on doubt_id from the URL parameter
 if (isset ($_GET['doubt_id'])) {
@@ -125,7 +127,7 @@ if (isset ($_GET['doubt_id'])) {
         .chat-header {
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 50;
             color: #fff;
             padding: 10px;
             display: flex;
@@ -730,6 +732,8 @@ if (isset ($_GET['doubt_id'])) {
                 </div>
             </div>
     </section>
+    <?php include('../includes/notes.php'); ?>
+
     <?php include('../includes/script.php'); ?>
 
     <script>

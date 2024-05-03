@@ -275,6 +275,8 @@ $doubts = $stmt->fetchAll();
 
 
     </section>
+    <?php include('../includes/notes.php'); ?>
+
     <script>
         function handleRightIconClick() {
             // Add your logic for right icon click here

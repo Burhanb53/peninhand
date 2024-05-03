@@ -1,6 +1,7 @@
 <?php
 session_start();
 error_reporting(0);
+$page_url = "index.php";
 include('../../includes/config.php');
 if (!(isset($_SESSION['role']) && $_SESSION['role'] == 2)) {
     // User doesn't have the required role, redirect to index.php
@@ -569,7 +570,9 @@ function time_elapsed_string($datetime)
         </div>
 
         <?php include('includes/footer.php'); ?>
+
     </section>
+    <?php include('includes/notes.php'); ?>
 
 
 

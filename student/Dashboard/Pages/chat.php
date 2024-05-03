@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../../../includes/config.php');
+$page_url= "chat.php" ;
 // Fetch the doubt details based on doubt_id from the URL parameter
 if (isset($_GET['doubt_id'])) {
     $doubt_id = $_GET['doubt_id'];
@@ -116,7 +117,7 @@ if (isset($_GET['doubt_id'])) {
         .chat-header {
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 50;
             color: #fff;
             padding: 10px;
             display: flex;
@@ -487,7 +488,79 @@ if (isset($_GET['doubt_id'])) {
             font-size: 1rem;
 
         }
+
+        .add-note-button {
+            margin-left: auto;
+            /* Pushes the add button to the right */
+            padding: 5px;
+            border: none;
+            background-color: white;
+            border-radius: 5px;
+            cursor: pointer;
+
+        }
+
+        .add-note-button svg {
+            width: 24px;
+            height: 24px;
+            fill: red;
+
+        }
+
+        .add-note-button:hover {
+            background-color: #f5f5f5;
+        }
     </style>
+    <style>
+        .new-note-card {
+            width: auto;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+        }
+
+        .note-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .new-note-content {
+            border: none;
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            background-image: repeating-linear-gradient(180deg, transparent, transparent 2px, #F1F1F1 2px, #F1F1F1 8px);
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            resize: none;
+        }
+
+        .note-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .doubt {
+            margin-top: 10px;
+            width: auto;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+        }
+    </style>
+
 
 </head>
 
@@ -523,6 +596,27 @@ if (isset($_GET['doubt_id'])) {
             </div>
 
             <div class="chat-content">
+                <!-- <div class="message">
+                    <div style="display: flex; align-items: center; ">
+                        <h4>Add to Notes</h4>
+                        <button class="add-note-button" style="margin-left: 10px; " onclick="openNoteCard()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5V19" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M5 12H19" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="new-note-card" id="noteCard" style="display: none; align-items: center; justify-content: center; margin: auto;">
+                        <div class="close-note" style="margin-bottom: 10px; float: inline-end;" onclick="openNoteCard()">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="black" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.09939 5.98831L11.772 10.661C12.076 10.965 12.076 11.4564 11.772 11.7603C11.468 12.0643 10.9766 12.0643 10.6726 11.7603L5.99994 7.08762L1.32737 11.7603C1.02329 12.0643 0.532002 12.0643 0.228062 11.7603C-0.0760207 11.4564 -0.0760207 10.965 0.228062 10.661L4.90063 5.98831L0.228062 1.3156C-0.0760207 1.01166 -0.0760207 0.520226 0.228062 0.216286C0.379534 0.0646715 0.578697 -0.0114918 0.777717 -0.0114918C0.976738 -0.0114918 1.17576 0.0646715 1.32737 0.216286L5.99994 4.889L10.6726 0.216286C10.8243 0.0646715 11.0233 -0.0114918 11.2223 -0.0114918C11.4213 -0.0114918 11.6203 0.0646715 11.772 0.216286C12.076 0.520226 12.076 1.01166 11.772 1.3156L7.09939 5.98831Z" fill="black" />
+                            </svg>
+                        </div>
+                        <input type="text" class="note-title" placeholder="Title" required>
+                        <textarea class="new-note-content" placeholder="Write your notes here..." required></textarea>
+                        <button class="note-button">Add</button>
+                    </div>
+                </div> -->
                 <!-- Chat messages go here -->
                 <?php if ($doubt['doubt']) : ?>
                     <div class="message sent">
@@ -535,7 +629,7 @@ if (isset($_GET['doubt_id'])) {
                     </div>
                 <?php endif; ?>
                 <?php if ($doubt['doubt_file']) : ?>
-                <div class="message sent">
+                    <div class="message sent">
                         <?php
                         $doubt_media_type = strtolower(pathinfo($doubt['doubt_file'], PATHINFO_EXTENSION));
                         if ($doubt_media_type === 'pdf' || $doubt_media_type === 'doc' || $doubt_media_type === 'docx') : ?>
@@ -557,7 +651,7 @@ if (isset($_GET['doubt_id'])) {
                         <a href="../uploads/doubt/<?php echo $doubt['doubt_file']; ?>" class="download-link" download>Download
                             <?php echo ucfirst($doubt_media_type); ?>
                         </a>
-                </div>
+                    </div>
                 <?php endif; ?>
                 <?php if ($doubt['answer']) : ?>
                     <div class="message received">
@@ -570,7 +664,7 @@ if (isset($_GET['doubt_id'])) {
                     </div>
                 <?php endif; ?>
                 <?php if ($doubt['answer_file']) : ?>
-                <div class="message received">
+                    <div class="message received">
                         <?php
                         $doubt_media_type = strtolower(pathinfo($doubt['answer_file'], PATHINFO_EXTENSION));
 
@@ -593,7 +687,7 @@ if (isset($_GET['doubt_id'])) {
                         <a href="../../../teacher/Dashboard/uploads/doubt/<?php echo $doubt['answer_file']; ?>" class="download-link" download>Download
                             <?php echo ucfirst($doubt_media_type); ?>
                         </a>
-                </div>
+                    </div>
                 <?php endif; ?>
                 <?php if ($video_call['videocall_link']) : ?>
                     <div class="message video">
@@ -636,7 +730,7 @@ if (isset($_GET['doubt_id'])) {
                     <form id="solutionForm" enctype="multipart/form-data" action="../backend/edit_doubt.php" method="post">
                         <input type="hidden" name="doubt_id" value="<?php echo $doubt_id; ?>">
                         <div class="form-group">
-                            <label for="solution">Solution:</label>
+                            <label for="solution">Doubt:</label>
                             <textarea id="solution" name="doubt" placeholder="Type your solution..."><?php if ($doubt['doubt']) : ?><?php echo $doubt_description ?><?php endif; ?></textarea>
                         </div>
 
@@ -703,7 +797,9 @@ if (isset($_GET['doubt_id'])) {
 
         </div>
 
+
     </section>
+    <?php include('../includes/notes.php'); ?>
 
     <script>
         function zoomMedia(element, mediaType) {
@@ -797,6 +893,8 @@ if (isset($_GET['doubt_id'])) {
                 alert('Video call join cancelled.');
             }
         }
+
+        
     </script>
 
     <?php include('../includes/script.php'); ?>

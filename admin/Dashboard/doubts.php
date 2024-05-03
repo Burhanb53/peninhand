@@ -269,6 +269,8 @@ $doubts = array_merge($doubtsNull, $doubtsRemaining);
                 </table>
             </div>
         </div>
+    </section>
+    <?php include('includes/notes.php'); ?>
 
         <script src="js/jquery1-3.4.1.min.js"></script>
 
