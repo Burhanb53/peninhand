@@ -85,136 +85,7 @@ $availableCategories = array_unique($availableCategories);
 <link rel="stylesheet" href="../css/colors/default.css" id="colorSkinCSS">
 <!-- Add these links in the head section of your HTML -->
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-
-
-
-
-<style>
-    .form-container {
-        width: 100%;
-        max-width: 80%;
-        margin: 0 auto;
-        /* Center the form horizontally */
-    }
-
-
-    .card {
-        background-color: #F7ECF9;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        margin-top: 50px;
-        margin-bottom: 50px;
-    }
-
-    .card-header {
-        background-color: #2D1967;
-        color: #fff;
-        text-align: center;
-        padding: 15px;
-    }
-
-    .card-body {
-        padding: 20px;
-        font-size: 20px;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    textarea,
-    input {
-        width: 100%;
-        padding: 10px;
-        box-sizing: border-box;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        margin-top: 5px;
-
-    }
-
-    button {
-        background-color: #2D1967;
-        color: white;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        float: right;
-    }
-
-    button:hover {
-        background-color: #2980b9;
-    }
-
-    #filePreview {
-        margin-top: 10px;
-        max-width: 100%;
-        overflow: hidden;
-    }
-
-    #filePreview img {
-        width: 100%;
-        border-radius: 5px;
-        margin-top: 5px;
-    }
-
-    #filePreview a {
-        color: #3498db;
-        text-decoration: none;
-    }
-
-    .notification {
-        display: none;
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1000;
-        padding: 20px;
-        background-color: #333;
-        color: #fff;
-        border-radius: 5px;
-    }
-
-    .message-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-    }
-
-    .card-content {
-        border-radius: 20px;
-        padding: 10px 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: opacity 0.5s ease-in-out;
-        width: fit-content;
-        
-    }
-
-    .success {
-        background-color: green;
-    }
-
-    .error {
-        background-color: #D4292C;
-    }
-
-    .invisible {
-        display: none;
-        opacity: 0;
-    }
-</style>
+<link rel="stylesheet" href="css/ask_doubt.css">
 </head>
 
 <body class="crm_body_bg">
@@ -274,32 +145,6 @@ $availableCategories = array_unique($availableCategories);
     </section>
     <?php include('../includes/notes.php'); ?>
 
-    <script>
-        document.getElementById('file').addEventListener('change', function(event) {
-            const fileInput = event.target;
-            const filePreview = document.getElementById('filePreview');
-
-            while (filePreview.firstChild) {
-                filePreview.removeChild(filePreview.firstChild);
-            }
-
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-
-                if (file.type.startsWith('image/')) {
-                    const img = document.createElement('img');
-                    img.src = URL.createObjectURL(file);
-                    filePreview.appendChild(img);
-                } else {
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(file);
-                    link.textContent = file.name;
-                    link.target = '_blank';
-                    filePreview.appendChild(link);
-                }
-            }
-        });
-    </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -308,15 +153,7 @@ $availableCategories = array_unique($availableCategories);
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-    <script>
-        // Get the card content element
-        var cardContent = document.querySelector('.message-container');
-
-        // Add the class to make it invisible after 3 seconds
-        setTimeout(function() {
-            cardContent.classList.add('invisible');
-        }, 3000);
-    </script>
+    <script src="js/ask_doubt.js"></script>
     <script>
         $(function() {
             // Fetch unique doubt categories from the doubt table

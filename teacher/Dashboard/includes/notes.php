@@ -79,6 +79,8 @@
         padding: 10px;
         display: none;
         min-height: 100px;
+        white-space: pre-line; /* Preserve line breaks */
+
     }
 
     .note-card.open .note-content {
@@ -110,7 +112,6 @@
 
     .note-card.open .note-content {
         display: block;
-        line-break: anywhere;
     }
 
     .add-note-button {
@@ -302,7 +303,7 @@
                 echo '</div>';
                 echo '</div>';
                 echo '<div class="note-content">';
-                echo '<p>' . $row["content"] . '</p>';
+                echo '<p>' . nl2br($row["content"]) . '</p>'; // Use nl2br() to convert newlines to <br> tags
                 $current_page = basename($_SERVER['PHP_SELF']);
                 $is_index_page = ($current_page === 'index.php');
 

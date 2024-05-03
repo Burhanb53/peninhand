@@ -79,6 +79,8 @@
         padding: 10px;
         display: none;
         min-height: 100px;
+        white-space: pre-line; /* Preserve line breaks */
+
     }
 
     .note-card.open .note-content {
@@ -301,7 +303,7 @@
                 echo '</div>';
                 echo '</div>';
                 echo '<div class="note-content">';
-                echo '<p>' . $row["content"] . '</p>';
+                echo '<p>' . nl2br($row["content"]) . '</p>'; // Use nl2br() to convert newlines to <br> tags
                 $current_page = basename($_SERVER['PHP_SELF']);
                 $is_index_page = ($current_page === 'index.php');
 
@@ -312,7 +314,7 @@
                     } else {
                         echo '<div class="doubt"><a href="chat.php?doubt_id=' . $row['doubt_id'] . '">';
                     }
-                    echo '<h7>' . substr($row["doubt"], 0, 40) . '</h7>';
+                    echo '<h7 style="color:blue; !important">' . substr($row["doubt"], 0, 40) . '</h7>';
                     echo '</a></div>';
                 }
 

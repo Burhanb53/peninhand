@@ -8,12 +8,12 @@ include('../../../includes/config.php');
 // Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the new active status from the request body
-    $newActive = $_POST['active'];
+    $newActive = $_POST['toggle'];
 
     // Validate and sanitize the input if necessary
 
     // Perform the update query
-    $stmt = $dbh->prepare("UPDATE teacher SET active = :active where teacher_id=:teacher_id");
+    $stmt = $dbh->prepare(" UPDATE teacher SET active = :active WHERE teacher_id = :teacher_id ");
     $stmt->bindParam(':active', $newActive);
     $stmt->bindParam(':teacher_id', $teacher_id);
     $stmt->execute();

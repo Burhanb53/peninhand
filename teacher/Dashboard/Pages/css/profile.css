@@ -1,0 +1,145 @@
+.additional-details {
+
+    margin-left: auto 10px;
+
+  }
+
+  .additional-details li {
+    list-style: none;
+    border: 2px solid #ddd;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 50rem;
+    background: #fff;
+    color: #333;
+    transition: background 0.3s ease;
+    width: calc(100% - 32px);
+    font-size: 20px;
+  }
+
+  .additional-details li:hover {
+    background: #f0f0f0;
+  }
+
+  .details {
+    display: none;
+    max-width: 800px;
+    background-color: #fff;
+    border-radius: 2rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    align-items: flex-start;
+    justify-content: center;
+    margin: auto;
+    padding: 20px;
+    transition: box-shadow 0.3s ease;
+    margin: 10px auto;
+    margin-bottom: 20px;
+  }
+
+  .details:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 1);
+  }
+
+  .edit-details-button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 20px;
+  }
+
+  .edit-details-button:hover {
+    background: #2980b9;
+    /* Darker blue background on hover */
+  }
+
+  @media (max-width: 990px) {
+    .details {
+      max-width: 420px;
+    }
+  }
+
+  .profile-page .content__avatar {
+    background: #8f6ed5 url("../uploads/profile/<?php echo $photo ?>") center/cover;
+  }
+
+
+  .toggle-container {
+    display: inline-block;
+    overflow: hidden;
+  }
+
+  .toggle-button {
+    display: inline-block;
+    width: 80px;
+    height: 40px;
+    background-color: #ff6666;
+    /* Default background color for off state */
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+
+  }
+
+  /* Change background color to green for 'on' state */
+  .toggle-button.toggle-on {
+    background-color: #66cc66;
+  }
+
+  .toggle-button::before {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: white !important;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+
+  }
+
+  /* Move the toggle handle to the right for 'on' state */
+  .toggle-button.toggle-on::before {
+    left: 40px;
+  }
+
+  /* Move the toggle handle to the left for 'off' state */
+  .toggle-button.toggle-off::before {
+    left: 0;
+  }
+
+  /* Change the background color of the left part for 'on' state */
+  .toggle-button.toggle-on::before {
+    background-color: #66cc66;
+  }
+
+  /* Change the background color of the right part for 'off' state */
+  .toggle-button.toggle-off::before {
+    background-color: #ff6666;
+  }
+
+  @media (max-width: 767px) {
+    .toggle-button {
+      width: 50px;
+      /* Adjusted width for mobile */
+      height: 25px;
+      /* Adjusted height for mobile */
+      border-radius: 12.5px;
+      /* Adjusted border radius for mobile */
+    }
+
+    .toggle-button::before {
+      width: 25px;
+      /* Adjusted width of toggle handle for mobile */
+      height: 25px;
+      /* Adjusted height of toggle handle for mobile */
+    }
+
+    .toggle-button.toggle-on::before {
+      left: 25px;
+    }
+  }

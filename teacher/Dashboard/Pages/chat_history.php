@@ -1,6 +1,6 @@
 <?php
 session_start();
-include ('../../../includes/config.php');
+include('../../../includes/config.php');
 
 // Fetch doubts for the current user
 $user_id = $_SESSION['user_id'];
@@ -52,136 +52,14 @@ $doubts = $stmt->fetchAll();
 
     <link rel="stylesheet" href="../css/style1.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/chat_history.css">
 
-    <style>
-        body {
-            overflow: hidden;
-        }
-
-        .chat-wrapper {
-            display: flex;
-            flex-direction: column;
-            max-width: 800px;
-            margin: 0 auto;
-            /* Center the chat container horizontally */
-            margin-bottom: 50px;
-        }
-
-        .search-bar {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            position: sticky;
-            top: 0;
-            background-color: #fff;
-            z-index: 1;
-        }
-
-        .chat-container {
-            max-height: 500px;
-            /* Adjust the maximum height as needed */
-            overflow-y: auto;
-            padding-right: 20px;
-            /* Add padding to compensate for the scrollbar width */
-        }
-
-        /* Customize scrollbar */
-        .chat-container::-webkit-scrollbar {
-            width: 12px;
-            /* Set the width of the scrollbar */
-        }
-
-        .chat-container::-webkit-scrollbar-thumb {
-            background-color: #B9BABA;
-            /* Set the color of the scrollbar thumb */
-            border-radius: 6px;
-            /* Set the border radius of the scrollbar thumb */
-        }
-
-        .chat-container::-webkit-scrollbar-track {
-            background-color: #f5f5f5;
-            /* Set the color of the scrollbar track */
-        }
-
-        /* End of scrollbar customization */
-
-        .chat-card {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            margin-bottom: 15px;
-            margin-left: 5px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-            transition: transform 0.3s ease;
-        }
-
-        .chat-card:hover {
-            transform: scale(1.05);
-            /* Adjust the scale factor as needed */
-        }
-
-        .profile-image {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            margin-right: 15px;
-            object-fit: cover;
-        }
-
-        .message-content {
-            flex-grow: 1;
-        }
-
-        .message-text {
-            margin: 0;
-            font-size: 16px;
-            color: #333;
-        }
-
-        .message-time {
-            font-size: 12px;
-            color: #888;
-        }
-
-        .unread {
-            background-color: #82bfe0;
-        }
-
-        .unread .message-time{
-            color: #fff;
-        }
-
-        .read {
-            background-color: #e6f7ff;
-        }
-
-        .submitted {
-            background-color: #f2f2f2;
-        }
-
-        @media (max-width: 600px) {
-            .chat-wrapper {
-                padding: 0 10px;
-            }
-
-            .chat-wrapper {
-
-                margin-left: 20px;
-                margin-right: 20px;
-                margin-top: 20px;
-            }
-        }
-    </style>
 </head>
 
 <body class="crm_body_bg">
-    <?php include ('../includes/sidebar.php'); ?>
+    <?php include('../includes/sidebar.php'); ?>
     <section class="main_content dashboard_part">
-        <?php include ('../includes/navbar.php'); ?>
+        <?php include('../includes/navbar.php'); ?>
 
         <div class="chat-wrapper">
             <input type="text" class="search-bar" id="searchInput" placeholder="Search...">
@@ -195,7 +73,7 @@ $doubts = $stmt->fetchAll();
                 $stmt_doubts->execute();
                 $all_doubts = $stmt_doubts->fetchAll();
 
-                foreach ($all_doubts as $doubt):
+                foreach ($all_doubts as $doubt) :
                     $student_view_class = '';
                     switch ($doubt['teacher_view']) {
                         case 0:
@@ -230,10 +108,9 @@ $doubts = $stmt->fetchAll();
 
                     // Format the created_at timestamp
                     $sent_time = date("F j, Y g:i A", strtotime($doubt['doubt_created_at']));
-                    ?>
+                ?>
 
-                    <a href="chat.php?doubt_id=<?php echo $doubt['doubt_id']; ?>"
-                        class="chat-card <?php echo $student_view_class; ?>">
+                    <a href="chat.php?doubt_id=<?php echo $doubt['doubt_id']; ?>" class="chat-card <?php echo $student_view_class; ?>">
                         <img src="<?php echo $profile_image_src; ?>" alt="Profile" class="profile-image">
                         <div class="message-content">
                             <p class="message-text">
@@ -246,43 +123,15 @@ $doubts = $stmt->fetchAll();
                     </a>
                 <?php endforeach; ?>
             </div>
-            <?php include('../includes/script.php'); ?>
-
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    var searchInput = document.getElementById("searchInput");
-
-                    searchInput.addEventListener("input", function () {
-                        var query = this.value.toLowerCase().trim();
-                        var chatCards = document.querySelectorAll("#searchResults .chat-card");
-
-                        chatCards.forEach(function (card) {
-                            var messageText = card.querySelector(".message-text").textContent.toLowerCase();
-
-                            if (messageText.includes(query)) {
-                                card.style.display = "block";
-                            } else {
-                                card.style.display = "none";
-                            }
-                        });
-                    });
-                });
-            </script>
-
-
         </div>
 
 
     </section>
     <?php include('../includes/notes.php'); ?>
+    <?php include('../includes/script.php'); ?>
 
-    <script>
-        function handleRightIconClick() {
-            // Add your logic for right icon click here
-            console.log('Right icon clicked');
-        }
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/chat_history.js"></script>
 </body>
 
 </html>

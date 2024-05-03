@@ -129,75 +129,7 @@ foreach ($user as $userInfo) {
   <link rel="stylesheet" href="../css/colors/default.css" id="colorSkinCSS">
   <!-- Add these links in the head section of your HTML -->
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <style>
-    .additional-details {
-
-      margin-left: auto 10px;
-
-    }
-
-    .additional-details li {
-      list-style: none;
-      border: 2px solid #ddd;
-      padding: 10px;
-      margin: 10px;
-      border-radius: 50rem;
-      background: #fff;
-      color: #333;
-      transition: background 0.3s ease;
-      width: calc(100% - 32px);
-      font-size: 20px;
-    }
-
-    .additional-details li:hover {
-      background: #f0f0f0;
-    }
-
-    .details {
-      display: none;
-      max-width: 800px;
-      background-color: #fff;
-      border-radius: 2rem;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-      align-items: flex-start;
-      justify-content: center;
-      margin: auto;
-      padding: 20px;
-      transition: box-shadow 0.3s ease;
-      margin: 10px auto;
-      margin-bottom: 20px;
-    }
-
-    .details:hover {
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 1);
-    }
-
-    .edit-details-button {
-      background-color: #3498db;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      margin-top: 20px;
-    }
-
-    .edit-details-button:hover {
-      background: #2980b9;
-      /* Darker blue background on hover */
-    }
-
-    @media (max-width: 990px) {
-      .details {
-        max-width: 420px;
-      }
-    }
-
-    .profile-page .content__avatar {
-      background: #8f6ed5 url("../uploads/profile/<?php echo $photo ?>") center/cover;
-    }
-  </style>
+  <link rel="stylesheet" href="css/profile.css">
 </head>
 
 <body>

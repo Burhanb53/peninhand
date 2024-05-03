@@ -387,7 +387,7 @@ function time_elapsed_string($datetime)
                                         <div class="tipWrap">
                                             <span class="tip"></span>
                                         </div>
-                                        <span class="fill" data-percentage="<?php echo ($pending_answer * 100 / $doubt_count); ?>"></span>
+                                        <span class="fill" data-percentage="<?php echo ROUND($pending_answer * 100 / $doubt_count); ?>"></span>
                                     </div>
                                 </div>
                                 <div class="single_progressbar d-flex">
@@ -396,7 +396,7 @@ function time_elapsed_string($datetime)
                                         <div class="tipWrap">
                                             <span class="tip"></span>
                                         </div>
-                                        <span class="fill" data-percentage="<?php echo ($answer_count * 100 / $doubt_count); ?>"></span>
+                                        <span class="fill" data-percentage="<?php echo ROUND($answer_count * 100 / $doubt_count); ?>"></span>
                                     </div>
                                 </div>
                                 <div class="single_progressbar d-flex">
@@ -405,7 +405,7 @@ function time_elapsed_string($datetime)
                                         <div class="tipWrap">
                                             <span class="tip"></span>
                                         </div>
-                                        <span class="fill" data-percentage="<?php echo ($feedback_count * 100 / $doubt_count); ?>"></span>
+                                        <span class="fill" data-percentage="<?php echo ROUND($feedback_count * 100 / $doubt_count); ?>"></span>
                                     </div>
                                 </div>
                                 <div class="single_progressbar d-flex">
@@ -414,7 +414,7 @@ function time_elapsed_string($datetime)
                                         <div class="tipWrap">
                                             <span class="tip"></span>
                                         </div>
-                                        <span class="fill" data-percentage="<?php echo ($video_call_count * 100 / $doubt_count); ?>"></span>
+                                        <span class="fill" data-percentage="<?php echo ROUND($video_call_count * 100 / $doubt_count); ?>"></span>
                                     </div>
                                 </div>
                             </div>
