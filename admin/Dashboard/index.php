@@ -799,7 +799,7 @@ $dbh = null;
 
         <?php include ('includes/footer.php'); ?>
     </section>
-    <?php include('includes/notes.php'); ?>
+    <?php include ('includes/notes.php'); ?>
 
 
 
