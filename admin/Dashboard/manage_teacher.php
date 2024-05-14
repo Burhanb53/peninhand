@@ -196,6 +196,8 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div> -->
     </section>
+    <?php include('includes/notes.php'); ?>
+
 </body>
 <script>
         document.addEventListener('DOMContentLoaded', function () {

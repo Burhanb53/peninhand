@@ -1,8 +1,8 @@
 <?php
 session_start();
 error_reporting(0);
-include ('../../includes/config.php');
-if (!(isset ($_SESSION['role']) && $_SESSION['role'] == 1)) {
+include('../../includes/config.php');
+if (!(isset($_SESSION['role']) && $_SESSION['role'] == 1)) {
     // User doesn't have the required role, redirect to index.php
     header("Location: ../../index.php");
     exit(); // Make sure to exit after the redirect to prevent further execution
@@ -43,7 +43,7 @@ if (!(isset ($_SESSION['role']) && $_SESSION['role'] == 1)) {
                     <div class="header_notification_warp d-flex align-items-center">
 
                         <li>
-                            <a class="bell_notification_clicker" href="#"> <img src="img/icon/bell.svg" alt>
+                            <a class="bell_notification_clicker" > <img src="img/icon/bell.svg" alt>
                                 <span>
                                     <?php echo $notification_count; ?>
                                 </span>
@@ -53,28 +53,25 @@ if (!(isset ($_SESSION['role']) && $_SESSION['role'] == 1)) {
                                     <h4>Notifications</h4>
                                 </div>
                                 <div class="Notification_body">
-                                    <?php foreach ($notifications as $notification): ?>
+                                    <?php foreach ($notifications as $notification) : ?>
                                         <div class="single_notify d-flex align-items-center">
                                             <div class="notify_thumb">
-                                                <?php if (!empty ($notification['teacher_photo'])): ?>
-                                                    <a href="Pages/chat.php?doubt_id=<?php echo $notification['doubt_id']; ?>"><img
-                                                            src="../../teacher/Dashboard/uploads/profile/<?php echo $notification['teacher_photo']; ?>"
-                                                            alt></a>
-                                                <?php else: ?>
-                                                    <a href="Pages/chat.php?doubt_id=<?php echo $notification['doubt_id']; ?>"><img
-                                                            src="img/profile.jpg" alt></a>
+                                                <?php if (!empty($notification['teacher_photo'])) : ?>
+                                                    <a href="Pages/chat.php?doubt_id=<?php echo $notification['doubt_id']; ?>"><img src="../../teacher/Dashboard/uploads/profile/<?php echo $notification['teacher_photo']; ?>" alt></a>
+                                                <?php else : ?>
+                                                    <a href="Pages/chat.php?doubt_id=<?php echo $notification['doubt_id']; ?>"><img src="img/profile.jpg" alt></a>
                                                 <?php endif; ?>
                                             </div>
                                             <div class="notify_content">
                                                 <a href="Pages/chat.php?doubt_id=<?php echo $notification['doubt_id']; ?>">
-                                                    <?php if (!empty ($notification['teacher_name'])): ?>
+                                                    <?php if (!empty($notification['teacher_name'])) : ?>
                                                         <h5>
                                                             <?php echo $notification['teacher_name']; ?>
                                                         </h5>
                                                         <p>
                                                             <?php echo substr($notification['doubt'], 0, 40); ?>...
                                                         </p> <!-- Displaying the first 40 characters of the doubt -->
-                                                    <?php else: ?>
+                                                    <?php else : ?>
                                                         <h5>
                                                             Teacher not available
                                                         </h5>
@@ -96,11 +93,16 @@ if (!(isset ($_SESSION['role']) && $_SESSION['role'] == 1)) {
                                 </div>
                             </div>
                         </li>
+                        <li>
+                            <a class="CHATBOX_open">
+                                <img src="img/icon/notes.svg" alt />
+                            </a>
+                        </li>
                     </div>
                     <div class="profile_info">
-                        <?php if (!empty ($user['photo'])): ?>
+                        <?php if (!empty($user['photo'])) : ?>
                             <a href="#"><img src="uploads/profile/<?php echo $user['photo']; ?>" alt></a>
-                        <?php else: ?>
+                        <?php else : ?>
                             <a href="#"><img src="img/profile.jpg" alt></a>
                         <?php endif; ?>
                         <div class="profile_info_iner">

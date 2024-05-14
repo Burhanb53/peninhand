@@ -173,6 +173,8 @@ $users = $result->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
         </div>
+    </section>
+    <?php include('includes/notes.php'); ?>
 
         <script src="js/jquery1-3.4.1.min.js"></script>
 

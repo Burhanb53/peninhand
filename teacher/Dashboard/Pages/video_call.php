@@ -51,143 +51,8 @@ $doubts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <link rel="stylesheet" href="../css/style1.css">
 <link rel="stylesheet" href="../css/colors/default.css" id="colorSkinCSS">
-<style>
-    .videocall {
-        display: flex;
-        ;
-        justify-content: center;
-        align-items: center;
-        max-width: 1200px;
-        margin: auto;
-    }
-
-    .form-container {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 300px;
-        text-align: center;
-        margin-right: 10px;
-        margin-top: 20px;
-    }
-
-    .form-container h2 {
-        margin-bottom: 20px;
-        color: #333;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 10px;
-        color: #555;
-    }
-
-    input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        box-sizing: border-box;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-        color: #333;
-        font-size: 20px;
-    }
-
-    button {
-        background-color: #4285f4;
-        color: #fff;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background-color: #357ae8;
-    }
-
-    .call-links {
-        flex-grow: 1;
-        max-height: 400px;
-        overflow-y: scroll;
-
-
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-
-    th,
-    td {
-        border: 1px solid #ddd;
-        padding: 10px;
-        text-align: left;
-        font-size: 15px;
-    }
-
-    td {
-        background-color: #F9F9F9;
-        word-wrap: break-word;
-    }
-
-    th {
-        background-color: #FFFFFF;
-        color: black;
-
-    }
-
-    .copy-btn {
-        padding: 8px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-right: 5px;
-        float: inline-end;
-    }
-
-    @media (max-width: 990px) {
-        .videocall {
-            flex-direction: column;
-            margin: auto 10px;
-        }
-
-        .form-container {
-            margin-bottom: 20px;
-        }
-
-    }
-
-
-
-    .call-links button:hover {
-        background-color: #357ae8;
-    }
-
-    .call-links::-webkit-scrollbar {
-        width: 8px;
-        /* Set the width of the scrollbar */
-    }
-
-    .call-links::-webkit-scrollbar-thumb {
-        background-color: #B9BABA;
-        /* Set the color of the scrollbar thumb */
-        border-radius: 6px;
-        /* Set the border radius of the scrollbar thumb */
-    }
-
-    .call-links::-webkit-scrollbar-track {
-        background-color: #f5f5f5;
-        /* Set the color of the scrollbar track */
-    }
-</style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha384-9aIt2nRpD7/jqTGc8z5p92T6OqN7lKgN8f5dGPI8uZI7TzI7aTS1PbN2C7QyU5s" crossorigin="anonymous">
-
+<link rel="stylesheet" href="css/video_call.css">
 </head>
 
 <body class="crm_body_bg">
@@ -207,10 +72,10 @@ $doubts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <button type="button" onclick="joinVideoCall()">Join Video Call</button>
                 </form>
             </div>
-            <div class="table" style="flex: 1;">
+            <div class="table">
                 <div style="display:flex; ">
                     <h2 style="margin-right: 20px;">Video Call Links</h2>
-                    <button type="button" onclick="joinVideoCall()" style="border-radius: 10px; ">Create Link</button>
+                    <!-- <button type="button" onclick="joinVideoCall()" style="border-radius: 10px; ">Create Link</button> -->
                 </div>
                 <div class="call-links">
                     <?php
@@ -301,6 +166,8 @@ $doubts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <?php include('../includes/footer.php'); ?>
     </section>
+    <?php include('../includes/notes.php'); ?>
+
     <script>
         function copyToClipboard(text) {
             // Create a temporary input element

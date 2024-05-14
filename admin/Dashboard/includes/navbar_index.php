@@ -1,3 +1,16 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    // Start the session
+    session_start();
+}
+error_reporting(0);
+include('../../../includes/config.php');
+if (!(isset($_SESSION['role']) && $_SESSION['role'] == 3)) {
+    // User doesn't have the required role, redirect to index.php
+    header("Location: ../index.php");
+    exit(); // Make sure to exit after the redirect to prevent further execution
+}
+?>
 <div class="container-fluid g-0">
 
     <div class="row">
@@ -8,10 +21,15 @@
                 </div>
                 <div style="margin-left: auto;" class="header_right d-flex justify-content-between align-items-center">
                     <div class="header_notification_warp d-flex align-items-center">
-                        <li>
+                        
+                        <li style="margin-right: 10px;">
                             <h3>Admin Dashboard</h3>
                         </li>
-                        
+                        <li>
+                            <a class="CHATBOX_open">
+                                <img src="img/icon/notes.svg" alt />
+                            </a>
+                        </li>
                     </div>
                     <div class="profile_info">
                         <?php if (!empty($user['photo'])) : ?>
@@ -20,7 +38,7 @@
                             <a href="#"><img src="img/profile.jpg" alt></a>
                         <?php endif; ?>
                         <div class="profile_info_iner">
-                            
+
                             <div class="profile_info_details">
                                 <a href="../../auth/logout.php">Log Out </a>
                             </div>

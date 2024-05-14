@@ -85,112 +85,7 @@ if (isset($_GET['id'])) {
     <link rel="stylesheet" href="../css/colors/default.css" id="colorSkinCSS">
     <!-- Add these links in the head section of your HTML -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <style>
-        .additional-details {
-            margin-left: auto;
-            margin-right: 10px;
-            max-width: 800px;
-            align-content: center;
-            justify-content: center;
-            margin: 10px auto;
-        }
-
-        .additional-details li {
-            border: 2px solid #ddd;
-            padding: 15px;
-            margin: 30px;
-            border-radius: 5rem;
-            background: #fff;
-            color: #333;
-            transition: background 0.3s ease;
-            width: calc(100% - 32px);
-            font-size: 20px;
-            position: relative;
-        }
-
-        .additional-details li::before {
-            content: attr(data-label);
-            position: absolute;
-            top: -20px;
-            left: 20%;
-            transform: translateX(-50%);
-            background: #fff;
-            padding: 5px 10px;
-            font-size: 16px;
-            color: #555;
-            border: 2px solid #ddd;
-            border-radius: 5rem;
-        }
-
-        .additional-details li:hover {
-            background: #f0f0f0;
-        }
-
-        .details {
-            display: flex;
-            flex-direction: column;
-            max-width: 800px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            align-items: flex-start;
-            justify-content: center;
-            margin: auto;
-            padding: 20px;
-            transition: box-shadow 0.3s ease;
-            margin: 10px auto;
-        }
-
-        .details:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        }
-
-        .edit-details-button {
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            margin-top: 20px;
-            align-self: flex-end;
-            margin-left: 20px;
-        }
-
-        .edit-details-button:hover {
-            background: #2980b9;
-        }
-
-        h2 {
-            margin-left: 20px;
-        }
-
-        @media (max-width: 990px) {
-            .details {
-                max-width: 420px;
-            }
-
-            .additional-details li::before {
-                left: 20%;
-                font-size: 15px;
-            }
-        }
-
-        .styled-input {
-            border: none;
-            background: none;
-            outline: none;
-            font-family: inherit;
-            font-size: inherit;
-            color: inherit;
-            padding: 0;
-            margin: 0;
-            width: 100%;
-            /* Adjust the width as needed */
-            display: inline;
-        }
-    </style>
+    <link rel="stylesheet" href="css/edit_profile.css">
 
 </head>
 
@@ -245,6 +140,7 @@ if (isset($_GET['id'])) {
         </main>
         <?php include('../includes/footer.php'); ?>
     </section>
+    <?php include('../includes/notes.php'); ?>
 
     <!-- Script JS -->
     <script src="./js/script.js"></script>

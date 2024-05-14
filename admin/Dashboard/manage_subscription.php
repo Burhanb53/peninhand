@@ -1,4 +1,17 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    // Start the session
+    session_start();
+}
+error_reporting(0);
+include('../../../includes/config.php');
+if (!(isset($_SESSION['role']) && $_SESSION['role'] == 3)) {
+    // User doesn't have the required role, redirect to index.php
+    header("Location: ../index.php");
+    exit(); // Make sure to exit after the redirect to prevent further execution
+}
+?>
+<?php
 session_start();
 error_reporting(0);
 include('includes/config.php');
@@ -299,6 +312,8 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
 
 
     </section>
+    <?php include('includes/notes.php'); ?>
+
     <div id="addPopup" class="popup">
         <div class="popup-content">
             <span class="close" onclick="hideAddPopup()">&times;</span>
