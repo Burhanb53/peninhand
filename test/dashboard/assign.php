@@ -257,37 +257,10 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
                                 <!-- DATA TABLE -->
                                 <h3 class="title-5 m-b-35">data table</h3>
                                 <div class="table-data__tool">
-                                    <div class="table-data__tool-left">
-                                        <div class="rs-select2--light rs-select2--md">
-                                            <select class="js-select2" name="property">
-                                                <option selected="selected">All Properties</option>
-                                                <option value="">Option 1</option>
-                                                <option value="">Option 2</option>
-                                            </select>
-                                            <div class="dropDownSelect2"></div>
-                                        </div>
-                                        <div class="rs-select2--light rs-select2--sm">
-                                            <select class="js-select2" name="time">
-                                                <option selected="selected">Today</option>
-                                                <option value="">3 Days</option>
-                                                <option value="">1 Week</option>
-                                            </select>
-                                            <div class="dropDownSelect2"></div>
-                                        </div>
-                                        <button class="au-btn-filter">
-                                            <i class="zmdi zmdi-filter-list"></i>filters</button>
-                                    </div>
+                                    
                                     <div class="table-data__tool-right">
-                                        <button class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                            <i class="zmdi zmdi-plus"></i>add item</button>
-                                        <div class="rs-select2--dark rs-select2--sm rs-select2--dark2">
-                                            <select class="js-select2" name="type">
-                                                <option selected="selected">Export</option>
-                                                <option value="">Option 1</option>
-                                                <option value="">Option 2</option>
-                                            </select>
-                                            <div class="dropDownSelect2"></div>
-                                        </div>
+                                <button onclick="printTable()" class="btn btn-primary">Print Table</button>
+                                        
                                     </div>
                                 </div>
 
@@ -344,38 +317,19 @@ $doubts = $result->fetchAll(PDO::FETCH_ASSOC);
 
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const searchInput = document.getElementById("searchInput");
-            const dataTable = document.getElementById("dataTable");
-
-            searchInput.addEventListener("input", function () {
-                const searchValue = searchInput.value.trim().toLowerCase();
-                const rows = dataTable.getElementsByTagName("tr");
-
-                for (let i = 1; i < rows.length; i++) { // Start loop from index 1 to skip header row
-                    const row = rows[i];
-                    const cells = row.getElementsByTagName("td");
-                    let found = false;
-
-                    for (let cell of cells) {
-                        if (cell.textContent.toLowerCase().includes(searchValue)) {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (searchValue === "") {
-                        row.style.display = ""; // Show the row if search is empty
-                        row.style.backgroundColor = ""; // Remove background color
-                    } else if (found) {
-                        row.style.display = ""; // Show the row if it matches search
-                        // row.style.backgroundColor = "yellow"; // Highlight matching rows
-                    } else {
-                        row.style.display = "none"; // Hide rows that don't match search
-                    }
-                }
-            });
-        });
+        function printTable() {
+            var printContents = document.getElementById("dataTable");
+            var originalContents = document.body.innerHTML;
+            var printWindow = window.open('', '', 'height=600,width=800');
+            printWindow.document.write('<html><head><title>All Teacher</title></head><body>');
+            // printWindow.document.write('<h1>Table Contents</h1>');
+            printWindow.document.write(printContents.outerHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+            printWindow.close();
+            document.body.innerHTML = originalContents;
+        }
     </script>
     <!-- Jquery JS-->
     <script src="vendor/jquery-3.2.1.min.js"></script>
