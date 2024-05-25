@@ -146,6 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Store email in session for verification
         $_SESSION['forgot_password_email'] = $email;
+        $_SESSION['from_forgot_password'] = true;
 
         // Redirect to OTP verification page
         header("Location: ../Pages/otp_verification.php");

@@ -19,11 +19,11 @@ session_start();
             height: 100vh;
         }
         .container {
-            max-width: 600px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            max-width: 400px;
+            padding: 40px;
+            border-radius: 10px;
             background-color: #fff;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
         }
         .form-group {
             margin-bottom: 20px;
@@ -35,19 +35,24 @@ session_start();
         input[type="email"],
         input[type="submit"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ccc;
-            border-radius: 3px;
+            border-radius: 5px;
             box-sizing: border-box; /* Ensure padding is included in the width */
         }
         input[type="submit"] {
             background-color: #007bff;
             color: #fff;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
         }
         .error {
             color: red;
             font-weight: bold;
+            margin-top: 10px;
         }
     </style>
 </head>

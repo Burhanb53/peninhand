@@ -62,6 +62,4 @@
     }
   }
 
-  .profile-page .content__avatar {
-    background: #8f6ed5 url("../uploads/profile/<?php echo $photo ?>") center/cover;
-  }
+  

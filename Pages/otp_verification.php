@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['from_forgot_password']) || !$_SESSION['from_forgot_password']) {
+    header("Location: forgot_password.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,12 +26,11 @@ session_start();
 
         .container {
             width: 80%;
-            /* Adjust width as needed */
             max-width: 600px;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 10px;
             background-color: #fff;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
@@ -42,18 +45,40 @@ session_start();
             padding: 10px;
             margin: 5px;
             border: 1px solid #ccc;
-            border-radius: 3px;
+            border-radius: 5px;
             text-align: center;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #007bff;
         }
 
         input[type="submit"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background-color: #007bff;
             color: #fff;
             border: none;
-            border-radius: 3px;
+            border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -62,7 +87,7 @@ session_start();
     <div class="container">
         <h2>Enter OTP</h2>
         <?php if (isset($_SESSION['otp_error'])) : ?>
-            <div style="color: red;"><?php echo $_SESSION['otp_error']; ?></div>
+            <div class="error"><?php echo $_SESSION['otp_error']; ?></div>
             <?php unset($_SESSION['otp_error']); ?> <!-- Clear the error message -->
         <?php endif; ?>
         <form id="otpForm" method="post" action="../auth/otp_verification.php">
