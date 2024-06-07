@@ -29,8 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query->execute();
 
         if ($query->rowCount() > 0) {
-            
+            $_SESSION['from_reset_password'] = true;
             header("Location: ../Pages/reset_password.php");
+            
             exit();
         } else {
             $_SESSION['otp_error'] = "Invalid OTP. Please try again.";

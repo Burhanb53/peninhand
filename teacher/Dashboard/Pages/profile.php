@@ -127,7 +127,11 @@ foreach ($user as $userInfo) {
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="css/profile.css">
 </head>
-
+<style>
+  .profile-page .content__avatar {
+    background: #8f6ed5 url("../uploads/profile/<?php echo $photo ?>") center/cover;
+  }
+</style>
 <body>
   <?php include('../includes/sidebar.php'); ?>
   <section class="main_content dashboard_part">

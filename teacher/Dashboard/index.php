@@ -45,7 +45,7 @@ if (!(isset($_SESSION['role']) && $_SESSION['role'] == 2)) {
     $feedback_row = $stmt_feedback->fetch(PDO::FETCH_ASSOC);
     $feedback_count = $feedback_row['feedback_count'];
 
-    $stmt_answer = $dbh->prepare("SELECT COUNT(*) AS answer_count FROM doubt WHERE teacher_id = :teacher_id AND feedback = 1");
+    $stmt_answer = $dbh->prepare("SELECT COUNT(*) AS answer_count FROM doubt WHERE teacher_id = :teacher_id AND doubt_submit = 1");
     $stmt_answer->bindParam(':teacher_id', $teacher_id);
     $stmt_answer->execute();
     $answer_row = $stmt_answer->fetch(PDO::FETCH_ASSOC);

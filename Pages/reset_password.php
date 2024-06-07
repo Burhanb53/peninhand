@@ -1,7 +1,10 @@
 <?php
 require_once "../includes/config.php";
 session_start();
-
+if (!isset($_SESSION['from_reset_password']) || !$_SESSION['from_reset_password']) {
+    header("Location: forgot_password.php");
+    exit();
+}
 // Initialize the error_message variable
 $error_message = "";
 
