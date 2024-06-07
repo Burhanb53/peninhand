@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         setcookie('user_id', $_SESSION['user_id'], time() + 259200, '/', '', false, true);
                         setcookie('email', $_SESSION['email'], time() + 259200, '/', '', false, true);
                         setcookie('role', $_SESSION['role'], time() + 259200, '/', '', false, true);
-                        header("Location: ../admin/Dashboard/index.php");
+                        header("Location: ../test/Dashboard/index.php");
                         exit();
                     case 4:
                         setcookie('user_id', $_SESSION['user_id'], time() + 259200, '/', '', false, true);
