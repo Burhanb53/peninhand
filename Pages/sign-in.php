@@ -122,7 +122,7 @@ include('includes/config.php');
                                         </a>
                                     </div>
                                     <div class="account-bottom-text">
-                                        <p>Don’t have an account ? <a href="sign-up.php">Sign Up for free</a></p>
+                                        <p>Don't have an account ? <a href="sign-up.php">Sign Up for free</a></p>
                                     </div>
                                 </div>
                             </div>

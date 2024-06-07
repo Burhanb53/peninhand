@@ -1,7 +1,7 @@
 <?php
 session_start();
 error_reporting(0);
-include('includes/config.php');
+include ('includes/config.php');
 
 $sql = "SELECT * FROM teacher";
 $result = $dbh->query($sql);
@@ -12,8 +12,8 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
 <html lang="zxx">
 
 <head>
-<!-- Required meta tags-->
-<meta charset="UTF-8">
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="au theme template">
     <meta name="author" content="Hau Nguyen">
@@ -42,7 +42,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Main CSS-->
     <link href="css/theme.css" rel="stylesheet" media="all">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         .card {
             width: 100%;
@@ -61,6 +61,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
 
         .syntax {
             flex-grow: 1;
+            
             /* Allow the syntax section to grow and take up remaining space */
         }
 
@@ -249,139 +250,158 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 
-<body class="crm_body_bg">
-<!-- HEADER MOBILE-->
-<?php include ('includes/navbar.php'); ?>
+<body >
+    <div class="page-wrapper">
+        <!-- HEADER MOBILE-->
+        <?php include ('includes/navbar.php'); ?>
+        <?php include ('includes/sidebar.php'); ?>
+        <!-- END HEADER MOBILE-->
 
-<!-- END HEADER MOBILE-->
+        <!-- PAGE CONTAINER-->
+        <div class="page-container">
+            <!-- MAIN CONTENT-->
+            <div class="main-content">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <section>
 
-<!-- MENU SIDEBAR-->
-<?php include ('includes/sidebar.php'); ?>
-<!-- END MENU SIDEBAR-->
-    <section class="main_content dashboard_part">
+                            <div>
+                                <!-- Scenario: Mail Student Whose Subscription is Ended -->
+                                <div class="card ended-subscription">
+                                    <div class="content">
+                                        <!-- Syntax for Subscription Ended Mail -->
+                                        <div class="syntax">
+                                            <h2>Mail Student Whose Subscription is Ended</h2>
+                                            <p>Your subscription has ended. Please renew your subscription to continue
+                                                accessing our
+                                                services.</p>
+                                        </div>
+                                        <!-- Send Mail Button -->
+                                        <button class="send-mail-btn">Send Mail</button>
+                                    </div>
+                                </div>
 
-        <div class="main_content_iner p-2">
-            <!-- Scenario: Mail Student Whose Subscription is Ended -->
-            <div class="card ended-subscription">
-                <div class="content">
-                    <!-- Syntax for Subscription Ended Mail -->
-                    <div class="syntax">
-                        <h2>Mail Student Whose Subscription is Ended</h2>
-                        <p>Your subscription has ended. Please renew your subscription to continue accessing our services.</p>
+                                <!-- Scenario: Mail Subscription Going to End in Under 10 Days -->
+                                <div class="card ending-subscription">
+                                    <div class="content">
+                                        <!-- Syntax for Subscription Ending Soon Mail -->
+                                        <div class="syntax">
+                                            <h2>Mail Subscription Going to End</h2>
+                                            <p>Your subscription is going to end in under 10 days. Renew your
+                                                subscription now to avoid
+                                                interruption.</p>
+                                        </div>
+                                        <!-- Send Mail Button -->
+                                        <button class="send-mail-btn">Send Mail</button>
+                                    </div>
+                                </div>
+
+                                <!-- Scenario: Mail Users Who Don't Have Subscription -->
+                                <div class="card no-subscription">
+                                    <div class="content">
+                                        <!-- Syntax for No Subscription Mail -->
+                                        <div class="syntax">
+                                            <h2>Mail Users Without Subscription</h2>
+                                            <p>You are currently not subscribed to our services. Subscribe now to enjoy
+                                                exclusive benefits.
+                                            </p>
+                                        </div>
+                                        <!-- Send Mail Button -->
+                                        <button class="send-mail-btn">Send Mail</button>
+                                    </div>
+                                </div>
+
+                                <!-- Scenario: Mail Teachers Frequently Declining Doubts -->
+                                <div class="card frequent-declining">
+                                    <div class="content">
+                                        <!-- Syntax for Frequent Declining Doubts Mail -->
+                                        <div class="syntax">
+                                            <h2>Mail Teachers Frequently Declining Doubts</h2>
+                                            <p>Your response rate to student doubts is lower than expected. Please
+                                                ensure timely assistance
+                                                to students.</p>
+                                        </div>
+                                        <!-- Send Mail Button -->
+                                        <button class="send-btn" onclick="showTeacherSelection()">Send Mail</button>
+                                    </div>
+                                </div>
+
+                                <!-- Scenario: Send Monthly Report to Students -->
+                                <div class="card monthly-report-student">
+                                    <div class="content">
+                                        <!-- Syntax for Monthly Report to Students -->
+                                        <div class="syntax">
+                                            <h2>Send Monthly Report to Students</h2>
+                                            <p>Here is your monthly report summarizing your academic progress and
+                                                performance. Review it for
+                                                insights.</p>
+                                        </div>
+                                        <!-- Send Mail Button -->
+                                        <button class="send-mail-btn">Send Mail</button>
+                                    </div>
+                                </div>
+
+                                <!-- Scenario: Send Monthly Report to Teachers -->
+                                <div class="card monthly-report-teacher">
+                                    <div class="content">
+                                        <!-- Syntax for Monthly Report to Teachers -->
+                                        <div class="syntax">
+                                            <h2>Send Monthly Report to Teachers</h2>
+                                            <p>Here is the monthly report summarizing your teaching activities and
+                                                student interactions.
+                                                Review it for insights.</p>
+                                        </div>
+                                        <!-- Send Mail Button -->
+                                        <button class="send-mail-btn">Send Mail</button>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <!-- Teacher Selection Modal -->
+                            <div id="teacherSelectionModal" class="modal">
+                                <div class="modal-content">
+                                    <span class="close" onclick="closeTeacherSelectionModal()">&times;</span>
+                                    <form id="teacherSelectionForm">
+                                        <!-- Teacher options will be added here dynamically -->
+                                    </form>
+                                    <button type="button" onclick="senddecliningEmails()">Send Emails</button>
+                                </div>
+                            </div>
+
+                            <div id="loader-container">
+                                <div id="loader"></div>
+                            </div>
+
+                            <!-- <div id="buffering-message">
+    <p>Sending...</p>
+</div> -->
+
                     </div>
-                    <!-- Send Mail Button -->
-                    <button class="send-mail-btn">Send Mail</button>
                 </div>
             </div>
-
-            <!-- Scenario: Mail Subscription Going to End in Under 10 Days -->
-            <div class="card ending-subscription">
-                <div class="content">
-                    <!-- Syntax for Subscription Ending Soon Mail -->
-                    <div class="syntax">
-                        <h2>Mail Subscription Going to End</h2>
-                        <p>Your subscription is going to end in under 10 days. Renew your subscription now to avoid interruption.</p>
-                    </div>
-                    <!-- Send Mail Button -->
-                    <button class="send-mail-btn">Send Mail</button>
-                </div>
-            </div>
-
-            <!-- Scenario: Mail Users Who Don't Have Subscription -->
-            <div class="card no-subscription">
-                <div class="content">
-                    <!-- Syntax for No Subscription Mail -->
-                    <div class="syntax">
-                        <h2>Mail Users Without Subscription</h2>
-                        <p>You are currently not subscribed to our services. Subscribe now to enjoy exclusive benefits.</p>
-                    </div>
-                    <!-- Send Mail Button -->
-                    <button class="send-mail-btn">Send Mail</button>
-                </div>
-            </div>
-
-            <!-- Scenario: Mail Teachers Frequently Declining Doubts -->
-            <div class="card frequent-declining">
-                <div class="content">
-                    <!-- Syntax for Frequent Declining Doubts Mail -->
-                    <div class="syntax">
-                        <h2>Mail Teachers Frequently Declining Doubts</h2>
-                        <p>Your response rate to student doubts is lower than expected. Please ensure timely assistance to students.</p>
-                    </div>
-                    <!-- Send Mail Button -->
-                    <button class="send-btn" onclick="showTeacherSelection()">Send Mail</button>
-                </div>
-            </div>
-
-            <!-- Scenario: Send Monthly Report to Students -->
-            <div class="card monthly-report-student">
-                <div class="content">
-                    <!-- Syntax for Monthly Report to Students -->
-                    <div class="syntax">
-                        <h2>Send Monthly Report to Students</h2>
-                        <p>Here is your monthly report summarizing your academic progress and performance. Review it for insights.</p>
-                    </div>
-                    <!-- Send Mail Button -->
-                    <button class="send-mail-btn">Send Mail</button>
-                </div>
-            </div>
-
-            <!-- Scenario: Send Monthly Report to Teachers -->
-            <div class="card monthly-report-teacher">
-                <div class="content">
-                    <!-- Syntax for Monthly Report to Teachers -->
-                    <div class="syntax">
-                        <h2>Send Monthly Report to Teachers</h2>
-                        <p>Here is the monthly report summarizing your teaching activities and student interactions. Review it for insights.</p>
-                    </div>
-                    <!-- Send Mail Button -->
-                    <button class="send-mail-btn">Send Mail</button>
-                </div>
-            </div>
-
-
-        </div>
-
-        <!-- Teacher Selection Modal -->
-        <div id="teacherSelectionModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeTeacherSelectionModal()">&times;</span>
-                <form id="teacherSelectionForm">
-                    <!-- Teacher options will be added here dynamically -->
-                </form>
-                <button type="button" onclick="senddecliningEmails()">Send Emails</button>
-            </div>
-        </div>
-
-        <div id="loader-container">
-            <div id="loader"></div>
-        </div>
-
-        <!-- <div id="buffering-message">
-            <p>Sending...</p>
-        </div> -->
-
-        </div>
-        </div>
-        </div>
         </div>
 
 
-    </section>
-    <?php include('includes/notes.php'); ?>
+        </section>
+        <?php include ('includes/notes.php'); ?>
 
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const cards = document.querySelectorAll(".card");
-            const colors = ["#FF6F61", "#6B5B95", "#88B04B", "#92A8D1", "#955251", "#B565A7", "#009B77", "#DD4124", "#D65076"];
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const cards = document.querySelectorAll(".card");
+                const colors = ["#FF6F61", "#6B5B95", "#88B04B", "#92A8D1", "#955251", "#B565A7", "#009B77", "#DD4124", "#D65076"];
 
-            cards.forEach((card, index) => {
-                const color = colors[index % colors.length]; // Assign color from the array based on index
-                card.style.backgroundColor = color; // Set background color of the card
+                cards.forEach((card, index) => {
+                    const color = colors[index % colors.length]; // Assign color from the array based on index
+                    card.style.backgroundColor = color; // Set background color of the card
+                });
             });
-        });
-    </script>
+        </script>
+</div>
+</div>
+</div>
 
 
 
@@ -430,14 +450,14 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
 <script src="js/custom.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Get all "Send Mail" buttons
         var sendMailBtns = document.querySelectorAll('.send-mail-btn');
 
         // Loop through each button
-        sendMailBtns.forEach(function(btn) {
+        sendMailBtns.forEach(function (btn) {
             // Add click event listener
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 // Get the parent card's class
                 var cardClass = btn.closest('.card').classList[1]; // Assumes each card has only one additional class
 
@@ -452,7 +472,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
                     data: {
                         cardType: cardClass
                     },
-                    success: function(response) {
+                    success: function (response) {
                         // Hide loader and buffering message
                         hideLoader();
                         hideBufferingMessage();
@@ -460,7 +480,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
                         // Show success message or handle response
                         alert("Mail sent successfully!");
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         // Hide loader and buffering message
                         hideLoader();
                         hideBufferingMessage();
@@ -503,7 +523,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
         $.ajax({
             type: 'GET',
             url: 'backend/fetch_teachers.php',
-            success: function(response) {
+            success: function (response) {
                 // Parse the JSON response
                 var teachers = JSON.parse(response);
 
@@ -519,33 +539,33 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
                 form.appendChild(heading);
 
                 // Loop through each teacher in the response and create an option element for each one
-                teachers.forEach(function(teacher) {
+                teachers.forEach(function (teacher) {
                     // Create a checkbox element for the teacher
                     var checkbox = document.createElement('input');
                     checkbox.type = 'checkbox';
                     checkbox.name = 'teachers[]';
-                    checkbox.value = teacher.email; 
+                    checkbox.value = teacher.email;
 
                     // Create a label for the checkbox
                     var label = document.createElement('label');
                     label.textContent = teacher.name + ' (' + teacher.email + ')';
 
                     // Add inline CSS styles to the label
-                    label.style.display = 'block'; 
-                    label.style.marginBottom = '10px'; 
+                    label.style.display = 'block';
+                    label.style.marginBottom = '10px';
 
                     // Create a span for spacing between checkbox and label text
                     var span = document.createElement('span');
-                    span.textContent = '\u00A0'; 
+                    span.textContent = '\u00A0';
 
                     // Append the checkbox, span, and label to the form
                     label.appendChild(checkbox);
-                    label.appendChild(span); 
+                    label.appendChild(span);
                     form.appendChild(label);
                 });
 
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('Error fetching teachers:', error);
             }
         });
@@ -564,7 +584,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
         var form = document.getElementById('teacherSelectionForm');
         var selectedTeachers = [];
         var checkboxes = form.querySelectorAll('input[type="checkbox"]:checked');
-        checkboxes.forEach(function(checkbox) {
+        checkboxes.forEach(function (checkbox) {
             selectedTeachers.push({
                 name: checkbox.getAttribute('data-name'),
                 email: checkbox.value
@@ -579,7 +599,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
             data: {
                 teachers: selectedTeachers
             },
-            success: function(response) {
+            success: function (response) {
                 // Handle success response
                 // Hide loader and buffering message
                 hideLoader();
@@ -587,7 +607,7 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
                 // Show success message or handle response
                 alert("Mail sent successfully!");
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 // Hide loader and buffering message
                 hideLoader();
                 hideBufferingMessage();
@@ -601,29 +621,29 @@ $teachers = $result->fetchAll(PDO::FETCH_ASSOC);
     }
 </script>
 
-    <!-- Jquery JS-->
-    <script src="vendor/jquery-3.2.1.min.js"></script>
-    <!-- Bootstrap JS-->
-    <script src="vendor/bootstrap-4.1/popper.min.js"></script>
-    <script src="vendor/bootstrap-4.1/bootstrap.min.js"></script>
-    <!-- Vendor JS       -->
-    <script src="vendor/slick/slick.min.js">
-    </script>
-    <script src="vendor/wow/wow.min.js"></script>
-    <script src="vendor/animsition/animsition.min.js"></script>
-    <script src="vendor/bootstrap-progressbar/bootstrap-progressbar.min.js">
-    </script>
-    <script src="vendor/counter-up/jquery.waypoints.min.js"></script>
-    <script src="vendor/counter-up/jquery.counterup.min.js">
-    </script>
-    <script src="vendor/circle-progress/circle-progress.min.js"></script>
-    <script src="vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="vendor/chartjs/Chart.bundle.min.js"></script>
-    <script src="vendor/select2/select2.min.js">
-    </script>
+<!-- Jquery JS-->
+<script src="vendor/jquery-3.2.1.min.js"></script>
+<!-- Bootstrap JS-->
+<script src="vendor/bootstrap-4.1/popper.min.js"></script>
+<script src="vendor/bootstrap-4.1/bootstrap.min.js"></script>
+<!-- Vendor JS       -->
+<script src="vendor/slick/slick.min.js">
+</script>
+<script src="vendor/wow/wow.min.js"></script>
+<script src="vendor/animsition/animsition.min.js"></script>
+<script src="vendor/bootstrap-progressbar/bootstrap-progressbar.min.js">
+</script>
+<script src="vendor/counter-up/jquery.waypoints.min.js"></script>
+<script src="vendor/counter-up/jquery.counterup.min.js">
+</script>
+<script src="vendor/circle-progress/circle-progress.min.js"></script>
+<script src="vendor/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="vendor/chartjs/Chart.bundle.min.js"></script>
+<script src="vendor/select2/select2.min.js">
+</script>
 
-    <!-- Main JS-->
-    <script src="js/main.js"></script>
+<!-- Main JS-->
+<script src="js/main.js"></script>
 
 </body>
 
