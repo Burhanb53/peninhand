@@ -95,7 +95,7 @@ session_start();
                                 echo '            <a href="../teacher/Dashboard/index.php">Dashboard</a>';
                                 echo '            <a href="../auth/logout.php">Logout</a>';
                             } elseif ($userRole == 3) {
-                                echo '            <a href="../admin/Dashboard/index.php">Dashboard</a>';
+                                echo '            <a href="../test/Dashboard/index.php">Dashboard</a>';
                                 echo '            <a href="../auth/logout.php">Logout</a>';
                             } elseif ($userRole == 4) {
                                 echo '            <a href="../parent/Dashboard/index.php">Dashboard</a>';
