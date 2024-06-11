@@ -452,7 +452,7 @@ function time_elapsed_string($datetime)
                             <form id="questionForm" action="backend/submit_doubt.php" method="post" enctype="multipart/form-data">
                                 <div class="question-box">
                                     <input type="text" name="doubt_category" value="General Doubt" hidden>
-                                    <input type="text" id="doubt" name="doubt" placeholder="What's your question?">
+                                    <input type="text" id="doubt" name="doubt" placeholder="What's your question?" required>
                                     <div class="icons">
                                         <label for="upload" class="icon-button">
                                             <i class="fas fa-image"></i>
