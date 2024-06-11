@@ -2,8 +2,8 @@
 session_start();
 error_reporting(0);
 $page_url = "index.php";
-include ('../../includes/config.php');
-if (!(isset ($_SESSION['role']) && $_SESSION['role'] == 1)) {
+include('../../includes/config.php');
+if (!(isset($_SESSION['role']) && $_SESSION['role'] == 1)) {
     // User doesn't have the required role, redirect to index.php
     header("Location: ../../index.php");
     exit(); // Make sure to exit after the redirect to prevent further execution
@@ -139,6 +139,12 @@ function time_elapsed_string($datetime)
 
     <link rel="stylesheet" href="css/style1.css">
     <link rel="stylesheet" href="css/colors/default.css" id="colorSkinCSS">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/mathlive/dist/mathlive-static.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
     <style>
         .round-card {
             width: 12rem;
@@ -215,19 +221,207 @@ function time_elapsed_string($datetime)
             cursor: pointer;
             font-size: 14px;
         }
-    </style>
 
+        .outer-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+
+        }
+
+        .centered-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .question-box {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            width: 90%;
+            width: 900px;
+            height: 100px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            border: none;
+            outline: none;
+            padding: 10px;
+            border-radius: 5px;
+            flex-grow: 1;
+            font-size: 16px;
+            color: #333;
+            border: 2px solid orange;
+            border-radius: 5px;
+            height: 100%;
+            margin-right: 20px;
+        }
+
+        input[type="text"]::placeholder {
+            color: #999;
+        }
+
+        .icons {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-left: 10px;
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #999;
+        }
+
+        .icon-button.arrow {
+            font-size: 18px;
+            color: white;
+            background-color: #999;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #image-container {
+            margin: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .question-box {
+                /* flex-direction: column; */
+                height: auto;
+            }
+
+            .icons {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+
+            .icon-button {
+                font-size: 24px;
+            }
+
+            .icon-button.arrow {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .question-box {
+                width: 100%;
+            }
+
+            input[type="text"] {
+                font-size: 14px;
+            }
+
+            .icon-button {
+                font-size: 20px;
+            }
+
+            .icon-button.arrow {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+    <style>
+        #loader-container {
+            display: none;
+            position: fixed;
+            z-index: 9000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        #loader {
+            position: absolute;
+            top: 50%;
+            left: 45%;
+            transform: translate(-50%, -50%);
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        /* Center loader in mobile view */
+        @media only screen and (max-width: 768px) {
+            #loader-container {
+                display: none;
+                position: fixed;
+                z-index: 9000;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(255, 255, 255, 0.5);
+            }
+
+            #loader {
+                position: absolute;
+                transform: none;
+                left: 35%;
+
+            }
+        }
+
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 8px 16px;
+            z-index: 9999;
+            width: auto;
+            border-radius: 4px;
+        }
+    </style>
 
 </head>
 
 <body class="crm_body_bg">
 
 
-    <?php include ('includes/sidebar_index.php'); ?>
+    <?php include('includes/sidebar_index.php'); ?>
 
     <section class="main_content dashboard_part">
 
-        <?php include ('includes/navbar_index.php'); ?>
+        <?php include('includes/navbar_index.php'); ?>
 
         <div class="main_content_iner ">
             <div class="container-fluid p-0 sm_padding_15px">
@@ -248,8 +442,32 @@ function time_elapsed_string($datetime)
                             </div>
                         </div>
                     </div>
-                    <div class="container text-center">
-                        <!-- Card 1: No. of Questions Asked -->
+                    <div id="notification"></div>
+
+                    <div id="loader-container">
+                        <div id="loader"></div>
+                    </div>
+                    <div class="outer-container">
+                        <div class="centered-box">
+                            <form id="questionForm" action="backend/submit_doubt.php" method="post" enctype="multipart/form-data">
+                                <div class="question-box">
+                                    <input type="text" name="doubt_category" value="General Doubt" hidden>
+                                    <input type="text" id="doubt" name="doubt" placeholder="What's your question?">
+                                    <div class="icons">
+                                        <label for="upload" class="icon-button">
+                                            <i class="fas fa-image"></i>
+                                            <input type="file" id="upload" name="file" style="display: none;">
+                                        </label>
+                                        <button type="button" class="icon-button arrow">
+                                            <i class="fas fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div id="image-container"></div>
+                        </div>
+                    </div>
+                    <!-- <div class="container text-center">
                         <div class="col-lg-3 col-md-3 col-sm-6 mb-12 d-inline-block align-top">
                             <div class="round-card box_shadow position-relative mb_30 blue_bg">
                                 <div class="count-wrapper">
@@ -259,7 +477,6 @@ function time_elapsed_string($datetime)
                             </div>
                         </div>
 
-                        <!-- Card 2: No. of Answers Received -->
                         <div class="col-lg-3 col-md-3 col-sm-6 mb-12 d-inline-block align-top">
                             <div class="round-card box_shadow position-relative mb_30 orange_bg">
                                 <div class="count-wrapper">
@@ -269,7 +486,6 @@ function time_elapsed_string($datetime)
                             </div>
                         </div>
 
-                        <!-- Card 3: No. of Video Calls Attended -->
                         <div class="col-lg-3 col-md-3 col-sm-6 mb-12 d-inline-block align-top">
                             <div class="round-card box_shadow position-relative mb_30 green_bg">
                                 <div class="count-wrapper">
@@ -278,7 +494,7 @@ function time_elapsed_string($datetime)
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="col-lg-4">
                         <div class="white_box QA_section card_height_100 blud_card">
@@ -307,14 +523,14 @@ function time_elapsed_string($datetime)
                                     <h3 class="m-0">Recent Doubts</h3>
                                 </div>
                                 <div class="ask-doubt-btn-container" style="display: inline-flex;">
-                                    <a href="Pages/ask_doubt.php" >
+                                    <a href="Pages/ask_doubt.php">
                                         <button class="ask-doubt-btn">Ask Doubt</button>
                                     </a>
                                 </div>
                             </div>
                             <div class="Activity_timeline">
                                 <ul>
-                                    <?php foreach ($doubts as $doubt): ?>
+                                    <?php foreach ($doubts as $doubt) : ?>
                                         <li>
                                             <div class="activity_bell"></div>
                                             <div class="timeLine_inner d-flex align-items-center">
@@ -341,7 +557,7 @@ function time_elapsed_string($datetime)
             </div>
         </div>
 
-        <?php include ('includes/footer.php'); ?>
+        <?php include('includes/footer.php'); ?>
     </section>
     <?php include('includes/notes.php'); ?>
 
@@ -404,10 +620,10 @@ function time_elapsed_string($datetime)
     <script src="js/custom.js"></script>
     <script src="vendors/apex_chart/bar_active_1.js"></script>
     <script src="vendors/apex_chart/apex_chart_list.js"></script>
-    
+
     <script>
         // Counter Animation
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const counters = document.querySelectorAll('.count');
             const speed = 100; // The lower the slower
 
@@ -434,6 +650,84 @@ function time_elapsed_string($datetime)
             });
         });
     </script>
+    <script>
+    document.getElementById("upload").addEventListener("change", function (event) {
+        const fileInput = event.target;
+        const imageContainer = document.getElementById("image-container");
+
+        while (imageContainer.firstChild) {
+            imageContainer.removeChild(imageContainer.firstChild);
+        }
+
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const filePreviewContainer = document.createElement("div");
+
+            if (file.type.startsWith("image/")) {
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(file);
+                img.style.maxWidth = '200px';
+                img.style.maxHeight = '200px';
+                imageContainer.appendChild(img);
+            } else {
+                const fileLink = document.createElement("a");
+                fileLink.href = URL.createObjectURL(file);
+                fileLink.textContent = file.name;
+                fileLink.target = "_blank";
+                filePreviewContainer.appendChild(fileLink);
+                imageContainer.appendChild(filePreviewContainer);
+            }
+        }
+    });
+</script>
+
+    <script>
+        $(document).ready(function() {
+            $(".arrow").click(function() {
+                // Show loader
+                $("#loader-container").show();
+
+                // Show top notification
+                $("#notification").text("Submitting question...").show();
+
+                // Serialize form data
+                var formData = new FormData($("#questionForm")[0]);
+
+                // Send AJAX request
+                $.ajax({
+                    url: $("#questionForm").attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    async: true,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        // Hide loader
+                        $("#loader-container").hide();
+                        // Hide top notification after 3 seconds
+                        $("#notification").text("Question submitted successfully.").delay(3000).fadeOut();
+                        // Handle success response here
+                        console.log(response);
+                        window.location.reload();
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        // Hide loader
+                        $("#loader-container").hide();
+                        // Show error notification
+                        $("#notification").text("Error: " + xhr.responseText).show();
+                        // Hide top notification after 5 seconds
+                        setTimeout(function() {
+                            $("#notification").fadeOut();
+                        }, 5000);
+                        //reload page_url
+                        window.location.reload();
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>
