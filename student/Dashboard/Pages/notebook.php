@@ -91,168 +91,7 @@ $availableCategories = array_unique($availableCategories);
 
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: auto;
-    }
-
-    .container {
-        background-color: #D2B48C;
-        border: 2px solid #000;
-        border-radius: 20px;
-        padding: 20px;
-        width: 700px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
-
-    h1 {
-        margin-bottom: 20px;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    input[type="text"],
-    textarea {
-        width: calc(100% - 20px);
-        padding: 10px;
-        border: 1px solid #F0E7D8;
-        border-radius: 20px;
-        box-sizing: border-box;
-        display: block;
-        margin: 0 auto;
-        background-color: #F0E7D8;
-        color: #8b4513;
-        font-size: 20px;
-    }
-
-    textarea {
-        height: 150px;
-        resize: none;
-    }
-
-    .action-buttons {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .upload-group {
-        position: relative;
-    }
-
-    input[type="file"] {
-        display: none;
-    }
-
-    label[for="upload"] {
-        display: inline-block;
-        cursor: pointer;
-        padding: 10px 20px;
-        border: 1px solid #F0E7D8;
-        border-radius: 20px;
-        background-color: #F0E7D8;
-        font-size: 20px;
-        color: #8b4513;
-        margin-left: 12px;
-    }
-
-    button {
-        padding: 10px 20px;
-        background-color: #F0E7D8;
-        color: #8b4513;
-        border: 1px solid #F0E7D8;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 5px;
-        margin-right: 12px;
-    }
-
-    button i,
-    label[for="upload"] i {
-        margin-right: 5px;
-    }
-
-    /* Media Queries for Responsiveness */
-    @media (max-width: 768px) {
-        .container {
-            width: 90%;
-            padding: 15px;
-        }
-
-        input[type="text"],
-        textarea,
-        label[for="upload"],
-        button {
-            font-size: 18px;
-            padding: 8px 16px;
-        }
-
-        textarea {
-            height: 120px;
-        }
-        label[for="upload"]{
-            margin-left: 10px;
-        }
-        button{
-            margin-right: 10px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .container {
-            width: 95%;
-            padding: 10px;
-            margin-top: 100px;
-        }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-
-        input[type="text"],
-        textarea,
-        label[for="upload"],
-        button {
-            font-size: 16px;
-            padding: 8px 14px;
-        }
-        label[for="upload"]{
-            margin-left: 10px;
-        }
-        button{
-            margin-right: 10px;
-        }
-
-        textarea {
-            height: 100px;
-        }
-
-        .action-buttons {
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        label[for="upload"],
-        button {
-            width: auto;
-        }
-
-        button {
-            justify-content: center;
-        }
-    }
-
+    
 
     #loader-container {
         display: none;
@@ -324,6 +163,110 @@ $availableCategories = array_unique($availableCategories);
         width: auto;
         border-radius: 4px;
     }
+
+    .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+.card, .placeholder {
+    background-color: #d2b48c;
+    border: 2px solid #8b4513;
+    border-radius: 10px;
+    width: 250px;
+    height: 250px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+.card img {
+    width: 80%;
+    height: auto;
+    border-radius: 10px;
+}
+.card .title-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 15px; 
+    margin-top: 10px;
+}
+.card .title {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: #4b3832;
+    margin-left: 15px; 
+}
+.card .arrow {
+    width: 30px;
+    height: 30px;
+    background-color: #8b4513;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin-left: 15px;
+}
+.placeholder::before {
+    content: '+';
+    font-family: 'Arial', sans-serif;
+    font-size: 50px;
+    color: #8b4513;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .card, .placeholder {
+        width: 90%;
+        height: auto;
+        padding: 20px;
+    }
+    .card .title-arrow {
+        justify-content: space-between;
+        flex-direction: row;
+        align-items: center;
+    }
+    .card .title {
+        font-size: 18px;
+        margin-left: 15px; 
+    }
+    .card .arrow {
+        width: 25px;
+        height: 25px;
+        font-size: 16px;
+        margin-left: 15px; 
+    }
+}
+
+@media (max-width: 480px) {
+    .card .title {
+        font-size: 18px;
+        margin-left: 15px; 
+    }
+    .card .arrow {
+        width: 25px;
+        height: 25px;
+        font-size: 16px;
+        margin-left: 15px;
+    }
+    .placeholder::before {
+        font-size: 40px;
+    }
+}
+
 </style>
 </head>
 
@@ -337,78 +280,20 @@ $availableCategories = array_unique($availableCategories);
         <div id="loader-container">
             <div id="loader"></div>
         </div>
+        <h1 style="margin-left: 20px; margin-top:20px; color: #8b4513;">Note Books</h1>
+        
         <div class="container">
-            <h1>Ask Doubt</h1>
-            <?php if ($_SESSION['message'] != null) : ?>
-                <div class="message-container">
-                    <div class="card-content <?php echo ($message === "Doubt submitted successfully.") ? "success" : "error"; ?>">
-                        <p style="color: white; font-size: 20px;"><i class="fa fa-exclamation-circle" aria-hidden="true" style="padding-right: 5px;"></i><?php echo $message; ?></p>
+        <a href="notebook_pages.php"  rel="noopener noreferrer">
+                <div class="card">
+                    <img src="../img/soccer boy.jpg" alt="Kids with soccer ball">
+                    <div class="title-arrow">
+                        <div class="title">Physics</div>
+                        <div class="arrow">&#10132;</div>
                     </div>
                 </div>
-                <script>
-                    setTimeout(function() {
-                        var cardContent = document.querySelector('.card-content');
-                        cardContent.classList.add('invisible');
-                    }, 3000); // 2000 milliseconds = 2 seconds
-                </script>
-                <?php unset($_SESSION['message']); ?>
-            <?php endif; ?>
-
-
-            <form id="doubtForm" action="../backend/submit_doubt.php" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <input type="text" name="doubt_category" placeholder="Write a topic or subject name" required>
-                </div>
-                <div class="form-group">
-                    <textarea id="doubt" name="doubt" placeholder="Description" required></textarea>
-                </div>
-                <div class="form-group action-buttons">
-                    <div class="upload-group">
-                        <input type="file" id="upload" name="file">
-                        <label for="upload">
-                            <i class="fas fa-folder-open"></i> Upload
-                        </label>
-                    </div>
-                    <?php if ($subscription_valid) : ?>
-                        <button type="submit" class="submit-btn">Submit<i class="fas fa-arrow-right" style="margin-left: 5px;"></i> </button>
-                    <?php else : ?>
-                        <button type="button" class="submit-btn" disabled style="background-color: red; color: white;" title="Your Subscription is expired">Subscription Expired</button>
-                    <?php endif; ?>
-                </div>
-            </form>
-            <div id="filePreview"></div>
-        </div>
-
-        <script>
-            document.getElementById('upload').addEventListener('change', function(event) {
-                const fileInput = event.target;
-                const filePreview = document.getElementById('filePreview');
-
-                while (filePreview.firstChild) {
-                    filePreview.removeChild(filePreview.firstChild);
-                }
-
-                if (fileInput.files.length > 0) {
-                    const file = fileInput.files[0];
-                    const filePreviewContainer = document.createElement('div');
-
-                    if (file.type.startsWith('image/')) {
-                        const img = document.createElement('img');
-                        img.src = URL.createObjectURL(file);
-                        filePreviewContainer.appendChild(img);
-                    } else {
-                        const link = document.createElement('a');
-                        link.href = URL.createObjectURL(file);
-                        link.textContent = file.name;
-                        link.target = '_blank';
-                        filePreviewContainer.appendChild(link);
-                    }
-
-                    filePreview.appendChild(filePreviewContainer);
-                }
-            });
-        </script>
-
+            </a>
+        <div class="placeholder" onclick="addCard()"></div>
+    </div>
 
     </section>
     <?php include('../includes/notes.php'); ?>
@@ -420,39 +305,23 @@ $availableCategories = array_unique($availableCategories);
     <?php include('../includes/script.php'); ?>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <script src="js/ask_doubt.js"></script>
+    
     <script>
-        $(function() {
-            // Fetch unique doubt categories from the doubt table
-            var doubtCategories = <?php echo json_encode($result); ?>;
-
-            // Fetch tech_stack data from the doubt table
-            var techStackData = <?php echo json_encode($tech_stack_result); ?>;
-
-            // Separate tech_stack data into individual categories
-            var techStackCategories = [];
-            techStackData.forEach(function(techStack) {
-                var categories = techStack.split(',');
-                techStackCategories = techStackCategories.concat(categories);
-            });
-
-            // Remove duplicates and empty values
-            techStackCategories = techStackCategories.filter(function(category) {
-                return category.trim() !== '';
-            });
-            techStackCategories = Array.from(new Set(techStackCategories));
-
-            // Combine both doubt categories and tech_stack categories
-            var availableCategories = doubtCategories.concat(techStackCategories);
-            availableCategories = Array.from(new Set(availableCategories));
-
-            // Initialize jQuery UI Autocomplete on the question category input field
-            $(".question-category").autocomplete({
-                source: availableCategories
-            });
-        });
+        function addCard() {
+            const container = document.querySelector('.container');
+            const newCard = document.createElement('div');
+            newCard.className = 'card';
+            newCard.innerHTML = `
+                <img src="../img/soccer boy.jpg" alt="Kids with soccer ball">
+                <div class="title-arrow">
+                    <div class="title" contenteditable="true">New Title</div>
+                    <div class="arrow">&#10132;</div>
+                </div>
+            `;
+            container.insertBefore(newCard, container.querySelector('.placeholder'));
+        }
     </script>
+    
     <script>
         $(document).ready(function() {
             $("#submitBtn").click(function() {

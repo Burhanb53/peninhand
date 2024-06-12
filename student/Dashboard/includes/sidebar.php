@@ -36,6 +36,12 @@ function isMenuItemActive($menuItemPath)
                 <span>Chat</span>
             </a>
         </li>
+
+        <li class="<?php echo isMenuItemActive('/notebook.php'); ?>">
+            <a href="notebook.php" aria-expanded="false">
+                <img src="../img/menu-icon/16.svg" alt>
+                <span>Note Book</span>
+            </a>
         </li>
 
         <li class="<?php echo isMenuItemActive('/video_call.php'); ?>">
